@@ -1,0 +1,256 @@
+<template>
+  <el-dialog
+    :title="!dataForm.id ? '新增' : '修改'"
+    :close-on-click-modal="false"
+    :modal-append-to-body="true"
+    :append-to-body="true"
+    width="30%"
+    :visible.sync="visible">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    
+    <el-form-item label="负责人员" prop="name">
+        <el-select v-model="dataForm.name" multiple @change="changeSelectName" width=100%  placeholder="请选择人员" style="width:100%;">
+              <el-option
+                v-for="item in namelist"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId+'_'+item.userName">
+              </el-option>
+        </el-select>
+    </el-form-item>
+    <el-form-item label="负责班组" prop="team">
+        <el-select v-model="dataForm.team" multiple @change="changeSelectTeam"  width=100%  placeholder="请选择班组" style="width:100%;">
+              <el-option
+                v-for="item in teamlist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id+'_'+item.name">
+              </el-option>
+        </el-select>
+    </el-form-item>
+                
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+    </span>
+  </el-dialog>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        typelist: [{
+          value: '1',
+          label: '单体模型'
+        },{
+          value: '2',
+          label: '场布模型'
+        }],
+        namelist:[],
+        teamlist:[],
+        modellist: [],
+        visible: false,
+        disabledmodel:true,
+        modelMajorId:'',
+        problemTrackingSettingUserList:[],
+        problemTrackingSettingTeamList:[],
+        dataForm: {
+          id: 0,
+          name:'',
+          team: ''
+        },
+        dataRule: {
+          name: [
+            { required: true, message: '负责人员不能为空', trigger: 'blur' }
+          ],
+          team: [
+            { required: true, message: '负责班组不能为空', trigger: 'blur' }
+          ],
+        },
+
+        laberUserList:[],
+        laberTeamList:[],
+      }
+    },
+    mounted() {
+      this.list()
+    },
+    methods: {
+      list(){
+        this.$http({
+          url: this.$http.adornUrl('/sys/user/listUser'),
+          method: 'post',
+          data: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            // console.log(data.result)
+              this.namelist = data.result
+          } 
+        })
+        this.$http({
+          url: this.$http.adornUrl('/bim/team/listTeam'),
+          method: 'post',
+          data: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+              this.teamlist = data.result
+          } 
+        })
+
+      },
+      
+      changeSelectName(){
+          var listdatas = this.dataForm.name
+          var ret = [];
+          for (let i = 0; i < listdatas.length; i++) {
+              var data = listdatas[i];
+              var data_arr = data.split('_');
+              var info = {};
+              info["userId"] = data_arr[0];
+              info["userName"] = data_arr[1];
+              ret.push(info);
+          }
+          this.laberUserList = ret
+      },
+      changeSelectTeam(){
+          var listdatas = this.dataForm.team
+          var rets = [];
+          for (let i = 0; i < listdatas.length; i++) {
+              var data = listdatas[i];
+              var data_arr = data.split('_');
+              var info = {};
+              info["teamId"] = data_arr[0];
+              info["teamName"] = data_arr[1];
+              rets.push(info);
+          }
+          // this.problemTrackingSettingTeamList = rets
+                this.laberTeamList = rets
+          console.log(rets)
+
+      },
+      init (row) {
+        // console.log(row)
+        this.dataForm.id = row.id || 0
+        this.visible = true
+        this.$nextTick(() => {
+                this.$refs['dataForm'].resetFields()
+                var arrs = row.problemTrackingSettingUserList
+                var newarr = []
+                for (let i = 0; i < arrs.length; i++) {
+                      var userId = arrs[i].userId;
+                      var personInCharge = arrs[i].userName;
+                      var ddd = userId+'_'+personInCharge
+                      newarr.push(ddd)
+                }
+                this.dataForm.name = newarr
+
+                var ret = [];
+                for (let i = 0; i < newarr.length; i++) {
+                    var data = newarr[i];
+                    var data_arr = data.split('_');
+                    var info = {};
+                    info["userId"] = data_arr[0];
+                    info["userName"] = data_arr[1];
+                    ret.push(info);
+                }
+                
+                this.laberUserList = ret
+
+                
+                var teamarrs = row.problemTrackingSettingTeamList
+                console.log(teamarrs)
+                var newsarr = []
+                for (let i = 0; i < teamarrs.length; i++) {
+                      var teamId = teamarrs[i].teamId;
+                      var teamName = teamarrs[i].teamName;
+                      var ddds = teamId+'_'+teamName
+                      newsarr.push(ddds)
+                }
+                this.dataForm.team = newsarr
+                
+                var rets = [];
+                for (let i = 0; i < newsarr.length; i++) {
+                    var data = newsarr[i];
+                    var data_arr = data.split('_');
+                    var info = {};
+                    info["teamId"] = data_arr[0];
+                    info["teamName"] = data_arr[1];
+                    rets.push(info);
+                }
+                
+                this.laberTeamList = rets
+                
+        })
+      },
+      handleSwitch(val){
+          // console.log(val)
+          this.dataForm.status = val
+      },
+      // 表单提交
+      dataFormSubmit () {
+        console.log('22222',this.laberUserList)
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$http({
+              url: this.$http.adornUrl(`/bim/problemTrackingSetting/${!this.dataForm.id ? 'save' : 'update'}`),
+              method: 'post',
+              data: this.$http.adornData({
+                'id': this.dataForm.id || undefined,
+                'problemTrackingSettingUserList': this.laberUserList,
+                'problemTrackingSettingTeamList': this.laberTeamList
+              })
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }
+        })
+      }
+    }
+  }
+</script>
+<style>
+.switchStyle .el-switch__label {
+  position: absolute;
+  display: none;
+  color: #fff;
+  font-size: 10px;
+}
+.is-checked .el-switch__label {
+  position: absolute;
+  display: none;
+  color:#5d5d5d;
+  /* color: #fff; */
+}
+
+.switchStyle .el-switch__label--left {
+  z-index: 9;
+  left: 6px;
+}
+.switchStyle .el-switch__label--right {
+  z-index: 9;
+  left: -14px;
+}
+.switchStyle .el-switch__label.is-active {
+  display: block;
+}
+.switchStyle.el-switch .el-switch__core,
+.el-switch .el-switch__label {
+  width: 60px !important;
+  line-height: 22px;
+  text-align: center;
+}
+</style>

@@ -1,0 +1,71 @@
+import Vue from 'vue'
+import App from '@/App'
+import router from '@/router'                 // api: https://github.com/vuejs/vue-router
+import store from '@/store'                   // api: https://github.com/vuejs/vuex
+import VueCookie from 'vue-cookie'            // api: https://github.com/alfhen/vue-cookie
+import echarts from 'echarts'
+
+import 'swiper/dist/css/swiper.css'
+import '@/element-ui'                         // api: https://github.com/ElemeFE/element
+import '@/icons'                              // api: http://www.iconfont.cn/
+import '@/element-ui-theme'
+import '@/assets/scss/index.scss'
+import 'fullpage.js/vendors/scrolloverflow';
+import VueFullPage from 'vue-fullpage.js';
+import animated from 'animate.css'
+
+Vue.use(VueFullPage);
+Vue.use(echarts)
+Vue.use(animated)
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
+
+import BaiduMap from 'vue-baidu-map'
+ 
+Vue.use(BaiduMap, {
+  ak: '0Fp0yZRYLtvfZXqOHBgnDgBo1Dw3N94a'
+})
+
+import '@/assets/icon/iconfont.css'
+import httpRequest from '@/utils/httpRequest' // api: https://github.com/axios/axios
+import { isAuth } from '@/utils'
+import cloneDeep from 'lodash/cloneDeep'
+import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
+// eslint-disable-next-line import/first
+import {Drawer, Card} from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
+// 引入样式
+import 'vue-easytable/libs/themes-base/index.css'
+// 导入 table 和 分页组件
+import {VTable, VPagination} from 'vue-easytable'
+
+// 注册到全局
+Vue.component(VTable.name, VTable)
+Vue.component(VPagination.name, VPagination)
+// Vue.component(Drawer.name, Drawer)
+Vue.use(Drawer)
+Vue.use(Card)
+Vue.use(VueCookie)
+Vue.config.productionTip = false
+
+// 非生产环境, 适配mockjs模拟数据                 // api: https://github.com/nuysoft/Mock
+if (process.env.NODE_ENV !== 'production') {
+  require('@/mock')
+}
+
+// 挂载全局
+Vue.prototype.$echarts = echarts   // echars
+Vue.prototype.$http = httpRequest // ajax请求方法
+Vue.prototype.isAuth = isAuth     // 权限方法
+
+// 保存整站vuex本地储存初始状态
+window.SITE_CONFIG['storeState'] = cloneDeep(store.state)
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  template: '<App/>',
+  components: { App }
+})
