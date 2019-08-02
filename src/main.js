@@ -3,7 +3,7 @@ import App from '@/App'
 import router from '@/router'                 // api: https://github.com/vuejs/vue-router
 import store from '@/store'                   // api: https://github.com/vuejs/vuex
 import VueCookie from 'vue-cookie'            // api: https://github.com/alfhen/vue-cookie
-import echarts from 'echarts'
+// import echarts from 'echarts'
 
 import 'swiper/dist/css/swiper.css'
 import '@/element-ui'                         // api: https://github.com/ElemeFE/element
@@ -11,6 +11,7 @@ import '@/icons'                              // api: http://www.iconfont.cn/
 import '@/element-ui-theme'
 import '@/assets/scss/index.scss'
 import 'fullpage.js/vendors/scrolloverflow';
+
 import VueFullPage from 'vue-fullpage.js';
 import animated from 'animate.css'
 
@@ -54,7 +55,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // 挂载全局
-Vue.prototype.$echarts = echarts   // echars
+// Vue.prototype.$echarts = echarts   // echars
 Vue.prototype.$http = httpRequest // ajax请求方法
 Vue.prototype.isAuth = isAuth     // 权限方法
 

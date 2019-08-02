@@ -15,7 +15,7 @@
       </el-form-item>
       <!-- 流水段操作 -->
       <el-form-item v-show="waterbtn"> 
-        <el-button type="warning" @click="addMonomerHandle">编辑</el-button>
+        <el-button type="warning" @click="addMonomerHandle">修改</el-button>
         <el-button type="danger" @click="delfield">删除</el-button>
       </el-form-item>
     </el-form> 

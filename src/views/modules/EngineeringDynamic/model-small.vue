@@ -491,17 +491,31 @@ import { setTimeout } from 'timers';
           return NewObject;
       },
       setOption:function(){
-        let chart = this.$echarts.init(this.$refs['Statistical']);
+        let chart = echarts.init(this.$refs['Statistical']);
         chart.setOption(this.chart_pie,true);
 
-        let chart1 = this.$echarts.init(this.$refs['line_echar']);
+        let chart1 = echarts.init(this.$refs['line_echar']);
         chart1.setOption(this.chart_line,true);
 
-        let chart2 = this.$echarts.init(this.$refs['issueEchar']);
+        let chart2 = echarts.init(this.$refs['issueEchar']);
         chart2.setOption(this.chart_pie2,true);
 
-        let chart3 = this.$echarts.init(this.$refs['issueEchar1']);
+        let chart3 = echarts.init(this.$refs['issueEchar1']);
         chart3.setOption(this.chart_pie3,true);
+
+
+
+        // let chart = this.$echarts.init(this.$refs['Statistical']);
+        // chart.setOption(this.chart_pie,true);
+
+        // let chart1 = this.$echarts.init(this.$refs['line_echar']);
+        // chart1.setOption(this.chart_line,true);
+
+        // let chart2 = this.$echarts.init(this.$refs['issueEchar']);
+        // chart2.setOption(this.chart_pie2,true);
+
+        // let chart3 = this.$echarts.init(this.$refs['issueEchar1']);
+        // chart3.setOption(this.chart_pie3,true);
 
         window.onresize = function(){
             chart.resize();

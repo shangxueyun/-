@@ -1,7 +1,7 @@
 <template>
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
-      <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
+      <h1 class="site-navbar__brand" @click="homeClick">
         <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/logo.png" width="150px"></a>
         <a class="site-navbar__brand-mini" href="javascript:;"><img src="~@/assets/img/smllogo.png" width="50px"></a>
       </h1>
@@ -50,7 +50,7 @@
           <el-menu-item index="2-3"><a href="//git.oschina.net/renrenio/renren-generator" target="_blank">代码生成器</a></el-menu-item>
         </el-submenu> -->
         <el-menu-item class="site-navbar__avatar right_menu_head" index="3">
-          <div class="board" ><a href="#/model-amplificationNew"><i class="magnify"></i> 观摩看板 </a></div>
+          <div class="board" @click="kanban"><a href="javascript:;"><i class="magnify"></i> 观摩看板 </a></div>
           <el-dropdown>
             <span class="el-dropdown-link">
               <img src="~@/assets/img/user.png" :alt="userName">
@@ -73,6 +73,7 @@
 <script>
   import UpdatePassword from './main-navbar-update-password'
   import { clearLoginInfo } from '@/utils'
+import { setTimeout, clearTimeout } from 'timers';
   export default {
     data () {
       return {
@@ -81,7 +82,8 @@
         div_ul_offsetWidth:(document.body.offsetWidth - 490)+"px",
         moveBle:false,
         num:0,
-        offWith:0
+        offWith:0,
+        timesOut:null,
       }
     },
     components: {
@@ -118,25 +120,41 @@
         li.children[0].style.color = "#fff";
         li.children[0].style.borderBottom = "2px solid #fff";
       }
-      if(this.$refs.UI_.offsetWidth - this.$refs.div_ul_.offsetWidth>40)
+      if(this.$refs.UI_.offsetWidth - this.$refs.div_ul_.offsetWidth>0)
       {
         this.moveBle = true;
         this.offWith = (this.$refs.UI_.offsetWidth - this.$refs.div_ul_.offsetWidth)
       }
       let vm = this;
-      window.onresize = (fn)=>{
+      
+      document.body.onresize = (fn)=>{
         vm.div_ul_offsetWidth = (document.body.offsetWidth - 490)+"px";
-        if(vm.$refs.UI_.offsetWidth - vm.$refs.div_ul_.offsetWidth>40)
-        {
-          vm.moveBle = true;
-          vm.offWith = (vm.$refs.UI_.offsetWidth - vm.$refs.div_ul_.offsetWidth)
-        }else{
-          vm.moveBle = false;
-        }
+        clearTimeout(vm.timesOut);
+        vm.timesOut = setTimeout(function(){
+          if(vm.$refs.UI_.offsetWidth - vm.$refs.div_ul_.offsetWidth>0)
+          {
+            vm.moveBle = true;
+            vm.offWith = (vm.$refs.UI_.offsetWidth - vm.$refs.div_ul_.offsetWidth)
+          }else{
+            vm.moveBle = false;
+            vm.$refs.UI_.style.transform=`translateX(0px)`;
+          }
+          //配合ehcars动态渲染
+          vm.$store.commit('common/updateDocumentClientWidth', document.body.offsetWidth);
+          vm.$store.commit('common/updateDocumentClientHeight', document.body.offsetHeight);
+        },100);
       }
+      let hrefS = window.location.href;
+      if(hrefS.substring(hrefS.lastIndexOf("#")+1) == '/home' || hrefS.substring(hrefS.lastIndexOf("#")+1) == '/project-board')
+      this.reTFunc();
     },
     methods: {
       // 修改密码
+      kanban(){
+        this.$router.push({  
+        path:'/model-amplificationNew',   
+         })
+      },
       updatePasswordHandle () {
         this.updatePassowrdVisible = true
         this.$nextTick(() => {
@@ -226,6 +244,17 @@
             ele.style.transform=`translateX(${strs+eles}px)`;
           }
         }
+      },
+      homeClick(){
+        this.$router.push({path:"/project-board"});
+        this.reTFunc();
+        this.$emit('routingResponse',"show");
+      },
+      reTFunc(){
+        let liEleF = this.$refs.UI_.children;
+        this.ElementCelar(liEleF);
+        liEleF[0].children[0].style.color = "#fff";
+        liEleF[0].children[0].style.borderBottom = "2px solid #fff";
       },
     }
   }
@@ -363,6 +392,9 @@
         color: #fff;
       }
     }
+    .left_move:hover{
+      cursor: pointer;
+    }
     .right_move{
       position: absolute;
       top: 0;
@@ -380,6 +412,9 @@
         font-size: 16px;
         color: #fff;
       }
+    }
+    .right_move:hover{
+      cursor: pointer;
     }
 }
 .div_ul ul li:first-child{

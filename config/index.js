@@ -16,9 +16,10 @@ module.exports = {
       '/proxyApi': {
         // target: 'http://192.168.60.101',
         // target: 'http://192.168.50.12:8099',
-        target: 'http://192.168.50.60',
+        // target: 'http://192.168.50.60',
+        target: 'http://222.184.237.178:9998',
         //target: 'http://192.168.50.13',
-        //  target: 'http://222.184.237.178:9998',
+        //  target: 'http://222.184.237.178:9997/zkyf-web',
         // target: 'http://demo.renren.io/renren-fast/',`
         // target: 'http://222.184.237.178:9010/zkyf-web',
          //target: 'http:// 222.184.237.178',

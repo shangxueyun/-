@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForms.type ? '新增流水段' : '编辑流水段'"
+    :title="!dataForms.type ? '新增流水段' : '修改流水段'"
     :close-on-click-modal="false"
     :modal-append-to-body="true"
     :append-to-body="true"

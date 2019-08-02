@@ -24,7 +24,8 @@ const globalRoutes = [
   // { path: '/screen', component: _import('modules/screen'), name: 'screen', meta: { title: '大屏演示' } },
   
 
-  { path: '/model-amplificationNew', component: _import('modules/EngineeringDynamic/model-amplificationNew'), name: 'inspect', meta: { title: '观摩看板' } }
+  { path: '/model-amplificationNew', component: _import('modules/EngineeringDynamic/model-amplificationNew'), name: 'inspect', meta: { title: '观摩看板' } },
+  { path: '/aaaaa', component: _import('modules/EngineeringDynamic/aaaaa'), name: 'aaaaa', meta: { title: '观摩看板' } }
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
@@ -42,7 +43,9 @@ const mainRoutes = {
     { path: '/home', component: _import('modules/project/board'), name: 'home', meta: { title: '首页' } },
     { path: '/associatedModel', component: _import('modules/model/associatedModel'), name: 'associatedModel', meta: { titl4e: '关联模型',  show: false } },
     { path: '/videoBox', component: _import('modules/safe/videoBox'), name: 'videoBox', meta: { title: '视频监控',  show: false } },
-    // { path: '/team', component: _import('modules/bim/team'), name: 'login', meta: { title: '队伍管理' } },
+    { path: '/site-details', component: _import('modules/safe/site-details'), name: 'site-details', meta: { title: '巡检详情' } },
+    { path: '/tracking-details', component: _import('modules/safe/tracking-details'), name: 'tracking-details', meta: { title: '安全问题详情' } },
+    { path: '/quality-details', component: _import('modules/safe/quality-details'), name: 'quality-details', meta: { title: ' 质量问题详情' } },
     { path: '/data/FileDetail', component: _import('modules/data/FileDetail'), name: 'FileDetail', meta: { title: '资料详情' } },
   ],
   beforeEnter (to, from, next) {

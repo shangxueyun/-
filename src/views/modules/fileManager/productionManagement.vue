@@ -179,12 +179,12 @@
         <el-dialog
             :title="bouncedTitle"
             :visible.sync="dialogVisible"
-            width="30%"
+            width="50%"
             :modal-append-to-body="true"
             :append-to-body="true"
             :before-close="clearClose">
             <!--  -->
-            <el-form :model="addData" status-icon ref="addData"  :rules="rules" label-width="110px" @keyup.esc.native="clearClose()" class="demo-ruleForm">
+            <el-form :model="addData" status-icon ref="addData"  :rules="rules" label-width="120px" @keyup.esc.native="clearClose()" class="demo-ruleForm">
                 <el-form-item label="项目名称:" prop="name" :rules="rules.name">
                     <el-input style="width:100%" type="text" v-model="addData.name" autocomplete="off"></el-input>
                 </el-form-item>
@@ -219,7 +219,7 @@
         <el-dialog
             :title="detailsName"
             :visible.sync="detailsVisible"
-            width="30%"
+            width="35%"
             :modal-append-to-body="true"
             :append-to-body="true"
             :before-close="detailsclearClose">
@@ -280,8 +280,15 @@ var num = 0;
           else if(Number(value).toString() == "NaN"){
             rule.message = '请输入产值格式不正确，请输入数字格式';
             callback(new Error())
-          }else
-          callback()
+          }else if(Number(value).toString() != "NaN"){
+            if(Number(value)<=0)
+            {
+              rule.message = '请输入产值不能小于等于0';
+              callback(new Error())
+            }else{
+              callback()
+            }
+          }
         }
       }
       return {
@@ -320,7 +327,7 @@ var num = 0;
           name:[{ required: true, message: '请输入项目名称', trigger: 'blur' }],
           completeOutputValue:[{ required: true,validator: ValueSize, message: '请输入本月完成产值', trigger: 'blur' }],
           constructionOutputValue:[{ required: true,validator: ValueSize, message: '请输入土建完成产值', trigger: 'blur' }],
-          installationOutputValue:[{ required: true, validator: installationOutputValue, trigger: 'blur' }],
+          installationOutputValue:[{ required: true, validator: ValueSize, message: '请输入安装完成产值',  trigger: 'blur' }],
           subcontractingOutputValue:[{ required: true,validator: ValueSize, message: '请输入其他分包产值', trigger: 'blur' }],
         },
         dialogVisible:false,
@@ -498,10 +505,21 @@ var num = 0;
         num++;
         let vm = this;
         time = setTimeout(() => {
-          if(num > 1)
-          vm.handleSuccess(row, event, column);
-          else if(num == 1)
-          vm.detailsFunc(row);
+          if(/fileManager-productionManagement/.test(window.location.href))
+          {
+            if(num > 1)
+            vm.handleSuccess(row, event, column);
+            else if(num == 1)
+            vm.detailsFunc(row);
+            else
+            num = 0
+          }
+          else{
+            if(num == 1)
+            vm.detailsFunc(row);
+            else
+            num = 0
+          }
         }, 300);
       },
       detailsclearClose(){

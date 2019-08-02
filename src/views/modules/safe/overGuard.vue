@@ -1,15 +1,16 @@
 <template>
-    <div class="overGuard" v-loading="overGuardloading">
+    <div class="overGuard" :data="flgE" v-loading="overGuardloading">
         <el-header height="40px">
             <div class="left">
                 <h3>悬挑钢平台</h3>
                 <p>设备编号：{{titleName}}</p>
             </div>
             <div class="right">
-                <p>数据获取时间：&nbsp;&nbsp;&nbsp;&nbsp;<span>{{dateDay}}</span></p>
+                <p style="    text-align: right;
+    padding-right: 32px;">数据获取时间：&nbsp;&nbsp;&nbsp;&nbsp;<span>{{dateDay}}</span></p>
             </div>
         </el-header>
-        <el-main style="padding:4px 0;width: 100%;display: flex;" id="mainCont">
+        <el-main style="padding:4px;width: 100%;display: flex;overflow: hidden;" id="mainCont">
             <div class="h3_left">
                 <el-header height="40px">
                     设备状态
@@ -37,7 +38,7 @@
                 <div class="model_bottom">
                     <el-header height="40px">
                         历史荷载
-                        <div style="width: 340px;height: 100%;float: right;">
+                        <div style="width: 332px;height: 100%;float: right;">
                             <el-date-picker
                             v-model="HistoricalLoadV"
                             @change="HistoricalLoad"
@@ -107,9 +108,9 @@ import { dateFormat } from '@/utils'
           present:'',
           chart_line:{
             grid: {
-                left: '3%',
+                left: '6%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '4%',
                 containLabel: true
             },
             tooltip: {
@@ -125,7 +126,7 @@ import { dateFormat } from '@/utils'
             legend: {
                 x: 'center',
                 textStyle: {
-                color: '#fff'
+                color: '#333'
                 },
                 data:['荷载']
             },
@@ -137,7 +138,7 @@ import { dateFormat } from '@/utils'
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#333',  //更改坐标轴文字颜色
                         fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -146,7 +147,7 @@ import { dateFormat } from '@/utils'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#333' //更改坐标轴颜色
                         }
                 },
             },
@@ -162,12 +163,11 @@ import { dateFormat } from '@/utils'
             ],
             yAxis : [{
                 type: 'value',
-                max: 500,
                 name:'(t)',
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#333',  //更改坐标轴文字颜色
                     fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -176,7 +176,7 @@ import { dateFormat } from '@/utils'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#333' //更改坐标轴颜色
                         }
                 },
                 splitLine: {     //网格线
@@ -216,12 +216,21 @@ import { dateFormat } from '@/utils'
     },
     created() {
         var date = new Date().toISOString().replace(/T/g," ");
-        this.dateDay = dateFormat(date.substring(0,date.lastIndexOf(".")),'yyyy-MM-dd HH:mm:ss');
+        this.dateDay = date.substring(0,date.lastIndexOf("."))
         this.getList();
         this.EchartsGet(this.nameObj.name);
     },
+    watch:{
+        flgE(val){
+            let chart = echarts.init(this.$refs['line_echars']);
+            chart.setOption(this.chart_line,true);
+            chart.resize();
+        },
+    },
     computed: {
-
+        flgE: {
+        get () { return this.$store.state.common.documentClientWidth }
+      },
     },
     mounted() {
 
@@ -320,7 +329,7 @@ import { dateFormat } from '@/utils'
            e.target.children[1].style.display = "none"
         },
         setOption(){
-            let chart = this.$echarts.init(this.$refs['line_echars']);
+            let chart = echarts.init(this.$refs['line_echars']);
             chart.setOption(this.chart_line,true);
         },
         HistoricalLoad(val){
@@ -354,14 +363,21 @@ import { dateFormat } from '@/utils'
 <style lang="scss" scoped>
 .overGuard{
     padding: 10px;
-    background: #0C4C5B;
+    height: 100%;
+    overflow: auto;
+    background: #fff;
     font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
     header{
         width: 100%;
-        padding: 0 10px;
+        margin-bottom: 14px;
+        padding: 0 20px;
         line-height: 40px;
-        background: #0C4154;
-        box-shadow: 4px 4px 6px -3px #000;
+        background: #fff;
+        color: #666;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+        font-weight: 400;
+        font-size: 18px;
+        border-radius: 4px;
         .left{
             float: left;
             width: 330px;
@@ -369,17 +385,18 @@ import { dateFormat } from '@/utils'
                 width: 32%;
                 line-height: 36px;
                 float: left;
-                font-weight: 700;
+                font-weight: 400;
                 font-style: normal;
                 font-size: 18px;
-                color: #00CC66;
+                color: #666;
             }
             p{
                 float: right;
-                line-height: 40px;
+                line-height: 38px;
                 width: 68%;
                 font-size: 14px;
-                color: #f2f2f2;
+                color: #00CC66;
+                margin: 0;
             }
         }
         .right{
@@ -387,7 +404,8 @@ import { dateFormat } from '@/utils'
             width: 318px;
             p{
                 font-size: 16px;
-                color: rgba(255, 255, 255, .5);
+                color: #666;
+                margin: 0;
             }
         }
     }
@@ -395,22 +413,25 @@ import { dateFormat } from '@/utils'
         width: 340px;
         float: left;
         header{
-            font-size: 18px;
-            color: #f2f2f2;
-            font-weight: 600;
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
         }
         .status_div{
             width: 100%;
             margin-top: 20px;
             height: 330px;
-            padding: 0 10px;
-            background: #0e5763;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
             p:first-child{
                 line-height: 40px;
                 margin: 0;
-                font-size: 17px;
-                color: #f2f2f2;
-                font-weight: 600;
+                font-size: 15px;
+                color: #666;
+                font-weight: 400;
+                padding: 0px 10px;
+                border-bottom: 1px solid #ccc;
             }
             p:last-child{
                 line-height: 248px;
@@ -418,7 +439,7 @@ import { dateFormat } from '@/utils'
                 margin: 0;
                 text-align: center;
                 font-weight: 600;
-                color: #f2f2f2;
+                color: #00CC66;
             }
         }
     }
@@ -431,15 +452,17 @@ import { dateFormat } from '@/utils'
             margin-bottom: 20px;
             header{
                 line-height: 40px;
-                color: #f2f2f2;
-                font-size: 18px;
-                font-weight: 600;
+                color: #666;
+                font-size: 16px;
+                font-weight: 400;
             }
             .echars_div{
                 width: 100%;
                 height: 330px;
                 margin-top: 20px;
-                background: #0e5763 !important;
+                background: #fff !important;
+                box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+                border-radius: 4px;
             }
         }
         .model_bottom{
@@ -447,15 +470,18 @@ import { dateFormat } from '@/utils'
             height: 328px;
             header{
                 line-height: 40px;
-                color: #f2f2f2;
-                font-size: 18px;
-                font-weight: 600;
+                color: #666;
+                font-size: 16px;
+                font-weight: 400;
             }
             .datalist_div{
                 width: 100%;
                 height: 270px;
+                padding: 4px;
                 margin-top: 20px;
-                background: #0e5763;
+                background: #fff !important;
+                box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+                border-radius: 4px;
             }
         }
     }
@@ -496,17 +522,17 @@ border-radius: 2px;
 </style>
 <style>
 .overGuard .el-table__header th,.overGuard .el-table__header tr {
-    color: #f2f2f2;
-    background: #0E5763;
-    font-weight: 100;
+    color: #666;
+    background: #fff;
+    font-weight: 400;
     line-height: 30px;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
+    border-bottom: 1px solid #ccc;
 }
 .overGuard .el-table__body td,.overGuard .el-table__body th{
     padding: 6px 0px;
-    background: #0E5763;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
-    color: #f2f2f2;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    color: #666;
     line-height: 40px;
 }
 
@@ -524,14 +550,14 @@ text-align: right;
 }
 
 .overGuard .el-pager li.active {
-color: #080909;
+color: #fff;
 cursor: default;
-background-color: #17B3A3;
+background-color:#008CD6;
 border-radius: 2px;
 }
 .overGuard .el-table__empty-block{
-    background: #0E5763;
-    border-top: 1px solid #666;
+    background: #fff;
+    border-top: none;
 }
 .overGuard .el-table::before {
     height: 0px;
@@ -541,10 +567,10 @@ border-radius: 2px;
 }
 .overGuard .el-range-editor--medium .el-range-input {
     background: transparent;
-    color: #fff;
+    color: #666;
 }
 .overGuard .el-table--enable-row-hover .el-table__body tr:hover>td {
-    background-color: #0E5763 !important;
+    background-color: #fff !important;
 }
 .overGuard .el-pagination__sizes>div{
     display: none;
@@ -553,9 +579,9 @@ border-radius: 2px;
     min-width: 0 !important;
 }
 .overGuard .el-pagination__total {
-    color: #fff;
+    color: #666;
 }
 .overGuard .el-pagination__jump {
-    color: #fff;
+    color: #666;
 }
 </style>

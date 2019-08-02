@@ -1,17 +1,29 @@
 <template>
-  <div class="mobileH5" v-loading="mobileH5loading">
+  <div class="mobileH5">
     <el-container>
-        <el-header height="60px">海门市拓鸿实业厂房新建项目</el-header>
         <el-main>
+            
+		<div class="banner-wrap">
+			<div class="banner">
+				<img src="~@/assets/img/h5bg.png">
+			</div>
+		</div>
+        
+        <div class="mainbox">
             <div class="milestone" v-if="milestoneData.length!=0">
-                <p>
+                <p style="height:2rem;overflow:hidden;">
                     <span style="float:left">
-                        总工期<span style="font-size: 1.2rem;">{{DateTimeDayF(milestoneData[0].milestoneData,milestoneData[milestoneData.length-1].milestoneDate)}}</span>
+                        总工期<span style="font-size: 1.2rem;">{{allDays}}</span>
                         日历天
                     </span>
-                    <span v-if="milestoneDataObj.flg == undefined" style="float:right">已安全生产<span style="font-size: 1.2rem;">{{0}}</span> 日历天</span>
-                    <span v-else style="float:right">已安全生产<span style="font-size: 1.2rem;">{{DateTimeDayF(milestoneData[0].milestoneData,milestoneDataObj.flg)}}</span> 日历天</span>
+                    <!-- <span v-if="milestoneDataObj.flg == undefined" style="float:right">已安全生产<span style="font-size: 1.2rem;">{{0}}</span> 日历天</span> -->
+                    <span style="float:right">已安全生产<span style="font-size: 1.2rem;">{{nowSafeDays}}</span>日历天</span>
                 </p>
+
+            <div class="startendDat" >
+                开工日期：{{startDatenew}}
+                竣工日期：{{endDatenew}}
+            </div>
                 <div v-if="milestoneData.length != 0" class="step">
                     <ul>
                         <li v-if="milestoneData[0]">{{milestoneData[0].milestoneName}}</li>
@@ -67,17 +79,17 @@
             <div class="cake_chart">
                 <div class="header">
                     <ul>
-                        <li style="text-align: left;">进场人员 &nbsp;<span style="color:#4081D9">171</span></li>
-                        <li>出场人员 &nbsp;<span style="color:#4081D9">171</span></li>
-                        <li style="text-align: right;">在场人员 &nbsp;<span style="color:#4081D9">171</span></li>
+                        <li style="text-align: left;">进场人员 &nbsp;<span style="color:#4081D9">{{entryNums}}</span></li>
+                        <li>出场人员 &nbsp;<span style="color:#4081D9">{{appearanceNums}}</span></li>
+                        <li style="text-align: right;">在场人员 &nbsp;<span style="color:#4081D9">{{venueRealNums}}</span></li>
                     </ul>
                 </div>
                 <div class="B_echarts" ref="B_echarts">
-                    <div class="legend">
+                    <!-- <div class="legend" style="display:none;">
                         <ul>
                             <li v-for="(item,key) in Daycake_chartList" :key="key">{{item.classNo}}<i :style="'background:'+item.color"></i></li>
                         </ul>
-                    </div>
+                    </div> -->
                     <div class="B_chart" id="B_chart"></div>
                 </div>
                 <div class="Z_echarts" id="Z_echarts"></div>
@@ -128,18 +140,33 @@
             <div class="outputValueAnalysis" id="outputValueAnalysis">
 
             </div>
+
             <div class="towerSwitch">
-                <select class="com-opt">
-                    <option value ="volvo">Volvo</option>
-                    <option value ="saab">Saab</option>
-                    <option value="opel">Opel</option>
-                    <option value="audi">Audi</option>
-                </select>
+
+                 <el-select style="width:100%;" v-model="tajivalue" placeholder="请选择"  @change="tajivaluechange">
+                    <el-option
+                    v-for="items in tajioptionslist"
+                    :key="items.equipmentCode"
+                    :label="items.equipmentCode"
+                    :value="items.equipmentCode">
+                    </el-option>
+                </el-select>
+                
                 <ul>
-                    <li>今日报警<br><span style="color:#4081D9">0</span></li>
-                    <li>今日违规<br><span style="color:#4081D9">0</span></li>
-                    <li>非正常断电<br><span style="color:#4081D9">0</span></li>
-                    <li>今日故障<br><span style="color:#4081D9">0</span></li>
+                    <li  v-for="items in todayExceptionGroup">
+                        <span v-if="items.type == 1">
+                                今日违章<br><span style="color:#4081D9">{{items.count}}</span>
+                        </span>
+                        <span v-if="items.type == 2">
+                                今日报警<br><span style="color:#4081D9">{{items.count}}</span>
+                        </span>
+                        <span v-if="items.type == 3">
+                                非正常断电<br><span style="color:#4081D9">{{items.count}}</span>
+                        </span>
+                        <span v-if="items.type == 4">
+                                今日故障<br><span style="color:#4081D9">{{items.count}}</span>
+                        </span>
+                    </li>
                 </ul>
                 <br style="clear: both;">
                 <img style="width: 100%;" src="~@/assets/img/towerS.png" alt="">
@@ -148,52 +175,54 @@
                         <span>No.1 重量</span>
                         <br>
                         <div>
-                            <el-progress :percentage="50"></el-progress>
+                            <el-progress :text-inside="true" :stroke-width="20" :percentage="weight"></el-progress>
+
                         </div>
                     </div>
                     <div class="item">
                         <span>No.2 力矩</span>
                         <br>
                         <div>
-                            <el-progress :percentage="50"></el-progress>
+                            <el-progress :text-inside="true" :stroke-width="20" :percentage="moment"></el-progress>
                         </div>
                     </div>
                     <div class="item">
                         <span>No.3 幅度</span>
                         <br>
                         <div>
-                            <el-progress :percentage="50"></el-progress>
+                            <el-progress :text-inside="true" :stroke-width="20" :percentage="towerRange"></el-progress>
                         </div>
                     </div>
                     <div class="item">
                         <span>No.4 高度</span>
                         <br>
                         <div>
-                            <el-progress :percentage="50"></el-progress>
+                            <el-progress :text-inside="true" :stroke-width="20" :percentage="height"></el-progress>
                         </div>
                     </div>
                 </div>
                 <br style="clear: both;">
             </div>
+
             <div class="visualSchedule">
-                <div class="header">
-                    扬尘噪音监测
-                </div>
-                <div class="clrg_">
-                    <img src="~@/assets/img/user.png" alt="">
-                    <ul>
-                        <li>描述：121313131</li>
-                        <li>描述：121313131</li>
-                        <li>描述：121313131</li>
-                        <li>描述：121313131</li>
-                        <li>描述：121313131</li>
-                        <li>描述：121313131</li>
-                    </ul>
-                </div>
-
-
-                <br style="clear: both;">
+                    <el-carousel :interval="4000"  class="carouselbox">
+                        <el-carousel-item v-for="item in listImageProgressdata" :key="item.id">
+                            <div class="listimgs">
+                            <img :src="item.img">
+                            </div>
+                            <ul>
+                                <li>单体：{{item.monomerName}}</li>
+                                <li>楼层：{{item.floorName}}</li>
+                                <li>流水段：{{item.flowSectionName}}</li>
+                                <li>劳动力总数：{{item.totalNumber}}</li>
+                                <li>上传人：{{item.createUser}}</li>
+                                <li>上传日期：{{item.createTime}}</li>
+                            </ul>
+                        </el-carousel-item>
+                    </el-carousel>
             </div>
+        </div>
+
         </el-main>
     </el-container>
   </div>
@@ -207,7 +236,25 @@ import { ObjectClear,DateTimeDay } from '@/utils'
     },
     data () {
       return {
+        entryNums:'',
+        appearanceNums:'',
+        venueRealNums:'',
+        startDatenew:'',
+        endDatenew:'',
+        allDays:'',
+        nowSafeDays:'',
+        weight:0,
+        moment:0,
+        towerRange:0,
+        height:0,
+        tajivalue:'',
+        todayExceptionGroup:[],
+        tajioptionslist:[],
+        listImageProgressdata:[],
         total:'',
+        sevenData: {},
+        proBlemList: [],
+        optionsData: [], //
         toBeRectifiedTotal:'',
         toBeReviewedTotal:'',
         completeTotal:'',
@@ -252,90 +299,50 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                 trigger: 'item',
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
-            series: [{
-                name: '工种分布',
-                type: 'pie',
-                selectedMode: 'single',
-                radius: [0, '50%'],
-                label: {
-                normal: {
-                    position: 'inner',
-                    show : false
-                }
-                },
-                labelLine: {
-                normal: {
-                show: false
-                }
-                },
-                data: [{
-                    value: 335,
-                    name: '直达',
-                    itemStyle: {color: '#9966ff'},
-                }, {
-                    value: 679,
-                    name: '营销广告'
-                }, {
-                    value: 1548,
-                    name: '搜索引擎'
-                }]
-            }, {
-                name: '区域分布',
-                type: 'pie',
-                radius: ['65%', '90%'],
-                label: {
-                normal: {
-                    position: 'inner',
-                    show : false
-                }
-                },
-                labelLine: {
-                normal: {
-                show: false
-                }
-                },
-                data: [{
-                    value: 335,
-                    name: '直达'
-                }, {
-                    value: 310,
-                    name: '邮件营销'
-                }, {
-                    value: 234,
-                    name: '联盟广告'
-                }, {
-                    value: 135,
-                    name: '视频广告'
-                }, {
-                    value: 1048,
-                    name: '百度'
-                }, {
-                    value: 251,
-                    name: '谷歌'
-                }, {
-                    value: 147,
-                    name: '必应'
-                }, {
-                    value: 102,
-                    name: '其他'
-                }]
-            }]
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data:[]
+            },
+            series: [
+                        {
+                            name: '工种分布',
+                            type: 'pie',
+                            selectedMode: true,
+                            radius: [0, '50%'],
+                            label: {
+                                normal: {
+                                    position: 'inner',
+                                    show : false
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: []
+                        },
+                        {
+                            name: '区域分布',
+                            type: 'pie',
+                            radius: ['65%', '90%'],
+                            label: {
+                                normal: {
+                                    position: 'inner',
+                                    show : false
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: []
+                        }  
+            ]
         },
         
-        // itemStyle:{
-        //     normal:{
-        //         color:function(params) {
-        //                 // build a color map as your need.
-        //                 var colorList = [
-        //                   '#ccc','#eee','#666','#777','#111',
-        //                   '#ccc','#eee','#666','#777','#111',
-        //                   '#ccc','#eee','#666','#777','#111',
-        //                   '#ccc','#eee','#666','#777','#111',
-        //                 ];
-        //                 return colorList[params.dataIndex]
-        //             },
-        //     }
-        // },
         //柱状图颜色
         colorList:[
         '#ccc','#eee','#666','#777','#111',
@@ -345,6 +352,30 @@ import { ObjectClear,DateTimeDay } from '@/utils'
         Z_option:{
                 tooltip : {
                     trigger: 'axis',
+                    formatter: (params) => {
+                        let info = params;
+                        var newArr = [];
+                        for (var i = 0; i < info.length; i++) { 
+                            if(info[i].value !== 0){
+                                newArr.push(info[i]);
+                            }
+                        }
+                        var num=0;
+                        for(var i in newArr){
+                            console.log(i+": "+newArr[i].value)
+                             num += newArr[i].value
+                        
+                        }
+                        for (var j = 0; j < newArr.length; j++) { 
+                                return `
+                                <div>
+                                    <div>总班组：${newArr.length}个</div>
+                                    <div>总人数：${num}</div>
+                                </div>
+                                `
+                        }
+
+                    }
                 },
                 grid: {
                     top:"5%",
@@ -558,9 +589,6 @@ import { ObjectClear,DateTimeDay } from '@/utils'
             "windSpeed": "风速",
             "winddirection": "",
         },
-        //
-     
-        //
         B_charts_2_option:{
             tooltip: {
                 trigger: 'item',
@@ -610,87 +638,15 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                 }]
             }]
         },
-        outputValueAnalysis_option:{
-                title: {
-                    text: '产值分析图',
-                    top:"10%",
-                    left:'center' 
-                },
-                tooltip : {
-                    trigger: 'axis',
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : ['1月', '2月', '3月', '4月', '5月', '6月','1月', '2月', '3月', '4月', '5月', '6月'],
-                        axisTick: {
-                            alignWithLabel: true
-                        },
-                        splitLine: {     //网格线
-                            show: true,
-                            lineStyle:{
-                                color: ['#FBFBFB'],
-                                width: 1,
-                                type: 'solid'
-                            }
-                        }
-                    }
-                ],
-                yAxis : [
-                        {
-                            type: 'value',
-                            max: 500,
-                            axisLabel: {
-                                show: true,
-                                textStyle: {
-                                color: '#333',  //更改坐标轴文字颜色
-                                fontSize : 14      //更改坐标轴文字大小
-                                }
-                            },
-                            axisTick: {
-                                show: false
-                            },
-                            axisLine:{
-                                    lineStyle:{
-                                        color:'#333' //更改坐标轴颜色
-                                    }
-                            },
-                            splitLine: {     //网格线
-                                show: true,
-                                lineStyle:{
-                                    color: ['#FBFBFB'],
-                                    width: 1,
-                                    type: 'solid'
-                                }
-                            }
-                        },
-                ],
-                series : [
-                    {
-                        name:'demo1',
-                        type:'bar',
-                        itemStyle : {
-                            normal : {
-                            color : '#63B0BA',
-                            borderColor : '#63B0BA ',
-                            borderWidth : 2
-                            }
-                        },
-                        data:[10, 52, 200, 334, 390, 330, 220,35,10, 52, 200, 334, 390, 330,]
-                    },
-                ]
-        },
       }
     },
     created() {
         this.milestoneDataList();
         this.QualityAssurance('1')// 质量管理
+        this.getWorkerOption() // 产值分析图
+        this.listImageProgress() //形象进度
+        this.taji() // 塔机
+        this.getSchedule()  //里程碑
     },
     computed: {
 
@@ -707,9 +663,244 @@ import { ObjectClear,DateTimeDay } from '@/utils'
         this.setOption();
     },
     methods: {
+
+      getSchedule(){
+        this.$http({
+          url: this.$http.adornUrl('/bim/index/getSchedule'),
+          method: 'get',
+          params: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+              if(data.result !== null){
+              this.startDatenew = data.result.startDate
+              this.endDatenew = data.result.endDate
+
+              }
+          }
+        })
+      },
+        taji(){
+            this.$http({
+                url: this.$http.partyUrl('/equipment/index/equipmentList/1'),
+                method: 'post',
+                data: this.$http.adornData({})
+            }).then((data) => {
+                if(data.data.code == 0){
+                    this.tajioptionslist = data.data.result
+                    this.tajivalue = data.data.result[0].equipmentCode
+                    this.todayExceptionGroups(this.tajivalue)
+                    this.infoByEquipmentCode(this.tajivalue)
+
+                }
+            })
+        },
+        tajivaluechange(value){
+                    this.todayExceptionGroups(value)
+                    this.infoByEquipmentCode(value)
+        },
+        todayExceptionGroups(value){
+            this.$http({
+                url: this.$http.partyUrl('/equipment/index/todayExceptionGroup/'+value),
+                method: 'post',
+                data: this.$http.adornData({})
+            }).then((data) => {
+                if(data.data.code == 0){
+                    if(data.data.result == '' || data.data.result == null){
+                        this.todayExceptionGroup = [
+                                {
+                                    "count": 0,
+                                    "type": "1"
+                                },
+                                {
+                                    "count": 0,
+                                    "type": "2"
+                                },
+                                {
+                                    "count": 0,
+                                    "type": "3"
+                                },
+                                {
+                                    "count": 0,
+                                    "type": "4"
+                                }
+                        ]
+
+                    }else{
+
+                   this.todayExceptionGroup = data.data.result
+                    }
+                }
+            })
+        },
+        infoByEquipmentCode(value){
+            this.$http({
+                url: this.$http.partyUrl('/equipment/index/infoByEquipmentCode/'+value),
+                method: 'post',
+                data: this.$http.adornData({})
+            }).then((data) => {
+                if(data.data.code == 0){
+                    if(data.data.result == null){
+                        this.weight = 0
+                        this.moment = 0
+                        this.towerRange = 0 
+                        this.height = 0
+                        
+                    }else{
+                        this.weight = data.data.result.weight
+                        this.moment = data.data.result.moment 
+                        this.towerRange = data.data.result.towerRange 
+                        this.height = data.data.result.height 
+                    }
+
+                }
+            })
+        },
+        listImageProgress(){
+                this.$http({
+                        url: this.$http.adornUrl('/bim/index/listImageProgress'),
+                    method: 'post',
+                    data: this.$http.adornData({})
+                    }).then((data) => {
+                        if(data.data.code==0){
+                            this.listImageProgressdata = data.data.result
+                            // console.log(this.listImageProgressdata)
+                        }
+                })
+
+        },
+        getWorkerOption(){
+
+                this.$http({
+                url: this.$http.adornUrl('/bim/index/analysisChart'),
+                method: 'post',
+                data: this.$http.adornData({
+                    'dateTime': '2019'
+                })
+                }).then((data) => {
+                if(data.data.code==0){
+                    let result=data.data.result,
+                    arr=[],
+                    subcontractingOutputValueArr=[],
+                    constructionOutputValueArr=[],
+                    installationOutputValueArr=[]
+                    for(var item in result.production){
+                    let obj={}
+                    obj.index=Number(item.split('-')[1])
+                    obj.subcontractingOutputValue=result.production[item].subcontractingOutputValue
+                    obj.constructionOutputValue=result.production[item].constructionOutputValue
+                    obj.installationOutputValue=result.production[item].installationOutputValue
+                    arr.push(obj)
+                    }
+
+                    for(let i=1; i<13; i++){
+                    subcontractingOutputValueArr.push(0)
+                    constructionOutputValueArr.push(0)
+                    installationOutputValueArr.push(0)
+                    }
+                    subcontractingOutputValueArr=this.publicFun(subcontractingOutputValueArr, arr, 'subcontractingOutputValue')
+                    constructionOutputValueArr=this.publicFun(constructionOutputValueArr, arr, 'constructionOutputValue')
+                    installationOutputValueArr=this.publicFun(installationOutputValueArr, arr, 'installationOutputValue')
+                    
+                    this.outputValueAnalysis(subcontractingOutputValueArr,constructionOutputValueArr,installationOutputValueArr)
+                }
+                })
+            
+        },
+      publicFun (data, arr, str){
+        data.forEach((a, i) => {
+          arr.forEach((m, n) => {
+            if(i+1==m.index){
+              data[i]=m[str]
+            }
+          })
+        })
+        // console.log(data)
+        return data
+      },
+      outputValueAnalysis(subcontractingOutputValueArr,constructionOutputValueArr,installationOutputValueArr){
+
+        let myChart = echarts.init(document.getElementById('outputValueAnalysis'))
+        myChart.setOption({
+              title: {
+                        // text: '某地区蒸发量和降水量',
+                        // subtext: '纯属虚构'
+                    },
+
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+
+                        data: ['分包产值', '土建产值', '安装产值'],
+                        top: '10px',
+                        textStyle: {// 图例文字的样式
+                        color: '#00EAFF',
+                        fontSize: 16
+                        }
+                    },
+                    toolbox: {
+                        show: false
+
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                        type: 'category',
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                        axisLine: {
+                            lineStyle: {
+                            color: '#00EAFF'
+                            }
+                        }
+
+                        }
+                    ],
+                    yAxis: [
+                        {
+                        type: 'value',
+                        axisLine: {
+                            lineStyle: {
+                            color: '#00EAFF'
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                            color: ['#00EAFF'],
+                            width: 1,
+                            type: 'solid'
+                            }
+                        }
+                        }
+                    ],
+                    series: [
+                        {
+                        name: '分包产值',
+                        type: 'bar',
+                        data: subcontractingOutputValueArr
+                        },
+                        {
+                        name: '土建产值',
+                        type: 'bar',
+                        data:constructionOutputValueArr
+
+                        },
+                        {
+                        name: '安装产值',
+                        type: 'bar',
+                        data: installationOutputValueArr
+
+                        }
+                    ]
+        })
+
+      },
         selected(value){
             this.active = value;
-            console.log(value)
+            // console.log(value)
             this.QualityAssurance(value)
         },
     
@@ -727,7 +918,7 @@ import { ObjectClear,DateTimeDay } from '@/utils'
           data: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
-              console.log("data1",data)
+            //   console.log("data1",data)
               this.total = data.result.total
               this.toBeRectifiedTotal = data.result.toBeRectifiedTotal
               this.toBeReviewedTotal = data.result.toBeReviewedTotal
@@ -745,7 +936,7 @@ import { ObjectClear,DateTimeDay } from '@/utils'
             item.value = item.number
             item.name = item.name
         })
-        let myChart = this.$echarts.init(document.getElementById('B_charts_1'))
+        let myChart = echarts.init(document.getElementById('B_charts_1'))
         myChart.setOption({
             tooltip: {
                 trigger: 'item',
@@ -778,7 +969,7 @@ import { ObjectClear,DateTimeDay } from '@/utils'
             item.value = item.number
             item.name = item.name
         })
-        let myChart = this.$echarts.init(document.getElementById('B_charts_2'))
+        let myChart = echarts.init(document.getElementById('B_charts_2'))
         myChart.setOption({
             tooltip: {
                 trigger: 'item',
@@ -837,23 +1028,15 @@ import { ObjectClear,DateTimeDay } from '@/utils'
       },
       setOption(){
         //图表
-        let chart = this.$echarts.init(document.getElementById("B_chart"));
+        let chart = echarts.init(document.getElementById("B_chart"));
         chart.setOption(this.B_option,true);
 
-        let chart1 = this.$echarts.init(document.getElementById("Z_echarts"));
+        let chart1 = echarts.init(document.getElementById("Z_echarts"));
         chart1.setOption(this.Z_option,true);
 
-        // let chart2 = this.$echarts.init(document.getElementById("Z_L_echarts"));
-        // chart2.setOption(this.Z_L_option,true);
 
-        // let chart3 = this.$echarts.init(document.getElementById("B_charts_1"));
-        // chart3.setOption(this.B_charts_1_option,true);outputValueAnalysis
-
-        let chart4 = this.$echarts.init(document.getElementById("B_charts_2"));
+        let chart4 = echarts.init(document.getElementById("B_charts_2"));
         chart4.setOption(this.B_charts_2_option,true);
-        
-        let chart5 = this.$echarts.init(document.getElementById("outputValueAnalysis"));
-        chart5.setOption(this.outputValueAnalysis_option,true);
       },
       //里程碑
       milestoneDataList(){
@@ -871,9 +1054,56 @@ import { ObjectClear,DateTimeDay } from '@/utils'
             this.milestoneData = [];
             this.milestoneData = dataarr;
             this.milestoneDataObj.flg = this.arrClear(dataarr)
+            this.startDatenew = data.result[0].startDate
+            this.endDatenew = data.result[0].endDate
+            this.allDays=this.changeDays(this.getDays(data.result[0].startDate, data.result[0].endDate))
+            // console.log(this.allDays)
+            this.nowSafeDays=this.changeDays(this.getDays(data.result[0].startDate, this.getNowFormatDate()))
+            // console.log(this.nowSafeDays)
           }else
           this.$message.error(data.msg);
         });    
+      },
+      getNowFormatDate () {
+        var date = new Date()
+        var seperator1 = '-'
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        var strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = '0' + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = '0' + strDate
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate
+        return currentdate
+      },
+      changeDays (day){
+          // console.log(day)
+        if(day<=9){
+          day=day
+        }else if(day<=99){
+          day=day
+        }else if(day<=999){
+          day=day
+        }else{
+
+        }
+        return day
+      },
+      getDays (strDateStart, strDateEnd){ // 获取天数
+        var strSeparator = '-' // 日期分隔符
+        var oDate1
+        var oDate2
+        var iDays
+        oDate1= strDateStart.split(strSeparator)
+        oDate2= strDateEnd.split(strSeparator)
+        var strDateS = new Date(oDate1[0], oDate1[1]-1, oDate1[2])
+        var strDateE = new Date(oDate2[0], oDate2[1]-1, oDate2[2])
+        iDays = parseInt(Math.abs(strDateS - strDateE) / 1000 / 60 / 60 /24)// 把相差的毫秒数转换为天数
+
+        return iDays 
       },
       arrClear(arr){
           for(let i = 0; i<arr.length;i++)
@@ -901,22 +1131,29 @@ import { ObjectClear,DateTimeDay } from '@/utils'
           data: this.$http.adornData({})
         }).then(({data}) => {
         this.mobileH5loading = false;
-        this.sevenDays();
           if (data && data.code === 0) {
+              this.appearanceNums = data.result.appearanceNums
+              this.entryNums = data.result.entryNums
+              this.venueRealNums = data.result.venueRealNums
             //cake_chartDataListObj
             this.B_option.series[1].name = "班组分布";
             let arr = [];
             data.result.teamDist.forEach((v,i)=>{
-                let color = `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)})`;
-                let obj = {name:v.classNo,value:v.nums,itemStyle: {color: color}};
-                data.result.teamDist[i].color = color;
+                // let color = `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)})`;
+                // let obj = {name:v.classNo,value:v.nums,itemStyle: {color: color}};
+                let obj = {name:v.classNo,value:v.nums};
+                // data.result.teamDist[i].color = color;
                 arr.push(obj)
             });
             this.B_option.series[1].data = arr;
+            // console.log("班组",arr)
             this.Daycake_chartList = [];
             this.Daycake_chartList = data.result.teamDist;
-          }else
-          this.$message.error(data.msg);
+          }else{
+            this.$message.error(data.msg);
+          }
+
+        this.sevenDays();
         }); 
       },
       sevenDays(){
@@ -988,10 +1225,10 @@ import { ObjectClear,DateTimeDay } from '@/utils'
             }
             this.Z_option.yAxis.data = objarr;
             this.Z_option.series = nameArr;
-            let chart = this.$echarts.init(document.getElementById("B_chart"));
+            let chart = echarts.init(document.getElementById("B_chart"));
             chart.setOption(this.B_option,true);
 
-            let chart1 = this.$echarts.init(document.getElementById("Z_echarts"));
+            let chart1 = echarts.init(document.getElementById("Z_echarts"));
             chart1.setOption(this.Z_option,true);
           }else
           this.$message.error(data.msg);
@@ -1043,10 +1280,10 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                 arr2.push(v.qualityProblemTotal);
                 arr3.push(v.safetyProblemTotal+v.qualityProblemTotal);
             });
-            console.log("arr1",arr1)
+            // console.log("arr1",arr1)
             // this.Z_L_option.xAxis[0].data = arrT;
 
-            let myChart = this.$echarts.init(document.getElementById('Z_L_echarts'))
+            let myChart = echarts.init(document.getElementById('Z_L_echarts'))
 
             myChart.setOption({
                  title: {
@@ -1139,13 +1376,6 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                 ]
                 
             })
-
-
-
-
-            // this.Z_L_option.xAxis.data = arrT;
-            // this.Z_L_option.xAxis.data = arrT;
-
           }else
           this.$message.error(data.msg);
         }); 
@@ -1156,18 +1386,51 @@ import { ObjectClear,DateTimeDay } from '@/utils'
     },
   }
 </script>
+<style>
+.carouselbox  .el-carousel__indicator{
+        display:none;
+    }
+</style>
+
 
 <style lang="scss" scoped>
 
+.banner-wrap{width:100%;height:auto;}
+	.banner{padding-top: 50%;width: 100%;height: auto; overflow: hidden; position: relative;}
+	.banner img{position:absolute;left:0;top:0;width:100%; height:100%; }
+.carouselbox{
+    .carouselbox{
+        height:20rem;
+    }
+    .listimgs{
+        height:10rem;
+        position: relative;
+        overflow: hidden;
+        img{
+            // height:10rem;
+            // width:100%;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) scale(1);
+            border:none;
+            border-radius: 6px;display:table-cell
+        }
+    }
+    ul{
+        margin-top:0.3rem;
+    }
+}
 
 .mobileH5{
+    overflow-y: auto;
     width: 100%;
     position: fixed;
     height: 100%;
-    overflow: auto;
     top: 0;
     left: 0;
-    z-index: 111111;
+    // z-index: 111111;
     background: #fff;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     header{
@@ -1182,10 +1445,19 @@ import { ObjectClear,DateTimeDay } from '@/utils'
         top: 0;
         z-index: 1111111111111111111;
     }
+    .el-main{
+        padding:0;
+    }
+    
     main{
-        padding: 0px 1.2rem 0px 1.2rem;
-        margin-top: 60px;
+        .mainbox{
+             padding: 0px 1.2rem 0px 1.2rem;
+        }
+        // padding: 0px 1.2rem 0px 1.2rem;
+        // margin-top: 60px;
         .milestone{
+           
+            padding:20px;
             width: 100%;
             height: 5.5rem;
             margin-bottom: 2rem;
@@ -1205,7 +1477,7 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                     width: 25%;
                     text-align: center;
                     color: #8A9098;
-                    font-size: .9rem;
+                    // font-size: .9rem;
                     padding: 4px 0px;
                     }
                 }
@@ -1302,8 +1574,8 @@ import { ObjectClear,DateTimeDay } from '@/utils'
                 }
                 .B_chart{
                     height: 100%;
-                    float: right;
-                    width: 74%;
+                    // float: right;
+                    // width: 74%;
                 }
             }
             .Z_echarts{
@@ -1498,7 +1770,8 @@ import { ObjectClear,DateTimeDay } from '@/utils'
         .outputValueAnalysis{
             width: 100%;
             padding: 1rem 0px;
-            height: 14rem;
+            height: 20rem;
+            border: 2px solid #E1E1E1;
         }
         .towerSwitch {
             width: 100%;
@@ -1613,12 +1886,11 @@ background-color: #d3dce6;
 .mobileH5 .el-carousel {
     overflow: hidden;
 }
-.mobileH5 .el-progress__text{
+/* .mobileH5 .el-progress__text{
     font-size: 12px !important;
-}
-.mobileH5 .el-progress-bar {
-    padding-right: 38px;
-    margin-right: -43px;
-}
+} */
+.mobileH5 .el-progress-bar__outer {
+    background:#747474;
+} 
 </style>
 

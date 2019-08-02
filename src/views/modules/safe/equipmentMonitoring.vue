@@ -1,7 +1,7 @@
 <template>
   <div class="equipmentMonitoring" >
-    <main class="equipmentMonitoring_contains" ref="equipmentMonitoring_contains">
-      <div v-show="equipmentMain == 1">
+    <main :style="{height:documentClientHeight -110+'px',width:(documentClientWidth - 330)+'px',margin: '0 auto'}" v-show="equipmentMonitoringBle" v-loading="equipmentMonitoringloading" class="equipmentMonitoring_contains" ref="equipmentMonitoring_contains">
+      <div style="width: 100%;height: 100%;position: relative;" v-show="equipmentMain == 1">
         <div class="select_div">
           <el-select v-model="equipmentVlaue" @change="equipmentVlaueChange" placeholder="IOT设备">
             <el-option
@@ -25,32 +25,33 @@
           </div>        
         </div>        
       </div>
-      <!-- 塔机 -->
-      <div v-if="equipmentMain == 2" style="height: 100%;
+      <!-- <div style="    width: 10px;
+    background: #ccc;
+    height: 10px;
     position: absolute;
-    left: 0;
-    width: 100%;">
-        <tower :nameObj="nameObj"  @tower="tower"></tower>
-      </div>
-      <!-- 临边防护 -->
-      <div v-if="equipmentMain == 3" style="width: 100%;
+    top: calc(61% - 14px);
+    left: calc(92.8% - 12px);"></div> -->
+      <!-- 塔机 -->
+      <!-- 悬挑钢平台 -->
+      <div v-if="equipmentMain == 3" style="    width: 100%;
     height: 100%;
     margin: 0px auto;
-    position: absolute;
     left: 0px;
-    top: 0px;">
+    top: 0px;
+    overflow: hidden;">
       <span style="    display: block;
     width: 22px;
     height: 22px;
     position: absolute;
-    right: 14px;
-    top: 18px;
-    font-size: 16px;
+    right: 75px;
+    top: 58px;
+    font-size: 14px;
     cursor: pointer;
     text-align: center;
     line-height: 22px;
     z-index: 1111;
-    background: #fff;
+    background: #ccc;
+    color: #fff;
     border-radius: 12px;" @click="equipmentMain = 1">X</span>
         <over-guard :nameObj="nameObj"  @overGuard="overGuard"></over-guard>
       </div>
@@ -58,20 +59,26 @@
       <div v-if="equipmentMain == 4" style="width: 100%;
     height: 100%;
     position: absolute;
+    overflow: hidden;
     background: #fff;">
         <span style="    display: block;
-    width: 1rem;
-    height: 1rem;
+    width: 20px;
+    height: 20px;
     position: absolute;
     right: 8px;
-    top: -10px;
-    font-size: 16px;
+    top: 4px;
+    font-size: 12px;
     cursor: pointer;
     text-align: center;
-    line-height: 1rem;" @click="equipmentMain = 1">X</span>
+    line-height: 1rem;
+    background: #ccc;
+    border-radius: 10px;
+    line-height: 20px;
+        z-index: 111111;
+    color: #fff;" @click="equipmentMain = 1">X</span>
         <video-box></video-box>
       </div>
-      <!-- 悬挑钢平台 -->
+      <!-- 临边防护 -->
       <div v-if="equipmentMain == 5" style="width: 100%;
     height: 100%;
     margin: 0px auto;
@@ -79,12 +86,19 @@
         <cantilevered-steel :nameObj="nameObj" @cantileveredSteel="cantileveredSteel"></cantilevered-steel>
       </div>
     </main>
+      <div v-if="equipmentMain == 2" style="    height: 100%;
+    left: 0px;
+    width: 100%;
+    overflow: auto hidden;">
+        <tower :nameObj="nameObj"  @tower="tower"></tower>
+      </div>
   </div>
 </template>
 
 <script>
+import { isURL } from '@/utils/validate'
     import tower from "./tower";
-    import videoBox from "./videoBox";overGuard
+    import videoBox from "./videoBox";
     import cantileveredSteel from "./cantileveredSteel";
     import overGuard from "./overGuard";
     export default {
@@ -104,8 +118,34 @@
             video_surveillance:true,
             Over_guard:true,
             Cantilevered_steel_platform:true,
+            equipmentMonitoringloading:false,
             equipmentMain:1,
+            equipmentMonitoringBle:false,
             equipmentloading:false,
+            //塔机五个位置
+            towerPosition:[
+              {top: 'calc(20% - 74px)',left: 'calc(25% - 38px)'},
+              {top: 'calc(52% - 74px)',left: 'calc(79% - 28px)'},
+              {top: 'calc(68% - 74px)',left: 'calc(79.8% - 28px)'},
+              {top: 'calc(87% - 74px)',left: 'calc(68.9% - 28px)'},
+              {top: 'calc(85% - 74px)',left: 'calc(85% - 28px)'},
+            ],
+            //
+            cantileveredPosition:[
+              {top: 'calc(27.4% - 74px)',left: 'calc(49.6% - 28px)'},
+              {top: 'calc(55.6% - 74px)',left: 'calc(54.6% - 28px)'},
+              {top: 'calc(64.6% - 74px)',left: 'calc(54.6% - 28px)'},
+            ],
+            //
+            videoPosition:[
+              {top: 'calc(63.2% - 74px)',left: 'calc(29.6% - 28px)'},
+              {top: 'calc(36.2% - 74px)',left: 'calc(36% - 28px)'},
+            ],
+            //
+            overGuardPosition:[
+               {top: 'calc(28% - 74px)',left: 'calc(66% - 28px)'},
+               {top: 'calc(60.2% - 74px)',left: 'calc(91.8% - 28px)'},
+            ],
             OfH:0,
             OfW:0,
           }
@@ -118,33 +158,39 @@
       },
       watch: {
         equipmentMain(val){
-          if(val == 2 || val == 3)
-          {
-            this.$refs.equipmentMonitoring_contains.style.width = "100%";
-            this.$refs.equipmentMonitoring_contains.style.height = "100%";
-          }else if(val == 1)
-          {
-            this.$refs.equipmentMonitoring_contains.style.width = "100%"
-            this.$refs.equipmentMonitoring_contains.style.height = this.OfH;
-          }else if(val == 5)
-          {
-            this.$refs.equipmentMonitoring_contains.style.width = "100%";
-            this.$refs.equipmentMonitoring_contains.style.height = (this.$store.state.common.documentClientHeight-80)+"px";
-          }
+          // if(val == 2 || val == 3)
+          // {
+          //   this.$refs.equipmentMonitoring_contains.style.width = "95.2%";
+          //   this.$refs.equipmentMonitoring_contains.style.height = "90%";
+          // }else if(val == 5)
+          // {
+          //   this.$refs.equipmentMonitoring_contains.style.width = "95.2%";
+          //   this.$refs.equipmentMonitoring_contains.style.height = (this.$store.state.common.documentClientHeight-80)+"px";
+          // }
         }
       },
       created() {
+        this.equipmentMonitoringBle = true;
         this.getDataList();
       },
       computed: {
+        documentClientHeight: {
+          get () { return this.$store.state.common.documentClientHeight }
+        },
+        documentClientWidth: {
+          get () { return this.$store.state.common.documentClientWidth }
+        },
       },
       beforeRouteLeave(to, from, next) {
+        this.equipmentMonitoringBle = false;
+        document.getElementsByClassName("el-card__body")[0].parentElement.style.overflow = "hidden";
+        document.getElementsByClassName("el-card__body")[0].style.width = "100%";
         this.$destroy();
         next();
       },
       mounted() {
-        this.OfW = this.$refs.equipmentMonitoring_contains.style.width;
-        this.OfH = this.$refs.equipmentMonitoring_contains.style.height;
+        // this.OfW = this.$refs.equipmentMonitoring_contains.style.width;documentClientWidth
+        // this.OfH = this.$refs.equipmentMonitoring_contains.style.height;
       },
        methods:{
          equipmentVlaueChange(val){
@@ -180,14 +226,14 @@
            }
          },
          getDataList(){
-            this.equipmentloading = true;
+            this.equipmentMonitoringloading = true;
             this.equipmentVlaue = "";
             this.$http({
               url: this.$http.partyUrl('/equipment/equipment/groupByType'),
               method: 'get',
               data: this.$http.adornData({})
             }).then(({data}) => {
-              this.equipmentloading = false;
+              this.equipmentMonitoringloading = false;
               if (data && data.code === 0) {
                 let type = data.result,objD = [{id:0,name:"所有设备"}];
                 type.unshift("0");
@@ -232,7 +278,8 @@
         equipmentMainFuc(type,item){
           if(type == "1")
           {
-            this.nameObj = {name:item.equipmentCode,status:this.statusF(item.status),no:item.id}
+            this.nameObj = {name:item.equipmentCode,status:this.statusF(item.status),no:item.id};
+            this.equipmentMonitoringBle = false;
             this.equipmentMain = 2
           }
           else if(type == "3")
@@ -283,16 +330,29 @@
           return "非正常断电"
         },
         unifyAjax(type){
-          this.equipmentloading = true;
+          this.equipmentMonitoringloading = true;
           this.$http({
             url: this.$http.partyUrl('/equipment/equipment/list/'+type),
             method: 'post',
           }).then(({data}) => {
-            this.equipmentloading = false;
+            this.equipmentMonitoringloading = false;
             if (data && data.code === 0) {
               let vm = this;
+              let towerPosition = 0,cantileveredPosition = 0,videoPosition = 0,overGuardPosition = 0;
               data.result.forEach((v,i)=>{
-                v.random = vm.random();
+                if(v.type == "1"){
+                  v.random = vm.towerPosition[towerPosition];
+                  towerPosition++;
+                }else if(v.type == "3"){
+                  v.random = vm.cantileveredPosition[cantileveredPosition];
+                  cantileveredPosition++;
+                }else if(v.type == "4"){
+                  v.random = vm.videoPosition[videoPosition];
+                  videoPosition++;
+                }else if(v.type == "5"){
+                  v.random = vm.overGuardPosition[overGuardPosition];
+                  overGuardPosition++;
+                }
               });
               this.dataList = data.result;
             }else
@@ -301,11 +361,14 @@
         },
         cantileveredSteel(){
           this.equipmentMain = 1;
+          this.equipmentMonitoringBle = true;
         },
         overGuard(){
           this.equipmentMain = 1;
+          this.equipmentMonitoringBle = true;
         },
         tower(){
+          this.equipmentMonitoringBle = true;
           this.equipmentMain = 1;
         },
        }
@@ -321,11 +384,9 @@
     width: 100%;
     height: 100%;
     .equipmentMonitoring_contains{
-      width: 100%;
-      height: 1120px;
+      width: 95.2%;
       background: url(~@/assets/img/equipment.jpg) no-repeat;
       background-size: 100% 100%;
-      position: relative;
       .select_div{
         position: absolute;
         top: 1rem;
@@ -409,30 +470,6 @@
       }
       .Over_guard:hover #Over_guard2{
         display: block;
-      }
-      .one{
-        left: 352px;
-        top: 176px;
-      }
-      .two{
-        left: 1230px;
-        top: 518px;
-      }
-      .three{
-        left: 428px;
-        top: 330px;
-      }
-      .four{
-        left: 1406px;
-        top: 326px;
-      }
-      .five{
-        left: 1006px;
-        top: 230px;
-      }
-      .six{
-        left: 760px;
-        top: 220px;
       }
     }
   }

@@ -1,10 +1,28 @@
 <template>
   <div class="contains" >
     <div  class="header" >
+       <el-form :inline="true"  >
+            <el-form-item >
+      <el-input v-model="params.name" placeholder="计划清单名称"  clearable></el-input>
+            </el-form-item>
+            <el-form-item >
+      <el-button  @click="searchTree(params.name)">查询</el-button>
+            </el-form-item>
+            <el-form-item >      
+              <template v-if="checkNum===1">
+<!--        <upload @getFile="getFileFun" :listId="uoloadData" ></upload>-->
+      </template>
+      <template v-if="checkNum===2">
+<!--        <el-button  type="warning" size="small" @click="addOrUpdateHandleExcel">修改</el-button>-->
+<!--        <el-button  type="danger"  size="small" @click="deleteHandle">删除</el-button>-->
+        <el-button  type="primary"  @click="importExcelFun">导出计划清单</el-button>
+        <el-button type="primary"  @click="assOrUpdateHandle" >详情查看</el-button>
+<!--        <el-button type="danger" size="small" @click="removeOrUpdateHandle" v-if="rowStatus==1">取消关联</el-button>-->
+      </template>
+            </el-form-item>
+       </el-form>
 
-      <el-input v-model="params.name" placeholder="计划清单名称" style="width: 20%" clearable></el-input>
 
-      <el-button type="success" @click="searchTree(params.name)">搜索</el-button>
 
       <!--<el-button type="primary" @click="importExcel">导入计划清单</el-button>-->
 
@@ -12,16 +30,7 @@
       <!--        <template v-if="checkNum===0">-->
       <!--          <el-button  size="small" type="warning" @click="editOrUpdateHandle">修改</el-button>-->
       <!--        </template>-->
-      <template v-if="checkNum===1">
-<!--        <upload @getFile="getFileFun" :listId="uoloadData" ></upload>-->
-      </template>
-      <template v-if="checkNum===2">
-<!--        <el-button  type="warning" size="small" @click="addOrUpdateHandleExcel">修改</el-button>-->
-<!--        <el-button  type="danger"  size="small" @click="deleteHandle">删除</el-button>-->
-        <el-button  type="primary" size="small" @click="importExcelFun">导出计划清单</el-button>
-        <el-button type="primary" size="small" @click="assOrUpdateHandle" >详情查看</el-button>
-<!--        <el-button type="danger" size="small" @click="removeOrUpdateHandle" v-if="rowStatus==1">取消关联</el-button>-->
-      </template>
+
       <!--<el-button type="primary">单体分组</el-button>-->
 
 

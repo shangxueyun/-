@@ -4,8 +4,7 @@
     :visible.sync="dialogVisible"
     :modal-append-to-body="true"
     :append-to-body="true"
-    width="80%"
-    :before-close="handleClose">
+    width="80%">
     <modelTableList :datas="data" ref="modelTableList" v-loading="loading"></modelTableList>
     <span slot="footer" class="dialog-footer">
 <!--    <el-button @click="dialogVisible = false">取 消</el-button>-->
@@ -42,16 +41,10 @@
             this.data=data;
             this.loading=false;
             this.$refs.modelTableList.init(this.data,0)
-            console.log(this.data)
+            // console.log(this.data)
           })
         },
-        handleClose(done) {
-          this.$confirm('确认关闭？')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {});
-        }
+     
       },
       mounted(){
 

@@ -1,7 +1,12 @@
 <template>
   <div>
         <el-form :inline="true"  :model="dataForm"  ref="dataForm" @keyup.enter.native="getDataList()">
-            <el-form-item label="安保人员" prop="userName">
+          
+          <el-form-item prop="labelName">
+              <el-input v-model="dataForm.labelName" placeholder="请输入打卡标签" clearable></el-input>
+          </el-form-item>
+      
+            <el-form-item prop="userName">
                   <el-select v-model="dataForm.userName" width=100% clearable placeholder="请选择安保人员">
                     <el-option
                       v-for="item in options"
@@ -11,15 +16,15 @@
                     </el-option>
                   </el-select>
             </el-form-item>
-            <el-form-item label="上传时间区间" prop="times">
+            <el-form-item  prop="times">
                   <el-date-picker
                     v-model="dataForm.times"
                     type="datetimerange"
                     range-separator="-"
                     format="yyyy-MM-dd HH:mm:ss"
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    start-placeholder="上传开始日期"
+                    end-placeholder="上传结束日期">
                   </el-date-picker>
             </el-form-item>
             <el-form-item>
@@ -93,7 +98,8 @@
               options:[],
               dataForm: {
                 userName: '',
-                times:''
+                times:'',
+                labelName:''
               },
               dataListLoading: false,
               patrolMapVisible:false,
@@ -145,7 +151,8 @@
                 'param':{
                   'endTime':(this.dataForm.times[1]),
                   'startTime':(this.dataForm.times[0]),
-                  'userId':this.dataForm.userName
+                  'userId':this.dataForm.userName,
+                  'labelName':this.dataForm.labelName
                 }
               })
             }).then(({data}) => {

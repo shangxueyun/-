@@ -198,7 +198,19 @@
     </div>
 
 
-    <div class="h3" v-if="viewerDing">
+    <div class="h3" style="position: relative;margin-top: 10px;" v-if="viewerDing">
+      <div style="    position: absolute;
+    top: 6px;
+    right: 0px;
+    width: 100px;
+    height: 24px;
+    background: #3E8EF7;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
+    cursor: pointer;
+    text-align: center;" @click="ClickModel">关闭模型</div>
       <h3>模型展示</h3>
       <el-checkbox v-model="Color_checked" @change="ColorFunc">非选中区透明</el-checkbox>
     </div>
@@ -480,6 +492,11 @@
       actualEndTimeDate(val){
         if(val)
         this.verifyDate('actualEndTime',val);
+      },
+      //关闭模型
+      ClickModel(){
+        this.viewerDing = false;
+        RemoveModel(this.ModelRenderingName);
       },
       verifyDate(data,val,str){
         let datastr,value,strs;
@@ -842,7 +859,7 @@
         }
       },
       uploadFile (file) {
-        debugger
+        // debugger
         let uploadSize = file.file.size,vm = this,fromData = new FormData(),fileBle = true;
         let fileName = file.file.name.substr(0,file.file.name.lastIndexOf('.'));
         let type = file.file.name.substr(file.file.name.lastIndexOf('.'),file.file.name.length);

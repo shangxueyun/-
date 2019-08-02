@@ -289,24 +289,50 @@
             item.name = item.classNo
         })
         // console.log(piearrs)
-        let myChart = this.$echarts.init(document.getElementById('teampie'))
+        let myChart = echarts.init(document.getElementById('teampie'))
         // 绘制图表
         myChart.setOption({
             tooltip: {
                 // trigger: 'item',
                 formatter: "{b}: {c}人 ({d}%)"
             },
+            legend: {
+                  type: 'scroll',
+                  orient: 'vertical',
+                  formatter: function (name) {
+                    if (!name) return ''
+                    if (name.length > 10) {
+                      return name.slice(0, 10) + '...'
+                    }else{
+                      return name
+                    }
+                  },
+                  padding:[0,0,0,20],
+                  x: 'left',
+                  textStyle: {// 图例文字的样式
+                    color: '#000',
+                    fontSize: 14
+                  },    
+                  data: piearrs
+
+            },
             series: [
                 {
                     type:'pie',      
-                    center: ["50%", "50%"],
-                    radius: ['80%', '30%'],
+                    center: ["70%", "50%"],
+                    radius: ['60%', '30%'],
                     avoidLabelOverlap: false,
                     label: {
                         normal: {
                             show: true,
                             position: 'inside',
-                            formatter: '{d}%',
+                            // formatter: '{d}%',
+                            formatter: function (obj) {
+
+console.log(obj.percent)
+
+                                return obj.percent
+                            },
                         }
                     },
                     labelLine: {
@@ -327,7 +353,7 @@
             item.value = item.nums
             item.name = item.workKindName
         })
-        let myChart = this.$echarts.init(document.getElementById('workpie'))
+        let myChart = echarts.init(document.getElementById('workpie'))
         // 绘制图表
         myChart.setOption({
             tooltip: {
@@ -363,7 +389,7 @@
         var  color =['#4dc1f0','#9989fc','#ff9d5c','#2d6da6','#398cc4',]
         var piearrs = arr 
         var max = Math.max.apply(null, arr);
-        let myChart = this.$echarts.init(document.getElementById('laborTrendChart'))
+        let myChart = echarts.init(document.getElementById('laborTrendChart'))
 
         var time = new Date();
         var year = time.getFullYear();
@@ -426,7 +452,7 @@
         console.log(nums)
         
      
-        let myChart = this.$echarts.init(document.getElementById('regionmap'))
+        let myChart = echarts.init(document.getElementById('regionmap'))
         // 绘制图表
         myChart.setOption({
             title: {
@@ -503,7 +529,7 @@
   // height:67px;
   background: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  // box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   padding:15px 20px 0 20px;
   h2{
     border-bottom:1px solid #fff;
@@ -529,12 +555,18 @@
 }
 .onsite{
   background: #ff9d5c;
+    background: url(~@/assets/img/onsite_bg.png) no-repeat;
+    background-size:100% 100%;
 }
 .entry{
   background: #a676ff;
+    background: url(~@/assets/img/entry_bg.png) no-repeat;
+    background-size:100% 100%;
 }
 .appearance{
   background: #ff758b;
+    background: url(~@/assets/img/appearance_bg.png) no-repeat;
+    background-size:100% 100%;
 }
 .echartsbox{
   height:300px;

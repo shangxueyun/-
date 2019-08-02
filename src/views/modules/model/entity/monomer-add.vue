@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增单体分组' : '编辑单体分组'"
+    :title="!dataForm.id ? '新增单体分组' : '修改单体分组'"
     :close-on-click-modal="false"
     :modal-append-to-body="true"
     :append-to-body="true"

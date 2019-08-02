@@ -53,7 +53,7 @@
                           <li><span>项目名称：</span>{{projectName}}</li>
                           <li><span>工程地点：</span>{{address}}</li>
                           <li><span>结构形式：</span>{{structuralStyle}}</li>
-                          <li><span>业主单位：</span>{{ownerUnit}}</li>
+                          <!-- <li><span>业主单位：</span>{{ownerUnit}}</li> -->
                           <li><span>建设单位：</span>{{constructionUnit}}</li>
                           <li><span>监理单位：</span>{{supervisorUnit}}</li>
                           <li><span>施工单位：</span>{{constructionCompanies}}</li>
@@ -63,13 +63,13 @@
                 <el-col :span="10">
                     <ul class="listboard">
                         <li><span class="seize">建筑面积：</span>{{floorage}}m²</li>
-                        <li><span>工程造价：</span>{{engineeringCost}}元</li>
+                        <li><span>工程造价：</span>{{engineeringCost}}万元</li>
                         <li><span>规模性质：</span>{{scaleNature}}</li>
                         <li><span>投资类型：</span>{{investmentType}}</li>
-                        <li><span>合同开工时间：</span>{{startTime}}</li>
-                        <li><span>合同竣工时间：</span>{{endTime}}</li>
-                        <li><span>实际开工时间：</span>{{actualStartTime}}</li>
-                        <li><span>实际竣工时间：</span>{{actualEndTime}}</li>
+                        <li><span>开工时间：</span>{{startTime}}</li>
+                        <li><span>竣工时间：</span>{{endTime}}</li>
+                        <!-- <li><span>实际开工时间：</span>{{actualStartTime}}</li> -->
+                        <!-- <li><span>实际竣工时间：</span>{{actualEndTime}}</li> -->
                     </ul>
                 </el-col>  
             </el-row>   
@@ -99,6 +99,9 @@
 </template>
 
 <script>
+
+  "use strict";
+
  import 'video.js/dist/video-js.css'
 
 import { videoPlayer } from 'vue-video-player'
@@ -194,11 +197,18 @@ import 'viewerjs/dist/viewer.css';
             //初始化 viewerjs
           var ViewerDom = document.getElementById('projectImgList');
           var viewer = new Viewer(ViewerDom, {
-                navbar:false,
+                navbar:true,
                 title:false,
-                toolbar:false,	
-                // url: 'data-original'
-                // loop:false,
+                toolbar:true,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                transition:true,
+                fullscreen:false,
+                keyboard:false,
+                backdrop:true,
+                loop:true,
+                loading:true,
           })
       },
       // 获取数据列表
@@ -295,9 +305,7 @@ video,button{
 
 
 <style  lang="scss" >
-.videostypeimg{
-  
-}
+
 .imgsloop{
   width: 100%;
   height:100%;

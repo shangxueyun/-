@@ -54,7 +54,7 @@
         <el-table
             :data="dataList"
             border
-            @cell-dblclick="scheduleDetails"
+            @cell-click="scheduleDetails"
             v-loading="dataListLoading"
             header-row-class-name="dataListheader"
             highlight-current-row
@@ -128,7 +128,7 @@
       </el-breadcrumb>
       <div style="position: absolute;width: 97.5%;top: 3rem;">
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
               <el-table
                 :data="constructionRegionData"
                 style="width: 100%"
@@ -221,16 +221,94 @@
             <el-container>
               <el-header height="50px">照片 </el-header>
               <el-main style="padding: 3rem;height: 455px;line-height: 36px;font-size: 14px;border-bottom: 1px solid #eee;">
-                <el-row :gutter="10">
+                <el-row id="projectImgList" :gutter="10">
                   <el-col v-for="(item,key) in Detailsimgs"  v-if="key<6" :key="key" :sm="12" :md="12" :lg="12" :xl="8">
                     <a href="javascript:void(0);" @click="swiperdialog">
-                      <img :src="item" alt="图片1">
+                      <img @click="swiperdialog" :src="item" alt="图片1">
                       图片{{key+1}}
                     </a>
                   </el-col>
                 </el-row>
               </el-main>
             </el-container>
+          </el-col> -->
+          <el-col :span="24">
+              <div class="teamDistribution" style="margin-top:10px;">
+                      <div class="form_content" style="padding-top: 0px;">
+                          <el-form>
+                              <el-form-item label="单体 :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.monomerName"></el-input>
+                              </el-form-item>
+                              <el-form-item label="流水段 :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.flowSectionName"></el-input>
+                              </el-form-item>
+                              <el-form-item label="楼层 :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.floorName"></el-input>
+                              </el-form-item>
+                              <br style="clear: both;">
+                              <el-form-item label="工种总数（种） :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.totalNumber"></el-input>
+                              </el-form-item>
+                              <el-form-item label="用工总量（人） :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.totalEmployment"></el-input>
+                              </el-form-item>
+                              <br style="clear: both;">
+                              <el-form-item label="上传人员 :" label-width="118px" style="width:26%;float: left;">
+                                    <el-input class="zdyinput" style="width:74%;" disabled v-model="DetailsObj.createUser"></el-input>
+                              </el-form-item>
+                              <el-form-item label="上传时间 :" label-width="118px" style="width:36%;float: left;">
+                                    <el-input class="zdyinput" style="width:86%;" disabled v-model="DetailsObj.createTime"></el-input>
+                              </el-form-item>
+                              <br style="clear: both;">
+                              <el-form-item label="工作内容 :" label-width="118px" style="width:84%;float: left;">
+                                    <el-input class="zdyinput" type="textarea" style="width:86%;" disabled v-model="DetailsObj.scheduleDetailscontent"></el-input>
+                              </el-form-item>
+                          </el-form>
+                      </div>
+                      <div class="form_content" style="margin-bottom: 18px;">
+                        <div style="width:50%;float: left;">
+                          <el-table
+                                :data="DetailstableData"
+                                border
+                                header-cell-class-name="ssssaaa"
+                                style="width: 100%">
+                            <el-table-column
+                              type="index"
+                              label="序号"
+                              header-align="center"
+                              width="80"
+                              align="center">
+                            </el-table-column>
+                            <el-table-column
+                              prop="name"
+                              label="工种"
+                              header-align="center"
+                              align="center">
+                            </el-table-column>
+                            <el-table-column
+                              prop="number"
+                              label="数量（人）"                        
+                              header-align="center"
+                              align="center">
+                            </el-table-column>
+                          </el-table>
+                        </div>
+                        <div style="width:50%;float: left;">
+                            <el-header height="50px">照片 </el-header>
+                            <el-main style="    padding: 3rem;height: auto;line-height: 36px;font-size: 14px;border-bottom: 1px solid rgb(238, 238, 238);border-left: 1px solid rgb(238, 238, 238);">
+                              <el-row id="projectImgList" :gutter="10">
+                                <el-col @click="swiperdialog" v-for="(item,key) in Detailsimgs"  v-if="key<6" :key="key" :sm="12" :md="12" :lg="12" :xl="8">
+                                  <a href="javascript:void(0);" @click="swiperdialog">
+                                    <img @click="swiperdialog" :src="item" alt="图片1">
+                                    图片{{key+1}}
+                                  </a>
+                                </el-col>
+                              </el-row>
+                            </el-main>
+                        </div>
+                        <br style="clear: both;">
+                      </div>
+              </div>  
           </el-col>
         </el-row>        
       </div>
@@ -269,6 +347,8 @@
 </template>
 
 <script>
+  import Viewer from 'viewerjs';
+  import 'viewerjs/dist/viewer.css';
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     components: {
@@ -307,6 +387,8 @@
         Detailsimgs:[],
         swiperimgs:[],
         swiperdialogBle:false,
+        DetailstableData:[],
+        DetailsObj:{},
         //
         dataListLoading:false,
         visualProgressLoading:false,
@@ -365,7 +447,7 @@
         if(num == 1){
             this.pageIndex = 1
         }
-        debugger
+        // debugger
         this.visualProgressLoading = true;
         this.$http({
           url: this.$http.adornUrl('/bim/imageProgress/list'),
@@ -514,8 +596,19 @@
         });
       },
       DetailsEleData(Obj){
+        debugger
         //施工区域
         this.constructionRegionData = [];
+        this.DetailsObj = {
+          monomerName:Obj.monomerName,
+          flowSectionName:Obj.flowSectionName,
+          floorName:Obj.floorName,
+          scheduleDetailscontent:Obj.content,
+          createTime:Obj.createTime,
+          createUser:Obj.createUser,
+          totalNumber:Obj.totalNumber,
+          totalEmployment:Obj.totalEmployment
+        }
         this.constructionRegionData = [{
           monomerName:Obj.monomerName,
           flowSectionName:Obj.flowSectionName,
@@ -523,31 +616,43 @@
         }]
         this.numberEmploymentData = [];
         this.numberEmploymentData = [
-          {totalNumber:Obj.totalNumber,
-          totalEmployment:Obj.totalEmployment}
+          {
+          totalNumber:Obj.totalNumber,
+          totalEmployment:Obj.totalEmployment
+          }
         ]
         this.leftContentData = Obj.laborDtoList;
+        this.DetailstableData = Obj.laborDtoList;
         this.scheduleDetailsObjD = {
           scheduleDetailscontent:Obj.content,
           createTime:Obj.createTime,
           createUser:Obj.createUser,
         }
+        //         DetailstableData:[],
+        // DetailsObj:{},
         this.Detailsimgs = [];
         this.Detailsimgs = Obj.imgs;
         this.switchModule = 2;
       },
       swiperdialog(){
-        this.swiperdialogBle = true;
-        this.swiperimgs = [];
-        this.swiperimgs = this.Detailsimgs;
-        this.swiperOptionThumbs.slidesPerView = this.Detailsimgs.length;
-        this.dialogVisible = true;
-        this.$nextTick(() => {
-          const swiperTop = this.$refs.swiperTop.swiper
-          const swiperThumbs = this.$refs.swiperThumbs.swiper
-          swiperTop.controller.control = swiperThumbs
-          swiperThumbs.controller.control = swiperTop
-        })
+          //初始化 viewerjs
+          var ViewerDom = document.getElementById('projectImgList');
+          var viewer = new Viewer(ViewerDom, {
+                navbar:true,
+                title:false,
+                toolbar:true,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                transition:true,
+                fullscreen:false,
+                keyboard:false,
+                backdrop:true,
+                loop:true,
+                loading:true,
+                // url: 'data-original'
+                // loop:false,
+          })
       },
       //Object
       examine(obj){
@@ -628,6 +733,22 @@
     padding: 0
   }
 }
+.teamDistribution{
+  h2{
+    border-bottom:1px solid #ebeef5;
+    color:#303133;
+    height:50px;
+    line-height: 50px;
+    font-size: 16px;
+    text-indent: 20px;
+  }
+  .form_content{
+    padding: 20px 0px;
+  }
+}
+.zdyinput.is-disabled .el-input__inner{
+  color:#606266;
+}
 </style>
 <style>
 .visualProgress .inquire button {
@@ -674,6 +795,9 @@
     border-bottom: 1px solid #eee;
     border-right: 1px solid #eee;
   }
+.visualProgress .ssssaaa {
+    line-height: 34px;
+}
 </style>
 <style lang="scss" scoped>
   .swiper-container {
@@ -699,6 +823,9 @@
   }
   .gallery-thumbs .swiper-slide-active {
     opacity: 1;
+  }
+  #projectImgList a{
+    cursor:default;
   }
 </style>
 

@@ -1,13 +1,13 @@
 <template>
-  <div class="environmentalMonitoring" v-loading="environmentalMonitoringloading">
+  <div class="environmentalMonitoring" :data="flgE" v-loading="environmentalMonitoringloading">
         <el-header height="50px">
             环境监测
         </el-header>
-        <el-main style="width: 100%;padding: 20px 6px;" id="mainCont">
+        <el-main style="width: 100%;padding: 14px 4px 0px 4px;" id="mainCont">
             <div class="content_left">
                 <div class="weather">
                     <el-header height="60px">
-                        天气情况<span style="float: right;font-size: 18px;"><i class="el-icon-thirdweizhi"></i>{{DayWeather.city}}</span>
+                        天气情况<span style="float: right;font-size: 16px;color: #3DA7FA;font-weight: 400;"><i class="el-icon-thirdweizhi"></i>{{DayWeather.city}}</span>
                     </el-header>
                     <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
                         <tr v-if="DayWeather.Day.length>0">
@@ -25,48 +25,53 @@
                     </table>
                 </div>
                 <div class="temperature">
-                    <div style="background:#199ED8;margin-right: 10px;" class="temperature_model">
-                        <ul>
-                            <li>温度</li>
-                            <li>{{infoObj.temperature}}&deg;C</li>
-                        </ul>
-                        <i class="el-icon-thirdtemperature"></i>
-                    </div>
-                    <div style="background:#199ED8" class="temperature_model">
-                        <ul>
-                            <li>湿度</li>
-                            <li>{{infoObj.humidity}}hpa</li>
-                        </ul>
-                        <i class="el-icon-thirdshidu"></i>
-                    </div>
-                    <div style="background:#1AB2D2;margin-right: 10px;" class="temperature_model">
-                        <ul>
-                            <li>PM &nbsp;2.5</li>
-                            <li>{{infoObj.pm}}</li>
-                        </ul>
-                        <i class="el-icon-thirdapp_icons--"></i>
-                    </div>
-                    <div style="background:#EC5574" class="temperature_model">
-                        <ul>
-                            <li>PM &nbsp;10</li>
-                            <li>{{infoObj.pm10}}</li>
-                        </ul>
-                        <i class="el-icon-thirdapp_icons--1"></i>
-                    </div>
-                    <div style="background:#1DD8D9;margin-right: 10px;" class="temperature_model">
-                        <ul>
-                            <li>噪音</li>
-                            <li>{{infoObj.noise}}分贝</li>
-                        </ul>
-                        <i class="el-icon-thirdzaoyin"></i>
-                    </div>
-                    <div style="background:#F1956F" class="temperature_model">
-                        <ul>
-                            <li v-if="DayWeather.time.winddirection">{{DayWeather.time.winddirection}}风</li>
-                            <li v-else>未知</li>
-                            <li>{{infoObj.windSpeed}}级</li>
-                        </ul>
-                        <i class="el-icon-thirdfeng"></i>
+                    <el-header height="50px">
+                    现场环境
+                    </el-header>
+                    <div style="padding: 0px 6px;margin-top: 4%;">
+                        <div style="background:#199ED8;margin-right: 10px;" class="temperature_model">
+                            <ul>
+                                <li>温度</li>
+                                <li>{{infoObj.temperature}}&deg;C</li>
+                            </ul>
+                            <i class="el-icon-thirdtemperature"></i>
+                        </div>
+                        <div style="background:#199ED8" class="temperature_model">
+                            <ul>
+                                <li>湿度</li>
+                                <li>{{infoObj.humidity}}hpa</li>
+                            </ul>
+                            <i class="el-icon-thirdshidu"></i>
+                        </div>
+                        <div style="background:#1AB2D2;margin-right: 10px;" class="temperature_model">
+                            <ul>
+                                <li>PM &nbsp;2.5</li>
+                                <li>{{infoObj.pm}}</li>
+                            </ul>
+                            <i class="el-icon-thirdapp_icons--"></i>
+                        </div>
+                        <div style="background:#EC5574" class="temperature_model">
+                            <ul>
+                                <li>PM &nbsp;10</li>
+                                <li>{{infoObj.pm10}}</li>
+                            </ul>
+                            <i class="el-icon-thirdapp_icons--1"></i>
+                        </div>
+                        <div style="background:#1DD8D9;margin-right: 10px;" class="temperature_model">
+                            <ul>
+                                <li>噪音</li>
+                                <li>{{infoObj.noise}}分贝</li>
+                            </ul>
+                            <i class="el-icon-thirdzaoyin"></i>
+                        </div>
+                        <div style="background:#F1956F" class="temperature_model">
+                            <ul>
+                                <li v-if="DayWeather.time.winddirection">{{DayWeather.time.winddirection}}风</li>
+                                <li v-else>未知</li>
+                                <li>{{infoObj.windSpeed}}级</li>
+                            </ul>
+                            <i class="el-icon-thirdfeng"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -224,7 +229,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
             legend: {
                 x: 'center',
                 textStyle: {
-                color: '#fff'
+                color: '#333'
                 },
                 data:['PM 2.5',"PM 10","噪音"]
             },
@@ -236,7 +241,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#333',  //更改坐标轴文字颜色
                         fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -245,7 +250,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#333' //更改坐标轴颜色
                         }
                 },
             },
@@ -261,12 +266,10 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
             ],
             yAxis : [{
                 type: 'value',
-                max: 500,
-                min: 0,
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#333',  //更改坐标轴文字颜色
                     fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -275,7 +278,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#333' //更改坐标轴颜色
                         }
                 },
                 splitLine: {     //网格线
@@ -289,8 +292,8 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                     animation: false,
                     itemStyle : {
                         normal : {
-                        color : '#fff',
-                        borderColor : '#fff ',
+                        color : '#f2f2f2',
+                        borderColor : '#f2f2f2 ',
                         borderWidth : 2
                         }
                     },
@@ -329,8 +332,17 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
     created() {
         this.timeIimes();
     },
+    watch:{
+        flgE(val){
+            let chart = echarts.init(this.$refs['line_chart']);
+            chart.setOption(this.Line_option,true);
+            chart.resize();
+        },
+    },
     computed: {
-
+        flgE: {
+        get () { return this.$store.state.common.documentClientWidth }
+      },
     },
     mounted() {
         this.setOption();
@@ -461,7 +473,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
             })
         },
         setOption(){
-            let chart = this.$echarts.init(this.$refs['line_chart']);
+            let chart = echarts.init(this.$refs['line_chart']);
             chart.setOption(this.Line_option,true);
         },
         // 每页数
@@ -516,59 +528,60 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
         width: 100%;
         padding: 0 20px;
         line-height: 50px;
-        background: #0C4154;
+        background: #fff;
         -webkit-box-shadow: 4px 4px 6px -3px #000;
-        color: #00CC66;
-        box-shadow: 4px 4px 6px -3px #000;
-        font-weight: 700;
+        color: #666;
+        box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, .5);
+        font-weight: 400;
         font-size: 18px;
+        border-radius: 4px;
     }
     main{
         display: flex;
         .content_left{
             min-width: 364px;
             max-width: 368px;
+            padding-bottom: 6px;
             .weather{
                 width: 100%;
                 height: 228px;
-                background: #0F5461;
+                background: #fff;
                 margin-bottom: 20px;
                 box-shadow: 0px 0px 10px -3px rgba(0, 0, 0, .5);
-                border-radius:8px;
+                border-radius:4px;
                 position: relative;
                 header{
                     width: 100%;
-                    -webkit-box-shadow: none;
-                    box-shadow: none;
-                    line-height: 54px;
-                    font-size: 20px;
-                    color: rgba(255, 255, 255, 0.8);
-                    padding: 0px 10px;
+                    padding: 0 20px;
+                    line-height: 50px;
+                    background: #fff;
+                    color: #666;
                     font-weight: 400;
-                    background: #0A4D5D;
-                    border-top-left-radius: 8px;
-                    border-top-right-radius: 8px;
-                    box-shadow: 0px 4px 6px -3px rgba(0, 0, 0, 0.5);
+                    font-size: 18px;
                     position: absolute;
                     top: 0;
+                    -webkit-box-shadow: none;
+                    box-shadow: none;
+                    border-radius: 4px 4px 0px 0px;
                     z-index: 1;
                 }
                 table{
                     width: 100%;
                     height: 168px;
-                    background: #094557;
+                    background: rgba(12, 145, 249, 0.8);
                     position: absolute;
                     top: 60px;
+                    border-radius: 0px 0px 4px 4px;
                     tr{
                         list-style: none;
                         td{
                             list-style: none;
                             padding: 0px 10px;
                             height: 162px;
-                            border-right: 1px solid #1D5161;
+                            border-right: 1px solid #fff;
                             text-align: center;
                             font-size: 16px;
-                            color: #f2f2f2;
+                            color: #fff;
                         }
                         td:first-child{
                             font-size: 14px;
@@ -576,7 +589,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                             .el-icon-thirdtianqi{
                                 font-size: 56px;
                                 float: left;
-                                color: #f2f2f2;
+                                color: #fff;
                             }
                             ul{
                                 margin: 0;
@@ -586,7 +599,7 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                                 li{
                                     list-style: none;
                                     line-height: 44px;
-                                    color: #f2f2f2;
+                                    color: #fff;
                                     span{
                                         text-align: left;
                                         display: inline-table;
@@ -610,12 +623,21 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                 width: 100%;
                 float: left;
                 color: #fff;
-                padding: 65px 4px;
-                background: #0F5461;
+                min-height: 508px;
+                background: #fff;
+                box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
+                border-radius: 4px;
+                header{
+                    box-shadow: none;
+                    border-bottom: 1px solid #ccc;
+                    border-radius: 4px 4px 0px 0px;
+                    font-weight: 400;
+
+                }
                 .temperature_model{
                     width: 48.58%;
                     float: left;
-                    height: 116px;
+                    height: 104px;
                     padding: 28px 22px;
                     margin-bottom: 10px;
                     ul{
@@ -645,17 +667,19 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
                 width: 100%;
                 height: 368px;
                 margin-bottom: 20px;
-                background: #0F5461;
+                background: #fff;
+                border-radius: 4px;
+                box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
                 header{
                     width: 100%;
                     padding: 0 20px;
-                    line-height: 46px;
-                    background: #0C4154;
-                    -webkit-box-shadow: 4px 4px 6px -3px #000;
-                    color: #f2f2f2;
-                    box-shadow: 4px 4px 6px -3px #000;
-                    font-weight: 700;
+                    line-height: 50px;
+                    background: #fff;
+                    font-weight: 400;
                     font-size: 18px;
+                    border-radius: 4px 4px 0px 0px;
+                    box-shadow: none;
+                    border-bottom: 1px solid #ccc;
                 }
                 .line_chart{
                     width: 99%;
@@ -667,17 +691,19 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
             .history{
                 width: 100%;
                 height: 368px;
-                background: #0F5461;
+                background: #fff;
+                border-radius: 4px;
+                box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
                 header{
                     width: 100%;
                     padding: 0 20px;
-                    line-height: 46px;
-                    background: #0C4154;
-                    -webkit-box-shadow: 4px 4px 6px -3px #000;
-                    color: #f2f2f2;
-                    box-shadow: 4px 4px 6px -3px #000;
-                    font-weight: 700;
+                    line-height: 50px;
+                    background: #fff;
+                    font-weight: 400;
                     font-size: 18px;
+                    border-radius: 4px 4px 0px 0px;
+                    box-shadow: none;
+                    border-bottom: 1px solid #ccc;
                 }
                 .tableDataList{
                     width: 100%;
@@ -689,21 +715,46 @@ import codefans_net_CC2PY from '@/assets/js/PinYin.js'
         }
     }
 }
+.environmentalMonitoring{
+    background: #fff;
+}
+.environmentalMonitoring header{
+    width: 100%;
+    padding: 0 20px;
+    line-height: 50px;
+    background: #fff;
+    -webkit-box-shadow: 4px 4px 6px -3px #000;
+    color: #666;
+    box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, .5);
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 4px;
+}
+.environmentalMonitoring main .content_left .weather{
+    background: transparent;
+    -webkit-box-shadow: 4px 4px 6px -3px #000;
+    color: #666;
+    box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, .5);
+    border-radius: 4px;
+}
+
+
 </style>
 <style>
 .environmentalMonitoring .el-table__header th,.environmentalMonitoring .el-table__header tr {
-    color: #f2f2f2;
-    background: #0E5763;
-    font-weight: 100;
+    color: #333;
+    background: #fff;
+    font-weight: 400;
     line-height: 30px;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
+    border-bottom: 1px solid #ccc;
 }
 .environmentalMonitoring .el-table__body td,.environmentalMonitoring  .el-table__body th{
     padding: 6px 0px;
-    background: #0E5763;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
-    color: #f2f2f2;
-    line-height: 40px;
+    color: #333;
+    background: #fff;
+    font-weight: 400;
+    line-height: 30px;
+    border-bottom: 1px solid #ccc;
 }
 
 /* 设置表头的高度 */
@@ -726,7 +777,7 @@ background-color: #17B3A3;
 border-radius: 2px;
 }
 .environmentalMonitoring .el-table__empty-block{
-    background: #0E5763;
+    background: #fff;
     border-top: 1px solid #666;
 }
 .environmentalMonitoring .el-table::before {
@@ -740,19 +791,13 @@ border-radius: 2px;
     color: #fff;
 }
 .environmentalMonitoring .el-table--enable-row-hover .el-table__body tr:hover>td {
-    background-color: #0E5763 !important;
+    background-color: #fff !important;
 }
 .environmentalMonitoring .el-pagination__sizes>div{
     display: none;
 }
 .environmentalMonitoring .el-pagination__sizes{
     min-width: 0 !important;
-}
-.environmentalMonitoring .el-pagination__total {
-    color: #fff;
-}
-.environmentalMonitoring .el-pagination__jump {
-    color: #fff;
 }
 .environmentalMonitoring .el-table{
     background-color: transparent;

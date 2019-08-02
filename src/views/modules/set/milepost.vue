@@ -38,7 +38,7 @@
     </el-form>
     
     <div class="mileposttitle">里程碑节点</div>
-      <el-button type="primary" @click="addmilepostable()">添加里程碑</el-button>
+      <el-button type="primary" @click="addmilepostable()" >添加里程碑</el-button>
       <el-button type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle">删除里程碑</el-button>
       
   <el-table class="milepostable"
@@ -115,6 +115,10 @@
                       }
                   }
         },
+        onelist:[],
+        startDate:'',
+        endDate:''
+        
           
       }
     },
@@ -123,6 +127,7 @@
     },
     activated () {
       this.getDataList()
+      this.getSchedule()
     },
     beforeRouteLeave(to, from, next) {
         this.dataListSelections = []
@@ -130,6 +135,36 @@
         next();
     },
     methods: {
+      getSchedule(){
+        this.$http({
+          url: this.$http.adornUrl('/bim/projectmilestone/getSchedule'),
+          method: 'get',
+          params: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+              if(data.result !== null){
+                this.dataForm.starttime = data.result.startDate
+                this.dataForm.endtime = data.result.endDate
+                
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                  month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                  strDate = "0" + strDate;
+                }
+              
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                this.dateDiff(this.dataForm.endtime,this.dataForm.starttime)
+                this.startdateDiff(currentdate,this.dataForm.starttime)
+              }
+          }
+        })
+      },
       // 获取数据列表
       getDataList () {
         this.dataListSelections = []
@@ -142,11 +177,15 @@
           params: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.result
-            console.log(data.result[0])
-            this.dataForm.starttime = data.result[0].startDate
-            this.dataForm.endtime = data.result[0].endDate
             
+            this.onelist = data.result
+            if(data.result == '' ){
+              this.dataList = data.result
+              this.dataListLoading = false
+              return
+            }
+            this.dataList = data.result
+
             var date = new Date();
             var seperator1 = "-";
             var year = date.getFullYear();
@@ -158,6 +197,7 @@
             if (strDate >= 0 && strDate <= 9) {
               strDate = "0" + strDate;
             }
+           
             var currentdate = year + seperator1 + month + seperator1 + strDate;
              this.dateDiff(this.dataForm.endtime,this.dataForm.starttime)
              this.startdateDiff(currentdate,this.dataForm.starttime)
@@ -296,10 +336,17 @@
       },
       // 新增 / 修改
       addmilepostable () {
-        this.milepostaddVisible = true
-        this.$nextTick(() => {
-          this.$refs.mileposts.init(this.dataForm.starttime,this.dataForm.endtime)
-        })
+        
+        if(this.dataForm.starttime == null || this.dataForm.endtime == null){
+            this.$message.error('请添加开工竣工日期')
+        }else{
+         this.milepostaddVisible = true
+          this.$nextTick(() => {
+            this.$refs.mileposts.init(this.dataForm.starttime,this.dataForm.endtime)
+          })
+          
+        }
+
       },
 
       
@@ -315,14 +362,16 @@
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.getDataList()
-                  }
-                })
+                    
+                    this.$message({
+                      message: '操作成功',
+                      type: 'success',
+                      duration: 1500,
+                      onClose: () => {
+                        this.getDataList()
+                      }
+                    })
+                    
               } else {
                 this.$message.error(data.msg)
               }
@@ -345,14 +394,14 @@
             data: this.$http.adornData({})
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.getDataList()
+                  }
+                })
             } else {
               this.$message.error(data.msg)
             }

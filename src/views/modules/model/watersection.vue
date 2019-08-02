@@ -14,13 +14,13 @@
         <!-- <el-button v-if="isAuth('sys:role:delete')" type="primary" @click="addMonomerHandle">新建单体分组</el-button>
         <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delmodelMajorHandle">删除</el-button> -->
         <el-button :disabled="modeleone" v-if="isAuth('sys:role:delete')" type="primary" @click="addWater">新建流水段</el-button>
-        <!-- <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="addMonomerHandlebj">编辑</el-button>
+        <!-- <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="addMonomerHandlebj">修改</el-button>
         <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delwater">删除</el-button> -->
      
         <!-- <el-button v-if="isAuth('sys:role:delete')" type="primary" @click="modelupload">导入模型</el-button> -->
 
         <el-button v-if="isAuth('sys:role:delete')" :disabled="modeledis" type="primary" @click="waterupdateclickguanlian">关联模型</el-button>
-        <el-button  :disabled="modeletwo" v-if="isAuth('sys:role:delete')" type="warning" @click="waterupdateclick">编辑流水段</el-button>
+        <el-button  :disabled="modeletwo" v-if="isAuth('sys:role:delete')" type="warning" @click="waterupdateclick">修改流水段</el-button>
         <el-button  :disabled="modelethree" v-if="isAuth('sys:role:delete')" type="danger" @click="delmodel">删除流水段</el-button>
         <!-- <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delandWater">删除</el-button> -->
       </el-form-item>

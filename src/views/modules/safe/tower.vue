@@ -2,21 +2,22 @@
   <div class="tower" v-if="towerTRUE" style="background: #0C4C5B;padding: 10px;" v-loading="towerloading">
         <el-header height="40px">
           <div class="towertitle">
-              <span class="el-dropdown-link" style="float: left;">
+              <span class="el-dropdown-link" style="float: left;font-size: 16px;">
                 {{no+"#塔机"}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <ul class="towlsul">
                   <li>设备编号：<i>{{equipmentCode}}</i> <span>{{equipmentstatus}}</span></li>
                   <li>最近操作：&nbsp;{{dateDay}}  {{present.driverName}}  <a href="javascript:void(0);" @click="moreBouncedBle = true">更多考勤</a> </li>
               </ul>
-              <div class="towout">
+              <div class="towout" style="    text-align: right;
+    padding-right: 32px;">
                   数据获取时间：&nbsp;&nbsp;&nbsp;&nbsp;<span>{{dateDay}}</span>
               </div>
           </div>
         </el-header>
         <el-main style="padding:14px 6px 6px 6px;width: 100%;">
           <div class="top_content">
-            <div style="width: 100%;height: 450px;">
+            <div style="width: 99%;height: 450px;padding-right: 6px;">
               <div class="left">
                 <div class="info_left">
                   <img v-if="present.headPortrait" :src="'data:image/png;base64,'+present.headPortrait" alt="">
@@ -27,7 +28,6 @@
                     <li>籍贯: <span>{{present.nativePlace}}</span></li>
                     <li>联系方式: <span>{{present.mobile}}</span></li>
                     <li>身份证号: <span>{{present.idCardNo}}</span></li>
-                    <li>专业证书: <span>{{present.idCardNo}}</span></li>
                   </ul>
                 </div>
                 <div class="info_right">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="right">
                   <div class="img"></div>
-                  <div style="width: 84%;margin: 0 auto;height: 1px;background: #15F1DB;"></div>
+                  <div style="width: 84%;margin: 0 auto;height: 1px;background: #00E4FF;"></div>
                   <p>回转{{realTimeObj.endRotation - realTimeObj.beginRotation}}&deg;</p>
                   <ul>
                     <li>风级 0.95 <i></i></li>
@@ -90,22 +90,26 @@
                 <p>设备状态</p>
                 <div class="status_left">
                   <ul>
-                    <li>{{EquipmentStatusObj.DayAlert}}</li>
-                    <li>今日报警</li>
-                    <li style="border-top: 1px solid rgba(238, 238, 238, 0.5);">{{EquipmentStatusObj.AbnormalPower}}</li>
-                    <li>非正常断电</li>
-                  </ul>
-                </div>
-                <div class="status_right">
-                  <ul>
-                    <li>{{EquipmentStatusObj.DayIllegal}}</li>
-                    <li>今日违章</li>
-                    <li style="border-top: 1px solid rgba(238, 238, 238, 0.5);">{{EquipmentStatusObj.DayMalfunction}}</li>
-                    <li>今日故障</li>
+                    <li style="border-right: 1px solid #eee;border-bottom: 1px solid #eee;">{{EquipmentStatusObj.DayAlert}}
+                      <br>
+                      今日报警
+                    </li>
+                    <li style="border-bottom: 1px solid #eee;">{{EquipmentStatusObj.AbnormalPower}}
+                      <br>
+                      非正常断电
+                    </li>
+                    <li style="    border-right: 1px solid #eee;">{{EquipmentStatusObj.DayIllegal}}
+                      <br>
+                      今日违章
+                    </li>
+                    <li>{{EquipmentStatusObj.DayMalfunction}}
+                      <br>
+                      今日故障
+                    </li>
                   </ul>
                 </div>
               </div>
-              <div class="right_model_top">
+              <div class="right_model_top" style="height: 532px;margin: 0;">
                 <p>人员考勤 <span style="text-align: center"><a href="javascript:void(0);" style="float: right;" @click="moreBouncedBle = true">更多</a> </span></p>
                 <ul class="head">
                   <li>照片</li>
@@ -116,7 +120,7 @@
                 <div class="dataList_div">
                   <table  border="0" cellspacing="0" cellpadding="0" style="width:100%">
                     <tr style="border-bottom: 1px solid;" v-for="(item,key) in driverList" :key="key" @click="driverListInfo(item)">
-                      <td><img style="width: 100%;height: 66px;margin-left: 8px;" :src="'data:image/png;base64,'+item.headPortrait" alt=""></td>
+                      <td><img style="height: 66px;margin-left: 8px;" :src="'data:image/png;base64,'+item.headPortrait" alt=""></td>
                       <td>{{item.driverName}}</td>
                       <td>{{item.createTime}}</td>
                     </tr>
@@ -218,8 +222,8 @@ import { dateFormat } from '@/utils'
           chart_line:{
             grid: {
                 top:'20%',
-                left: '3%',
-                right: '4%',
+                left: '6%',
+                right: '8%',
                 bottom: '3%',
                 containLabel: true
             },
@@ -229,14 +233,14 @@ import { dateFormat } from '@/utils'
                     type: 'cross',
                     animation: false,
                     label: {
-                        backgroundColor: '#505765'
+                        backgroundColor: '#666'
                     }
                 }
             },
             legend: {
                 x: 'center',
                 textStyle: {
-                color: '#fff'
+                color: '#666'
                 },
                 data:['吊重',"力矩"]
             },
@@ -248,7 +252,7 @@ import { dateFormat } from '@/utils'
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#666',  //更改坐标轴文字颜色
                         fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -257,7 +261,7 @@ import { dateFormat } from '@/utils'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#666' //更改坐标轴颜色
                         }
                 },
             },
@@ -276,7 +280,7 @@ import { dateFormat } from '@/utils'
                 axisLabel: {
                     show: true,
                     textStyle: {
-                    color: '#fff',  //更改坐标轴文字颜色
+                    color: '#666',  //更改坐标轴文字颜色
                     fontSize : 14      //更改坐标轴文字大小
                     }
                 },
@@ -285,7 +289,7 @@ import { dateFormat } from '@/utils'
                 },
                 axisLine:{
                         lineStyle:{
-                            color:'#fff' //更改坐标轴颜色
+                            color:'#666' //更改坐标轴颜色
                         }
                 },
                 splitLine: {     //网格线
@@ -335,12 +339,11 @@ import { dateFormat } from '@/utils'
     },
     created() {
         var date = new Date().toISOString().replace(/T/g," ");
-        this.dateDay = dateFormat(date.substring(0,date.lastIndexOf(".")),'yyyy-MM-dd HH:mm:ss');
+        this.dateDay = date.substring(0,date.lastIndexOf("."))
         this.offsetHeight = (this.$store.state.common.documentClientHeight - 206) + "px";
         this.DriverList();
         //body
-        document.getElementsByClassName("el-card__body")[0].parentElement.style.overflow = "inherit";
-        document.getElementsByClassName("el-card__body")[0].style.width = "1672px";
+        document.getElementsByClassName("el-card__body")[0].parentElement.style.overflow = "auto";
     },
     computed: {
 
@@ -353,14 +356,14 @@ import { dateFormat } from '@/utils'
         tower(){
           this.towerTRUE = false;
           document.getElementsByClassName("el-card__body")[0].parentElement.style.overflow = "hidden";
-          document.getElementsByClassName("el-card__body")[0].style.width = "inherit";
+          document.getElementsByClassName("el-card__body")[0].style.width = "100%";
           this.$emit('tower');
         },
         moreBounced(){
             this.moreBouncedBle = false;
         },
         setOption(){
-            let chart = this.$echarts.init(this.$refs['line_chart']);
+            let chart = echarts.init(this.$refs['line_chart']);
             chart.setOption(this.chart_line,true);
         },
         DriverList(){
@@ -441,7 +444,7 @@ import { dateFormat } from '@/utils'
                             if(n == "operationTime")
                             {
                                 var str = v[n];
-                                arrT.push(v[n]);
+                                arrT.push(str.substring(0,str.lastIndexOf(".")));
                             }
                         }
                     });
@@ -504,19 +507,21 @@ import { dateFormat } from '@/utils'
 
 <style lang="scss" scoped>
 .tower{
-  width: 100%;
-  background: #0C4C5B;
+  width: 1604px;
+  background: #fff !important;
   padding: 10px;
   position: relative;
   header{
     width: 100%;
-    padding: 0 10px;
+    padding: 0 20px;
     line-height: 40px;
-    background: #0C4154;
-    box-shadow: 4px 4px 6px -3px #000;
+    background: #fff;
+    -webkit-box-shadow: 4px 4px 6px -3px #000;
+    color: #666;
+    box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, .5);
+    font-weight: 400;
     font-size: 18px;
-    color: #f2f2f2;
-    font-weight: 600;
+    border-radius: 4px;
     .towertitle{
       height:30px;
       padding:0 10px;
@@ -533,9 +538,10 @@ import { dateFormat } from '@/utils'
         padding:0;
         margin:0;
         li{
-          display: inline-block;
+          display: inline-table;
           margin-left: 16px;
-          font-size: 16px;
+          width: auto;
+          font-size: 15px;
           color: #4CD4A2;
           i{
             font-style: normal;
@@ -547,7 +553,7 @@ import { dateFormat } from '@/utils'
         }
         li:last-child{
           margin-left: 20px;
-          color: #f2f2f2;
+          color: #666;
           a{
             padding-left: 10px;
           }
@@ -557,8 +563,8 @@ import { dateFormat } from '@/utils'
         float: right;
         line-height: 40px;
         font-size: 16px;
-        color: #f2f2f2;
-        font-weight: 100;
+        color: #666;
+        font-weight: 400;
         margin-right: 18px;
       }
     } 
@@ -573,24 +579,25 @@ import { dateFormat } from '@/utils'
           width: 410px;
           height: 450px;
           float: left;
-          background: #0E5763;
+          background: #fff;
+          box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
+          border-radius: 4px;
           .info_left{
             width: 60%;
             float: left;
             height: 100%;
             img{
-              width: 50%;
-              margin-left: 56px;
-              margin-top: 10px;
+              height: 176px;
+              margin: 10px 0px 0px 20%;
             }
             ul{
               margin: 0;
               padding: 10px 6px;
               li{
                 list-style: none;
-                line-height: 42px;
-                color: #fff;
-                font-size: 18px;
+                line-height: 48px;
+                color: #666;
+                font-size: 16px;
                 font-weight: 400;
                 span{
                   font-size: 16px;
@@ -611,10 +618,10 @@ import { dateFormat } from '@/utils'
                 list-style: none;
                 line-height: 104px;
                 width: 97%;
-                background: #0D4E5F;
+                background: #fff;
                 padding: 6px;
                 margin-bottom: 8px;
-                box-shadow: 4px 4px 4px 0px #000;
+                box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, .5);
                 p:first-child{
                 line-height: 30px;
                 margin: 0;
@@ -627,7 +634,7 @@ import { dateFormat } from '@/utils'
                 text-align: right;
                 font-size: 30px;
                 padding-right: 6px;
-                color: #f2f2f2;
+                color: #666;
                 letter-spacing: -1px;
                 }
                 .progress{
@@ -638,11 +645,12 @@ import { dateFormat } from '@/utils'
           }
         }
         .center{
-          width: 800px;
-          height:450px;
+          width: 814px;
+          height: 450px;
           float: right;
-          margin:0 16px;/*左右margin不会叠加*/
-          background: #0E5763;
+          background: #fff;
+          border-radius: 4px;
+          box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
           .left{
             width: 60%;
             background: url(~@/assets/img/tower_img.png) no-repeat;
@@ -653,20 +661,23 @@ import { dateFormat } from '@/utils'
             width: 40%;
             height: 100%;
             float: right;
-            background: #0A4A5C;
-            box-shadow: 0px 0px 8px 0px #000;
+            background: #fff;
+            -webkit-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+            box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
+            border-radius: 0px 4px 4px 0px;
             .img{
-              width: 100%;
+              width: 89%;
               height: 282px;
+              margin: 18px;
               background: url(~@/assets/img/zhuan.png) no-repeat;
               background-size: 100% 100%;
             }
             p{
               list-style: none;
-              line-height: 64px;
+              line-height: 44px;
               margin: 0;
               text-align: center;
-              color: #f2f2f2;
+              color: #666666;
               font-size: 22px;
               margin-top: 12px;
               letter-spacing: 2px;
@@ -674,19 +685,21 @@ import { dateFormat } from '@/utils'
             ul{
               margin: 0;
               padding: 0;
-              padding: 0px 24px;
+              width: 68%;
+              height: 20px;
+              margin: 0 auto;
               li{
                 list-style: none;
                 float: left;
                 line-height: 68px;
                 font-size: 21px;
-                color: #f2f2f2;
+                color: #666;
                 letter-spacing: 1px;
                 position: relative;
                 padding-right: 18px;
                 padding-left: 10px;
                 span{
-                  color: #f2f2f2;
+                  color: #666;
                   display: block;
                   line-height: 20px;
                   position: absolute;
@@ -717,8 +730,12 @@ import { dateFormat } from '@/utils'
         .bottom_content{
           width: 98.5%;
           margin-top: 14px;
+          height: 268px;
+          background: #fff;
+          box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
+          border-radius: 4px;
           .chart_div{
-            width: 100%;
+            height: 86%;
             ul{
             margin: 0;
             padding: 0;
@@ -747,25 +764,30 @@ import { dateFormat } from '@/utils'
     width: 302px;
     height: 100%;
     float: right;
-    background: #0E5763;
+    background: #fff;
     .right_model_top{
           clear: both;
+          height: 180px;
+          margin-bottom: 20px;
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+          border-radius: 4px;
         .status_left{
-            width: 49%;
+            width: 100%;
             margin-top: 10px;
             float: left;
-            margin-bottom: 16px;
           ul{
               margin: 0;
               padding: 0;
               border-right: 1px solid rgba(238, 238, 238, .5);
               padding: 0px 16px;
             li{
-              list-style: none;
-              text-align: center;
-              color: #f2f2f2;
-              font-size: 14px;
-              line-height: 28px;
+            list-style: none;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            line-height: 28px;
+            float: left;
+            width: 50%;
             }
           }
         }
@@ -790,32 +812,38 @@ import { dateFormat } from '@/utils'
           margin: 0;
           padding: 0;
           width: 100%;
+          height: 34px;
           margin-top: 10px;
           padding: 0px 6px;
+          border-bottom: 1px solid #ccc;
         li{
           list-style: none;
           width: 33%;
           float: left;
           text-align: center;
           line-height: 34px;
-          border-bottom: 1px solid #333;
-          font-size: 16px;
-          color: #f2f2f2;
+          font-size: 14px;
+          color: #666;
         }
       }
       .dataList_div{
           width: 100%;
-          max-height: calc(100vh - 4vh);
+          height: 452px;
           clear: both;
           padding-top: 8px;
+          overflow: hidden;
           tr{
-            height: 94px;
+            height: 88px;
+            border-bottom: 1px solid #ccc !important;
+          }
+          tr:nth-child(5){
+            border-bottom: none !important;
           }
           td{
-            color: #f2f2f2;
+            color: #666;
             text-align: center;
             width: 120px;
-    max-width: 111px;WORD-WRAP: break-word;
+            max-width: 111px;WORD-WRAP: break-word;
           }
           ul{
           margin: 0;
@@ -842,11 +870,11 @@ import { dateFormat } from '@/utils'
   list-style: none;
   margin: 0;
   line-height: 34px;
-  background: #0A4A5C;
-  -webkit-box-shadow: 0px 0px 8px 0px #000;
+  background: #fff;
   padding: 0px 8px;
-  color: #f2f2f2;
-  box-shadow: 2px 2px 5px 0px #000;
+  color: #666;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid #ccc;
 }
 .tower .clone{
     position: absolute;
@@ -854,8 +882,9 @@ import { dateFormat } from '@/utils'
     right: 18px;
     display: block;
     width: 22px;
+    color: #fff;
     height: 22px;
-    background: #f2f2f2;
+    background: #ccc;
     text-align: center;
     border-radius: 12px;
     cursor: pointer;
@@ -867,7 +896,7 @@ import { dateFormat } from '@/utils'
     width: 110px;
 }
 .tower .el-progress__text {
-    color: #f2f2f2;
+    color: #666;
     margin-left: 18px;
 }
 </style>

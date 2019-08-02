@@ -57,7 +57,7 @@
         label="">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addWater(scope.row)">新建流水段</el-button>
-          <el-button type="text" size="small" @click="addMonomerHandle(scope.row.id,scope.row.name)">编辑</el-button>
+          <el-button type="text" size="small" @click="addMonomerHandle(scope.row.id,scope.row.name)">修改</el-button>
           <el-button type="text" size="small" @click="delwater(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>

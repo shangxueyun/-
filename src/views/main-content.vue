@@ -141,11 +141,14 @@
   .site-content .el-card {
     border: none;
     box-shadow: none;
+    margin-top: 4px;
 }
 .el-card__body {
     padding: 0px;
     background: #fff;
     border: 20px solid #F0F3F4;
+    border-bottom: 14px solid #F0F3F4;
+    border-top: 16px solid #F0F3F4;
     overflow: auto;
 }
 .el-card__body>div{
@@ -154,6 +157,7 @@
 }
 .site-content--tabs {
     padding: 0;
+    overflow: hidden;
 }
 .bounce-enter-active {
   animation: bounce-in .5s;

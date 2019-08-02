@@ -23,18 +23,11 @@
   export default {
     data () {
       return {
-        typelist: [{
-          value: '1',
-          label: '质量问题'
-        },{
-          value: '2',
-          label: '安全问题'
-        }],
         visible: false,
+        httpUrl:'',
         dataForm: {
           id: 0,
           name:'',
-          types: '',
         },
         dataRule: {
           name: [
@@ -46,10 +39,11 @@
     mounted() {
     },
     methods: {
-      init (name,id) {
+      init (name,id,url) {
         this.dataForm.id = id || 0
         this.dataForm.name = name
         this.visible = true
+        this.httpUrl = url
         // this.$nextTick(() => {
         //   this.$refs['dataForm'].resetFields()
         // })
@@ -59,7 +53,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
               this.$http({
-                url: this.$http.adornUrl(`/bim/problemType/update`),
+                url: this.$http.adornUrl(this.httpUrl),
                 method: 'post',
                 data:this.$http.adornData({
                   "name":this.dataForm.name,

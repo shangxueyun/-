@@ -4,7 +4,7 @@
         <el-header height="40px">
             <div class="left">
                 <h3>临边防护</h3>
-                <p>设备编号：{{titleName}}</p>
+                <p style="color: #00CC66;">设备编号：{{titleName}}</p>
                 <p>{{status}}</p>
             </div>
         </el-header>
@@ -12,7 +12,7 @@
             <div class="model_bottom">
                 <el-header height="40px">
                     报警记录
-                    <div style="width: 340px;height: 100%;float: right;">
+                    <div style="width: 332px;height: 100%;float: right;">
                         <el-date-picker
                         v-model="cantileveredSteelV"
                         @change="cantileveredSteellLoad"
@@ -48,7 +48,7 @@
                             @size-change="sizeChangeHandle"
                             @current-change="currentChangeHandle"
                             :current-page="pageIndex"
-                            :page-sizes="[5, 10, 15]"
+                            :page-sizes="[10]"
                             :page-size="pageSize"
                             :total="totalPage"
                             layout="total, sizes, prev, pager, next, jumper">
@@ -160,10 +160,13 @@
 <style lang="scss" scoped>
 .cantileveredSteel{
     width: 54%;
+    min-width: 622px;
     margin: 0 auto;
-    background: #0C4C5B;
+    background: #fff;
     padding: 20px;
     position: relative;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+    border-radius: 4px;
     span{
         display: block;
         width: 22px;
@@ -176,15 +179,20 @@
         text-align: center;
         line-height: 22px;
         z-index: 1111;
-        background: #fff;
+        background: #ccc;
         border-radius: 12px;
+        color: #fff;
     }
     header{
         width: 100%;
-        padding: 0 10px;
+        padding: 0 20px;
         line-height: 40px;
-        background: #0C4154;
-        box-shadow: 4px 4px 6px -3px #000;
+        background: #fff;
+        color: #666;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+        font-weight: 400;
+        font-size: 18px;
+        border-radius: 4px;
         .left{
             float: left;
             width: 414px;
@@ -192,17 +200,18 @@
                 width: 26%;
                 line-height: 36px;
                 float: left;
-                font-weight: 700;
+                font-weight: 400;
                 font-style: normal;
-                font-size: 18px;
-                color: #00CC66;
+                font-size: 16px;
+                color: #666;
             }
             p{
                 float: right;
-                line-height: 40px;
+                line-height: 38px;
                 width: 37%;
                 font-size: 14px;
-                color: #f2f2f2;
+                color: #666;
+                margin: 0;
             }
         }
     }
@@ -212,15 +221,13 @@
             height: 328px;
             header{
                 line-height: 40px;
-                color: #f2f2f2;
-                font-size: 18px;
-                font-weight: 600;
+                color: #666;
+                font-size: 14px;
+                font-weight: 400;
             }
             .datalist_div{
                 width: 100%;
-                height: 270px;
                 margin-top: 20px;
-                background: #0e5763;
             }
         }
     }
@@ -278,26 +285,26 @@ text-align: right;
 }
 
 .el-pager li.active {
-color: #080909;
+color: #fff;
 cursor: default;
-background-color: #17B3A3;
+background-color: #008CD6;
 border-radius: 2px;
 }
 // rgba(0, 153, 102, 0.6)
 </style>
 <style>
 .cantileveredSteel .el-table__header th,.cantileveredSteel .el-table__header tr {
-    color: #f2f2f2;
-    background: #0E5763;
+    color: #333;
+    background: #fff;
     font-weight: 100;
     line-height: 30px;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
+    border-bottom: 1px solid #ccc;
 }
 .cantileveredSteel .el-table__body td,.cantileveredSteel .el-table__body th{
     padding: 6px 0px;
-    background: #0E5763;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
-    color: #f2f2f2;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    color: #333;
     line-height: 40px;
 }
 
@@ -315,14 +322,14 @@ text-align: right;
 }
 
 .cantileveredSteel .el-pager li.active {
-color: #080909;
+color: #fff;
 cursor: default;
-background-color: #17B3A3;
+background-color: #008CD6;
 border-radius: 2px;
 }
 .cantileveredSteel .el-table__empty-block{
-    background: #0E5763;
-    border-top: 1px solid #666;
+    background: #fff;
+    border-top: none;
 }
 .cantileveredSteel .el-table::before {
     height: 0px;
@@ -335,7 +342,7 @@ border-radius: 2px;
     color: #fff;
 }
 .cantileveredSteel .el-table--enable-row-hover .el-table__body tr:hover>td {
-    background-color: #0E5763 !important;
+    background-color: #fff !important;
 }
 .cantileveredSteel .el-pagination__sizes>div{
     display: none;
@@ -344,10 +351,10 @@ border-radius: 2px;
     min-width: 0 !important;
 }
 .cantileveredSteel .el-pagination__total {
-    color: #fff;
+    color: #666;
 }
 .cantileveredSteel .el-pagination__jump {
-    color: #fff;
+    color: #666;
 }
 .cantileveredSteel .el-table{
     background-color: transparent;

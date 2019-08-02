@@ -44,7 +44,7 @@
     },
     computed: {
       documentClientHeight: {
-        get () { return this.$store.state.common.documentClientHeight },
+        get () { return this.$store.state.common.documentClientHeight-26 },
         set (val) { this.$store.commit('common/updateDocumentClientHeight', val) }
       },
       sidebarFold: {
@@ -66,7 +66,8 @@
       this.resetDocumentClientHeight();
       let arr = JSON.parse(sessionStorage.getItem('menuList') || '[]');
       let menNavDataS = JSON.parse(sessionStorage.getItem('menNavData') || '[]');
-      if(menNavDataS.length == 0)
+      let hrefS = window.location.href;
+      if(menNavDataS.length == 0 || hrefS.substring(hrefS.lastIndexOf("#")+1) == '/home' || hrefS.substring(hrefS.lastIndexOf("#")+1) == '/project-board')
       this.menNavData = arr[0].list;
       else{
         this.menNavData = menNavDataS;
@@ -75,9 +76,11 @@
     methods: {
       // 重置窗口可视高度
       resetDocumentClientHeight () {
-        this.documentClientHeight = document.documentElement['clientHeight']
+        this.documentClientHeight = document.documentElement['clientHeight'];
+        this.$store.commit('common/updateDocumentClientWidth', document.documentElement['clientWidth'])
         window.onresize = () => {
-          this.documentClientHeight = document.documentElement['clientHeight']
+          this.documentClientHeight = document.documentElement['clientHeight'];
+          this.$store.commit('common/updateDocumentClientWidth', document.documentElement['clientWidth'])
         }
       },
       // 获取当前管理员信息
@@ -95,9 +98,16 @@
         })
       },
       routingResponse(e){
-        sessionStorage.setItem("menNavData",JSON.stringify(e.list));
-        this.menNavData = [];
-        this.menNavData = e.list;
+        if(e == "show")
+        {
+          let arr = JSON.parse(sessionStorage.getItem('menuList') || '[]');
+          this.menNavData = [];
+          this.menNavData = arr[0].list;
+        }else{
+          sessionStorage.setItem("menNavData",JSON.stringify(e.list));
+          this.menNavData = [];
+          this.menNavData = e.list;
+        }
       }
     }
   }
@@ -105,7 +115,7 @@
 
 <style scoped>
 .site-content__wrapper {
-    padding-top: 20px;
+    padding-top: 14px;
     background: #ffff
 }
 </style>
@@ -116,6 +126,9 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+}
+.viewer-transition {
+  z-index: 1111111;
 }
 </style>
 

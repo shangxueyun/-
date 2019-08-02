@@ -17,15 +17,21 @@
             </div>
             <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
               <el-form-item prop="userName">
+
                 <!-- prefix-icon="el-icon-thirdyonghuming1" -->
                 <el-input v-model="dataForm.userName" 
   placeholder="请输入您的用户名">
-      <template slot="prepend"><i style="font-size:1.5rem;color:#fff" class="el-icon-thirdyonghuming1"></i></template>
+      <template slot="prepend">          
+        <icon-svg name="admin" style="color:#fff;font-size:20px;"></icon-svg>
+<!-- <i style="font-size:1.5rem;color:#fff" class="el-icon-thirdyonghuming1"></i> -->
+</template>
   </el-input>
               </el-form-item>
               <el-form-item prop="password">
                 <el-input v-model="dataForm.password" type="password"  placeholder="请输入您的密码">
-      <template slot="prepend"><i  style="font-size:1.5rem;color:#fff" class="el-icon-thirdmima2"></i></template>
+      <template slot="prepend">
+        <icon-svg name="jiesuo" style="color:#fff;font-size:20px;"></icon-svg>
+      </template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="captcha">
@@ -63,7 +69,7 @@
           userName: '',
           password: '',
           uuid: '',
-          captcha: '',
+          captcha: ''
         },
         dataRule: {
           userName: [
@@ -77,20 +83,19 @@
           ]
         },
         captchaPath: '',
-        remember:false,
+        remember: false
       }
     },
     created () {
-      this.getCaptcha();
-      sessionStorage.removeItem('refB');
-      sessionStorage.removeItem('menNavData');
-      let userName = this.$cookie.get("userName");
-      let password = this.$cookie.get("password");
-      if(userName)
-      {
-        this.dataForm.userName = userName;
-        this.dataForm.password = password;
-        this.remember = true;
+      this.getCaptcha()
+      sessionStorage.removeItem('refB')
+      sessionStorage.removeItem('menNavData')
+      let userName = this.$cookie.get('userName')
+      let password = this.$cookie.get('password')
+      if(userName) {
+        this.dataForm.userName = userName
+        this.dataForm.password = password
+        this.remember = true
       }
     },
     methods: {
@@ -98,13 +103,12 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if(this.remember)
-            {
-              this.$cookie.set('userName', this.dataForm.userName);
-              this.$cookie.set('password', this.dataForm.password);
+            if(this.remember) {
+              this.$cookie.set('userName', this.dataForm.userName)
+              this.$cookie.set('password', this.dataForm.password)
             }else{
-              this.$cookie.delete("userName");
-              this.$cookie.delete("password");
+              this.$cookie.delete('userName')
+              this.$cookie.delete('password')
             }
             this.$http({
               url: this.$http.adornUrl('/sys/login'),
@@ -229,7 +233,7 @@
       background-color: rgba(0, 0, 0, 0.1);
       // margin:30px 30px -130px 0;
       .flex{
-        margin-top: calc(50vh - 32vh);
+        margin-top: calc(50vh - 285px);
       }
       input{
         height:64px;
@@ -325,3 +329,6 @@ input[type="radio"],input[type="checkbox"]{
 zoom:180%;
 }
 </style>
+<style lang="scss" scoped>
+</style>
+

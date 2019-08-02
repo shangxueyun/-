@@ -41,7 +41,7 @@
         width="200"
         label="">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addMonomerHandle(scope.row.id,scope.row.modelName)">编辑</el-button>
+          <el-button type="text" size="small" @click="addMonomerHandle(scope.row.id,scope.row.modelName)">修改</el-button>
           <el-button type="text" size="small" @click="delfield(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>

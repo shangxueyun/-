@@ -1,7 +1,7 @@
 <template>
 <div>
   <el-dialog
-    title="编辑"
+    title="修改"
     :show-header="false"
     :modal-append-to-body="false"
     :append-to-body="true"

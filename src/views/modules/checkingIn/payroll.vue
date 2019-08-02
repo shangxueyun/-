@@ -1,13 +1,13 @@
 <template>
   <el-dialog  class="managetablepay"
-    :title="'南通三建海门大学科技园项目部'+times+'工资支付表'"
+    :title="'海门市拓鸿实业厂房新建项目部'+times+'工资支付表'"
     :close-on-click-modal="false"
     :modal-append-to-body="true"
     :append-to-body="true"
     width="70%"
     :visible.sync="visible">
     <div class="datepickersbox">
-项目部名称：南通三建海门大学科技园项目部
+项目部名称：海门市拓鸿实业厂房新建项目部
 <el-date-picker  class="datepickers"
       v-model="dates"
       @change="dateschange"
@@ -22,8 +22,6 @@
                 border
                     show-summary
                     height="500"
-                    show-summary
-
                 style="width: 100%">
                 <el-table-column
                   type="index"
@@ -87,11 +85,11 @@
     },
     methods: {
       init () {
-          var date = new Date();
-          var seperator1 = "-";
-          var year = date.getFullYear();
-          var month = date.getMonth() + 1;
-          var strDate = date.getDate();
+          let date = new Date();
+          let seperator1 = "-";
+          let year = date.getFullYear();
+          let month = date.getMonth() + 1;
+          let strDate = date.getDate();
           if (month >= 1 && month <= 9) {
             month = "0" + month;
           }
@@ -117,15 +115,15 @@
         })
       },
       dateschange(val){
-          var monthdata = new Date(val)
-          var year = monthdata.getFullYear();
-          var month = monthdata.getMonth() + 1;
-          var months = monthdata.getMonth() + 1;
+          let monthdata = new Date(val)
+          let year = monthdata.getFullYear();
+          let month = monthdata.getMonth() + 1;
+          let months = monthdata.getMonth() + 1;
           if (months >= 1 && months <= 9) {
             months = "0" + months;
           }
           this.times = year + '年' + month+ '月'
-          var sss = year + '-' + months+ '-'+'01'
+          let sss = year + '-' + months+ '-'+'01'
           if(val == null){
               this.init()
           }else{

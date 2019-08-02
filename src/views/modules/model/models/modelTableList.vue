@@ -29,7 +29,7 @@
          </el-col>
        </el-row>
      </el-form>
-     <el-table
+     <el-table 
        ref="singleTable"
        :data="tabData.budgetSheet[form.region]&&tabData.budgetSheet[form.region].list"
        border
@@ -87,8 +87,9 @@
          label="合价">
        </el-table-column>
      </el-table>
+     <div v-if="tablesbox">
       <div v-if="tabData.budgetSheet[form.region]&&tabData.budgetSheet[form.region].list">
-        <el-pagination
+        <el-pagination 
             @size-change="sizeChangeHandle"
             @current-change="currentChangeHandle"
             :current-page="pageIndex"
@@ -98,6 +99,7 @@
             layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
       </div>
+     </div>
    </div>
 </template>
 <script>
@@ -121,7 +123,8 @@
         pageSize: 10,
         totalPage: 0,
         selectIndexsData: 0,
-        pagingIndex: 10
+        pagingIndex: 10,
+        tablesbox:''
       }
     },
     methods: {
@@ -129,8 +132,16 @@
         this.$emit('rowClickData', row)
       },
       init (data, type){
+         this.tablesbox = false
+         this.$nextTick(() => {
+           this.pageSize = 10
+           this.pagingIndex = 10
+           this.currentChangeHandle('1')
+             this.tablesbox = true
+             
+         })
        //  console.log(data)
-        console.log(data, type)
+        // console.log(data, type)
         if(type){
           this.type=type
         }
@@ -169,7 +180,7 @@
         }
       },
       handleCurrentChange (currentRow, oldCurrentRow){
-        console.log(currentRow, oldCurrentRow)
+        // console.log(currentRow, oldCurrentRow)
         if(currentRow&&oldCurrentRow&&currentRow.id!=oldCurrentRow.id){
           this.$emit('getOldRow', oldCurrentRow)
         }
@@ -178,7 +189,8 @@
       },
       // 计算分页数据
       CalculatePagingData (data){
-        // debugger
+        // // debugger
+        // console.log('data',data)
         let dataArr = data[this.form.region].list
         this.totalPage = dataArr.length
         this.pageIndex= 1
@@ -187,11 +199,15 @@
       },
       // 每页数
       sizeChangeHandle (val) {
+        console.log("val111",val)
         this.pageSize = val
         this.pageIndex = 1
       },
       // 当前页
       currentChangeHandle (val) {
+        // alert(1)
+        console.log("val",val)
+        this.pageIndex = 1
         this.pagingIndex = val*10-10
         this.tabData.budgetSheet[this.form.region].list = []
         this.tabData.budgetSheet[this.form.region].list = this.tableArrData[this.form.region].list.slice(this.pagingIndex, val*10)

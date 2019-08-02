@@ -61,7 +61,7 @@
         label="">
         <template slot-scope="scope">
           <Div class="words">
-          <el-button type="text" size="small" @click="waterupdateclick(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="waterupdateclick(scope.row)">修改</el-button>
           <el-button type="text" size="small" @click="delandWater(scope.row.id)">删除</el-button>
           <el-button type="text" size="small" @click="delmodel(scope.row.id)">删除模型</el-button>
            <span v-if="scope.row.analysisFlag == '0'">

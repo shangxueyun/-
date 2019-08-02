@@ -35,7 +35,7 @@
                         header-align="center"
                         align="center">
                         <template slot-scope="scope">
-                            <img style="width: 200px;height: 114px;margin-left: 8px;" :src="'data:image/png;base64,'+scope.row.headPortrait" alt="">
+                            <img style="height: 114px;margin-left: 8px;" :src="'data:image/png;base64,'+scope.row.headPortrait" alt="">
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -200,31 +200,40 @@
 <style lang="scss" scoped>
 .moreBounced{
     width: 50%;
+    min-width: 488px;
     margin: 0 auto;
-    background: #0C4C5B;
+    background: #fff;
     padding: 20px;
     position: relative;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, .5);
+    border-radius: 4px;
     span{
         display: block;
         width: 22px;
         height: 22px;
         position: absolute;
         right: 24px;
+        color: #f2f2f2;
         top: 28px;
         font-size: 16px;
         cursor: pointer;
         text-align: center;
         line-height: 22px;
         z-index: 1111;
-        background: #fff;
+        background: #ccc;
         border-radius: 12px;
     }
     header{
         width: 100%;
-        padding: 0 10px;
-        line-height: 40px;
-        background: #0C4154;
-        box-shadow: 4px 4px 6px -3px #000;
+        padding: 0 20px;
+        line-height: 50px;
+        background: #fff;
+        -webkit-box-shadow: 4px 4px 6px -3px #000;
+        color: #666;
+        box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, .5);
+        font-weight: 400;
+        font-size: 18px;
+        border-radius: 4px;
         .left{
             float: left;
             width: 414px;
@@ -232,10 +241,10 @@
                 width: 52%;
                 line-height: 36px;
                 float: left;
-                font-weight: 700;
+                font-weight: 400;
                 font-style: normal;
                 font-size: 18px;
-                color: #00CC66;
+                color: #666;
             }
             p{
                 float: right;
@@ -253,9 +262,9 @@
             height: 328px;
             header{
                 line-height: 40px;
-                color: #f2f2f2;
-                font-size: 18px;
-                font-weight: 600;
+                color: #666;
+                font-size: 14px;
+                font-weight: 400;
             }
             .datalist_div{
                 width: 100%;
@@ -326,18 +335,19 @@ border-radius: 2px;
 </style>
 <style>
 .moreBounced .el-table__header th,.moreBounced .el-table__header tr {
-    color: #f2f2f2;
-    background: #0E5763;
-    font-weight: 100;
+    color: #333;
+    background: #fff;
+    font-weight: 400;
     line-height: 30px;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
+    border-bottom: 1px solid #ccc;
 }
 .moreBounced .el-table__body td,.moreBounced .el-table__body th{
-    padding: 6px 0px;
-    background: #0E5763;
-    border-bottom: 1px solid rgba(121, 121, 121, 1);
-    color: #f2f2f2;
-    line-height: 40px;
+    color: #333;
+    background: #fff;
+    font-weight: 400;
+    line-height: 30px;
+    border-bottom: 1px solid #ccc;
+        padding: 6px 0px;
 }
 
 /* 设置表头的高度 */
@@ -354,13 +364,13 @@ text-align: right;
 }
 
 .moreBounced .el-pager li.active {
-color: #080909;
+color: #fff;
 cursor: default;
-background-color: #17B3A3;
+background-color: #008CD6;
 border-radius: 2px;
 }
 .moreBounced .el-table__empty-block{
-    background: #0E5763;
+    background: #fff;
     border-top: 1px solid #666;
 }
 .moreBounced .el-table::before {
@@ -374,7 +384,7 @@ border-radius: 2px;
     color: #fff;
 }
 .moreBounced .el-table--enable-row-hover .el-table__body tr:hover>td {
-    background-color: #0E5763 !important;
+    background-color: #fff !important;
 }
 .moreBounced .el-pagination__sizes>div{
     display: none;
@@ -383,9 +393,9 @@ border-radius: 2px;
     min-width: 0 !important;
 }
 .moreBounced .el-pagination__total {
-    color: #fff;
+    color: #666;
 }
 .cantileveredSteel .el-pagination__jump {
-    color: #fff;
+    color: #666;
 }
 </style>

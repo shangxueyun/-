@@ -14,9 +14,9 @@
           <el-form-item label="结构形式" prop="structuralStyle">
             <el-input style="width:370px" v-model="formInline.structuralStyle" placeholder="结构形式"></el-input>
           </el-form-item>
-          <el-form-item label="业主单位" prop="ownerUnit">
+          <!-- <el-form-item label="业主单位" prop="ownerUnit">
             <el-input style="width:370px" v-model="formInline.ownerUnit" placeholder="业主单位"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="建设单位" prop="constructionUnit">
             <el-input style="width:370px" v-model="formInline.constructionUnit" placeholder="建设单位"></el-input>
           </el-form-item>
@@ -36,7 +36,7 @@
           </el-form-item>
           <el-form-item label="工程造价" prop="engineeringCost">
             <el-input style="width:370px" v-model="formInline.engineeringCost" placeholder="工程造价">
-              <template slot="append">元</template></el-input>
+              <template slot="append">万元</template></el-input>
           </el-form-item>
           <el-form-item label="规模性质">
             <el-input style="width:370px" v-model="formInline.scaleNature" placeholder="规模性质"></el-input>
@@ -44,19 +44,19 @@
           <el-form-item label="投资类型">
             <el-input style="width:370px" v-model="formInline.investmentType" placeholder="投资类型"></el-input>
           </el-form-item>
-          <el-form-item label="合同开工时间" prop="startTime">
+          <el-form-item label="开工时间" prop="startTime">
               <el-date-picker type="date" @change="changestartTime" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.startTime" style="width: 370px;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="合同竣工时间" prop="endTime">
+          <el-form-item label="竣工时间" prop="endTime">
               <el-date-picker type="date" @change="changeendTime" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.endTime" style="width: 370px"></el-date-picker>
           </el-form-item>
           <br/>
-          <el-form-item label="实际开工时间" prop="actualStartTime">
+          <!-- <el-form-item label="实际开工时间" prop="actualStartTime">
               <el-date-picker  type="date" @change="changeactualStartTime" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.actualStartTime" style="width: 370px"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="实际竣工时间" prop="actualEndTime">
+          </el-form-item> -->
+          <!-- <el-form-item label="实际竣工时间" prop="actualEndTime">
               <el-date-picker type="date" @change="changeactualEndTime" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.actualEndTime" style="width: 370px"></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           
 
       </el-form>
@@ -136,7 +136,7 @@
       <template slot-scope="scope">
         <!-- <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+          @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
         <el-button 
           size="mini"
           type="danger"
@@ -191,7 +191,7 @@ export default {
             projectName:'',
             address:'',
             structuralStyle:'',
-            ownerUnit:'',
+            // ownerUnit:'',
             constructionUnit:'',
             supervisorUnit:'',
             constructionCompanies:'',
@@ -202,8 +202,8 @@ export default {
             investmentType:'',
             startTime:'',
             endTime:'',
-            actualStartTime:'',
-            actualEndTime:''
+            // actualStartTime:'',
+            // actualEndTime:''
         },
         rulesformInline: {
           projectName: [
@@ -242,12 +242,12 @@ export default {
           endTime: [
             {required: true, message: '请选择合同竣工时间', trigger: 'change'  }
           ],
-          actualStartTime: [
-            {required: true, message: '请选择实际开工时间', trigger: 'change'  }
-          ],
-          actualEndTime: [
-            { required: true, message: '请选择实际竣工时间', trigger: 'change'  }
-          ]
+          // actualStartTime: [
+          //   {required: true, message: '请选择实际开工时间', trigger: 'change'  }
+          // ],
+          // actualEndTime: [
+          //   { required: true, message: '请选择实际竣工时间', trigger: 'change'  }
+          // ]
         },
         editor: null,
         editorContent: '',
@@ -374,7 +374,7 @@ export default {
                     this.formInline.projectName = data.result.projectName
                     this.formInline.address = data.result.address
                     this.formInline.structuralStyle = data.result.structuralStyle
-                    this.formInline.ownerUnit = data.result.ownerUnit
+                    // this.formInline.ownerUnit = data.result.ownerUnit
                     this.formInline.constructionUnit = data.result.constructionUnit
                     this.formInline.supervisorUnit = data.result.supervisorUnit
                     this.formInline.constructionCompanies = data.result.constructionCompanies
@@ -385,8 +385,8 @@ export default {
                     this.formInline.investmentType = data.result.investmentType
                     this.formInline.startTime = data.result.startTime
                     this.formInline.endTime = data.result.endTime
-                    this.formInline.actualStartTime = data.result.actualStartTime
-                    this.formInline.actualEndTime = data.result.actualEndTime
+                    // this.formInline.actualStartTime = data.result.actualStartTime
+                    // this.formInline.actualEndTime = data.result.actualEndTime
                     this.formInline.introduction = data.result.introduction
                     this.formInline.projectImgList = data.result.projectFileList
                     this.content = data.result.introduction
@@ -447,10 +447,10 @@ export default {
           this.formInline.endTime = val
       },
       changeactualStartTime(val){
-          this.formInline.actualStartTime = val
+          // this.formInline.actualStartTime = val
       },
       changeactualEndTime(val){
-          this.formInline.actualEndTime = val
+          // this.formInline.actualEndTime = val
       },
       primarysub(formInline){
         
@@ -485,7 +485,7 @@ export default {
                       'projectName':this.formInline.projectName,
                       'address':this.formInline.address,
                       'structuralStyle':this.formInline.structuralStyle,
-                      'ownerUnit':this.formInline.ownerUnit,
+                      // 'ownerUnit':this.formInline.ownerUnit,
                       'constructionUnit':this.formInline.constructionUnit,
                       'supervisorUnit':this.formInline.supervisorUnit,
                       'constructionCompanies':this.formInline.constructionCompanies,
@@ -496,8 +496,8 @@ export default {
                       'investmentType':this.formInline.investmentType,
                       'startTime':this.formInline.startTime,
                       'endTime':this.formInline.endTime,
-                      'actualStartTime':this.formInline.actualStartTime,
-                      'actualEndTime':this.formInline.actualEndTime,
+                      // 'actualStartTime':this.formInline.actualStartTime,
+                      // 'actualEndTime':this.formInline.actualEndTime,
                       'introduction':cons,
                       'projectFileList': JSON.parse(sessionStorage.getItem('tableDataList'))
                     })

@@ -22,21 +22,14 @@
   export default {
     data () {
       return {
-        typelist: [{
-          value: '1',
-          label: '质量问题'
-        },{
-          value: '2',
-          label: '安全问题'
-        }],
         visible: false,
+        httpUrl:'',
         dataForm: {
           id: 0,
           name:'',
-          types: '',
         },
         dataRule: {
-          types: [
+          name: [
             { required: true, message: '分组名称不能为空', trigger: 'blur' }
           ]
         }
@@ -45,10 +38,10 @@
     mounted() {
     },
     methods: {
-      init (type,id) {
-        this.dataForm.id = id 
-        this.dataForm.types = type 
+      init (type,id,url) {
+        this.dataForm.id = id
         this.visible = true
+        this.httpUrl = url
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
         })
@@ -58,10 +51,9 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
               this.$http({
-                url: this.$http.adornUrl(`/bim/problemType/save`),
+                url: this.$http.adornUrl(this.httpUrl),
                 method: 'post',
                 data:this.$http.adornData({
-                  "type":this.dataForm.types,
                   "name":this.dataForm.name,
                   "parentId":this.dataForm.id
                 })

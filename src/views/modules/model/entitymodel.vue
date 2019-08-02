@@ -16,13 +16,13 @@
       <!-- 流水段操作 -->
       <el-form-item v-show="waterbtn"> 
         <el-button v-if="isAuth('sys:role:delete')" type="primary" @click="addWater">新建流水段</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="addMonomerHandlebj">编辑</el-button>
+        <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="addMonomerHandlebj">修改</el-button>
         <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delwater">删除</el-button>
       </el-form-item>
       <!-- 模型操作 -->
       <el-form-item v-show="modelbtn"> 
         <el-button v-if="isAuth('sys:role:delete')" type="primary" @click="modelupload">导入模型</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="waterupdateclick">编辑</el-button>
+        <el-button v-if="isAuth('sys:role:delete')" type="warning" @click="waterupdateclick">修改</el-button>
         <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delmodel">删除模型</el-button>
         <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="delandWater">删除</el-button>
       </el-form-item>

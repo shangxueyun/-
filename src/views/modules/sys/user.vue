@@ -2,12 +2,12 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="请输入账号查询" clearable></el-input>
+        <el-input v-model="dataForm.userName" style="width:300px;" placeholder="请输入账号、身份证、手机号查询" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList('1')">查询</el-button>
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle('0')">新增</el-button>
-        <el-button type="primary" @click="healthBynamicBle = true" >人员地图</el-button>
+        <el-button type="primary" @click="personnelMapBle = true" >健康动态</el-button>
         <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
         <el-button v-if="isAuth('sys:user:delete')" type="warning" @click="addOrUpdateHandle()" :disabled="dataListSelections.length <= 0">修改</el-button>
         <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">删除</el-button> -->
@@ -41,7 +41,6 @@
         width="180"
         label="账号">
       </el-table-column>
-     </el-table-column>
      <el-table-column
         prop="status"
         header-align="center"
@@ -111,12 +110,16 @@
     <div v-if="healthBynamicBle" style="position: absolute;top: 0;left: 0;z-index: 11111;width: 100%;">
       <health-bynamic @healthBynamic="healthBynamic"></health-bynamic>
     </div>
+    <div v-if="personnelMapBle" style="position: absolute;top: 0;left: 0;z-index: 11111;width: 100%;">
+      <personnel-map @dialogMap="dialogMap"></personnel-map>
+    </div>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './user-add-or-update'
   import healthBynamic from './healthBynamic'
+  import personnelMap from './personnelMap'
   export default {
     data () {
       return {
@@ -131,12 +134,14 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         healthBynamicBle:false,
+        personnelMapBle:false,
         disableds:false
       }
     },
     components: {
       AddOrUpdate,
-      healthBynamic
+      healthBynamic,
+      personnelMap
     },
     activated () {
       this.getDataList()
@@ -238,6 +243,9 @@
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id.userId)
         })
+      },
+      dialogMap(){
+        this.personnelMapBle = false;
       },
       // 删除
       deleteHandle () {

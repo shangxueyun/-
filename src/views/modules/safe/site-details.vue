@@ -1,12 +1,12 @@
 <template>
-  <el-dialog 
-  class="eldialogbody"
-    title="巡检详情"
-    :close-on-click-modal="false"
-    :modal-append-to-body="true"
-    :append-to-body="true"
-    :fullscreen="isfullscreen"
-    :visible.sync="visible">
+
+<div v-if="sitedetailsBle" id="site-details">
+    <div class="breadcrumbtab">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/safe-site' }">安全巡检</el-breadcrumb-item>
+          <el-breadcrumb-item>安全巡检详情</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-form :inline="true"  >
         <el-form-item label="RFID号" >
                 <el-input class="zdyinput"  style="width:180px;" disabled v-model="rfId"></el-input>
@@ -22,8 +22,7 @@
         </el-form-item>
     </el-form>
 
-<div id="index">
-    <ul v-for="item in safetyPatrolDetailList" class="ullists" >
+    <ul v-for="(item,key) in safetyPatrolDetailList" class="ullists"  :key="key">
           <li v-if="item.type == '1'">
                 <h2>检查信息</h2>
 <el-row :gutter="20">
@@ -92,8 +91,8 @@
 
       <el-col :span="9" >
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" @click="getInfo" :src="img">
               </div>
       </el-col>
 </el-row>
@@ -175,8 +174,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" :src="img" @click="getInfo">
               </div>
       </el-col>
 </el-row>      
@@ -203,8 +202,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" :src="img" @click="getInfo">
               </div>
       </el-col>
 </el-row> 
@@ -213,7 +212,6 @@
                
     </ul>
     </div>
-  </el-dialog>
 
 </template>
 
@@ -228,6 +226,7 @@ import 'viewerjs/dist/viewer.css';
         dataListLoading: false,
         dataList:[],
         isfullscreen:true,
+        sitedetailsBle:true,
         rfId:'',
         labelName:'',
         attributeName:'',
@@ -235,11 +234,15 @@ import 'viewerjs/dist/viewer.css';
       }
     },
     activated () {
+      this.sitedetailsBle = false;
+      this.init()
     },
     mounted(){
     },
     methods: {
       init (id) {
+        var id = this.$route.query.id
+
         this.visible = true
         this.$http({
           url: this.$http.adornUrl('/bim/safetyPatrol/findSafetyPatrolById'),
@@ -269,21 +272,28 @@ import 'viewerjs/dist/viewer.css';
 
                     
                 })
-                this.safetyPatrolDetailList = safelist
-                this.$nextTick(() => {
-                    this.getInfo();
-                });
+                this.safetyPatrolDetailList = safelist;
+                this.sitedetailsBle = true;
             } else {
 
             }
         })
       },
       getInfo(){
-          var ViewerDom = document.getElementById('index');
+          var ViewerDom = document.getElementById('site-details');
           var viewer = new Viewer(ViewerDom, {
-                navbar:false,
+                navbar:true,
                 title:false,
-                toolbar:false,	
+                toolbar:true,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                transition:true,
+                fullscreen:false,
+                keyboard:false,
+                backdrop:true,
+                loop:true,
+                loading:true,
           })
 
       }
@@ -292,7 +302,7 @@ import 'viewerjs/dist/viewer.css';
 </script>
 <style>
 
-.eldialogbody .el-dialog__body{padding:10px 20px;}
+/* .eldialogbody .el-dialog__body{padding:10px 20px;} */
 .zdyinput.is-disabled .el-input__inner{
   color:#606266;
 }
@@ -305,6 +315,11 @@ import 'viewerjs/dist/viewer.css';
 </style>
 
 <style  lang="scss" scoped>
+.breadcrumbtab{
+  height:30px;
+  border-bottom:1px solid #ebeef5;
+  margin-bottom:20px;
+}
 .tableDatatable{
   margin:10px 0 0 0;
 }
@@ -328,6 +343,7 @@ import 'viewerjs/dist/viewer.css';
   padding:0;
   margin:0;
   h2{
+
     padding:0;
     margin:0 0 20px 0;
     font-size:16px;
@@ -338,7 +354,7 @@ import 'viewerjs/dist/viewer.css';
     border:1px solid #ebeef5;
     padding:0 20px 20px 20px;
     margin:0 0 20px 0;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
     .h{
       color:#378906;
     }

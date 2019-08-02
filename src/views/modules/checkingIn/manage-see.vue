@@ -8,14 +8,14 @@
      <el-date-picker
       v-model="dates"
       @change="dateschange"
-      format="yyyy-MM-dd"
-      value-format="yyyy-MM-dd"
-      type="date"
+      format="yyyy-MM"
+      value-format="yyyy-MM"
+      type="month"
       placeholder="请选择日期">
     </el-date-picker>
     <br/>
           <el-table 
-                :data="tableData"
+                :data="tableDatas"
                 border
                 style="width: 100%">
                 <el-table-column
@@ -64,7 +64,7 @@
     data () {
       return {
         visible: false,
-        tableData:[],
+        tableDatas:[],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
@@ -79,6 +79,7 @@
     },
     methods: {
       init (id,time,userName) {
+        this.dates = time
         this.ids = id 
         this.times = time 
         this.userNames = userName 
@@ -94,42 +95,41 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-
                 data.result.list.forEach((item) =>{
-                    var date = new Date(item.createTime);
-                    var beginTime = new Date(item.beginTime);
-                    var endTime = new Date(item.endTime);
-                    var seperator1 = "-";
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var strDate = date.getDate();
+                    let date = new Date(item.createTime.replace(/-/g, "/"));
+                    let beginTime = new Date(item.beginTime.replace(/-/g, "/"));
+                    let endTime = new Date(item.endTime.replace(/-/g, "/"));
+                    let seperator1 = "-";
+                    let year = date.getFullYear();
+                    let month = date.getMonth() + 1;
+                    let strDate = date.getDate();
                     if (month >= 1 && month <= 9) {
                       month = "0" + month;
                     }
                     if (strDate >= 0 && strDate <= 9) {
                       strDate = "0" + strDate;
                     }
-                    var getHours = beginTime.getHours()
+                    let getHours = beginTime.getHours()
                     if (getHours >= 0 && getHours <= 9) {
                       getHours = "0" + getHours;
                     }
-                    var getMinutes = beginTime.getMinutes()
+                    let getMinutes = beginTime.getMinutes()
                     if (getMinutes >= 0 && getMinutes <= 9) {
                       getMinutes = "0" + getMinutes;
                     }
-                    var getSeconds = beginTime.getSeconds()
+                    let getSeconds = beginTime.getSeconds()
                     if (getSeconds >= 0 && getSeconds <= 9) {
                       getSeconds = "0" + getSeconds;
                     }
-                    var getHoursendTime = endTime.getHours()
+                    let getHoursendTime = endTime.getHours()
                     if (getHoursendTime >= 0 && getHoursendTime <= 9) {
                       getHoursendTime = "0" + getHoursendTime;
                     }
-                    var getMinutesendTime = endTime.getMinutes()
+                    let getMinutesendTime = endTime.getMinutes()
                     if (getMinutesendTime >= 0 && getMinutesendTime <= 9) {
                       getMinutesendTime = "0" + getMinutesendTime;
                     }
-                    var getSecondsendTime = endTime.getSeconds()
+                    let getSecondsendTime = endTime.getSeconds()
                     if (getSecondsendTime >= 0 && getSecondsendTime <= 9) {
                       getSecondsendTime = "0" + getSecondsendTime;
                     }
@@ -140,14 +140,27 @@
                     
                 })
               
-                this.tableData = data.result.list
-          } else {
-
-          }
+                this.tableDatas = data.result.list
+                this.totalPage = data.result.totalCount
+              } else {
+                this.dataList = []
+                this.totalPage = 0
+              }
+              this.dataListLoading = false
         })
       },
       dateschange(val){
-        this.times = val 
+
+            let monthdata = new Date(val)
+            let year = monthdata.getFullYear();
+            let month = monthdata.getMonth() + 1;
+            let months = monthdata.getMonth() + 1;
+            if (months >= 1 && months <= 9) {
+              months = "0" + months;
+            }
+            // this.times = year + '年' + month+ '月'
+            // this.dataForm.date = year + '-' + months+ '-'+'01'
+        this.times = year + '-' + months+ '-'+'01' 
         this.init(this.ids,this.times,this.userNames)
       },
       // 每页数

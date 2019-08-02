@@ -1,12 +1,11 @@
 <template>
-  <el-dialog 
-  class="eldialogbody"
-    title="质量问题详情"
-    :close-on-click-modal="false"
-    :modal-append-to-body="true"
-    :append-to-body="true"
-    :fullscreen="isfullscreen"
-    :visible.sync="visible">
+  <div v-if="qualitydetailsBle" id="quality-details">
+    <div class="breadcrumbtab">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/safe-quality' }">质量问题跟踪</el-breadcrumb-item>
+          <el-breadcrumb-item>质量问题跟踪详情</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-form :inline="true"  >
         <el-form-item label="问题区域" >
                 <el-input class="zdyinput"  style="width:180px;" disabled v-model="monomerName"></el-input>
@@ -17,7 +16,7 @@
     </el-form>
 
 <div id="quality">
-    <ul v-for="item in safetyPatrolDetailList" class="ullists" >
+    <ul v-for="(item,key) in safetyPatrolDetailList" class="ullists" :key="key">
           <li v-if="item.type == '1'">
                 <h2>问题信息</h2>
 <el-row :gutter="20">
@@ -40,7 +39,7 @@
                 </el-form-item>
                 <el-form-item>
                   <div>
-                    <span >通知人员</span><div class="tzuser" ><span v-for="i in safetyProblemUserList">
+                    <span >通知人员</span><div class="tzuser" ><span v-for="i in safetyProblemUserList" :key="i">
                             <span>{{i.userName}}</span>
                       </span></div>
                   </div>
@@ -56,8 +55,8 @@
 
       <el-col :span="9" >
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" data-preview-src="" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" @click="getInfo" data-preview-src="" :src="img">
               </div>
       </el-col>
 </el-row>
@@ -90,8 +89,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img  class="itemimgs" data-preview-src="" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img  class="itemimgs" @click="getInfo" data-preview-src="" :src="img">
               </div>
       </el-col>
 </el-row>      
@@ -124,8 +123,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" data-preview-src="" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" @click="getInfo" data-preview-src="" :src="img">
               </div>
       </el-col>
 </el-row> 
@@ -134,8 +133,9 @@
                
     </ul>
     </div>
-  </el-dialog>
 
+
+  </div>
 </template>
 
 <script>
@@ -150,6 +150,7 @@ import 'viewerjs/dist/viewer.css';
         dataListLoading: false,
         dataList:[],
         isfullscreen:true,
+        qualitydetailsBle:true,
         monomerName:'',
         problemTypeName:'',
         attributeName:'',
@@ -158,11 +159,15 @@ import 'viewerjs/dist/viewer.css';
       }
     },
     activated () {
+      this.qualitydetailsBle = false;
+      this.init();
     },
     mounted(){
     },
     methods: {
       init (id) {
+
+        var id = this.$route.query.id
         this.visible = true
         this.$http({
           url: this.$http.adornUrl('/bim/qualityProblem/findQualityProblemById'),
@@ -192,9 +197,7 @@ import 'viewerjs/dist/viewer.css';
                     
                 })
                 this.safetyPatrolDetailList = safelist
-                this.$nextTick(() => {
-                    this.getInfo();
-                });
+                this.qualitydetailsBle = true;
             } else {
 
             }
@@ -202,11 +205,20 @@ import 'viewerjs/dist/viewer.css';
       },
       getInfo(){
          
-          var ViewerDom = document.getElementById('quality');
+          var ViewerDom = document.getElementById('quality-details');
           var viewer = new Viewer(ViewerDom, {
-                navbar:false,
+                navbar:true,
                 title:false,
-                toolbar:false,	
+                toolbar:true,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                transition:true,
+                fullscreen:false,
+                keyboard:false,
+                backdrop:true,
+                loop:true,
+                loading:true,
           })
       }
     }
@@ -227,6 +239,11 @@ import 'viewerjs/dist/viewer.css';
 </style>
 
 <style  lang="scss" scoped>
+.breadcrumbtab{
+  height:30px;
+  border-bottom:1px solid #ebeef5;
+  margin-bottom:20px;
+}
 .tableDatatable{
   margin:10px 0 0 0;
 }

@@ -1,13 +1,13 @@
 <template>
-  <el-dialog 
-  class="eldialogbody"
-    title="安全问题详情"
-    :close-on-click-modal="false"
-    :modal-append-to-body="true"
-    :append-to-body="true"
-    :fullscreen="isfullscreen"
-    :visible.sync="visible">
-    <el-form :inline="true"  >
+
+    <div v-if="trackingdetailsBle" id="tracking-details">
+      <div class="breadcrumbtab">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/safe-tracking' }">安全问题跟踪</el-breadcrumb-item>
+            <el-breadcrumb-item> 安全问题跟踪详情</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <el-form :inline="true"  >
         <el-form-item label="问题区域" >
                 <el-input class="zdyinput"  style="width:180px;" disabled v-model="monomerName"></el-input>
         </el-form-item>
@@ -17,7 +17,7 @@
     </el-form>
 
 <div id="tracking">
-    <ul v-for="item in safetyPatrolDetailList" class="ullists" >
+    <ul v-for="(item,key) in safetyPatrolDetailList" :key="key" class="ullists" >
           <li v-if="item.type == '1'">
                 <h2>问题信息</h2>
 <el-row :gutter="20">
@@ -40,7 +40,7 @@
                 </el-form-item>
                 <el-form-item>
                   <div>
-                    <span >通知人员</span><div class="tzuser" ><span v-for="i in safetyProblemUserList">
+                    <span >通知人员</span><div class="tzuser" ><span v-for="i in safetyProblemUserList" :key="i">
                             <span>{{i.userName}}</span>
                       </span></div>
                   </div>
@@ -56,8 +56,8 @@
 
       <el-col :span="9" >
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" :src="img" @click="getInfo">
               </div>
       </el-col>
 </el-row>
@@ -90,8 +90,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" :src="img" @click="getInfo">
               </div>
       </el-col>
 </el-row>      
@@ -124,8 +124,8 @@
 
       <el-col :span="9">
               <div>照片</div>
-              <div v-for="(img,i) in item.imgs" class="imgbox">
-                    <img class="itemimgs" :src="img">
+              <div v-for="(img,i) in item.imgs" class="imgbox" :key="i">
+                    <img class="itemimgs" :src="img" @click="getInfo">
               </div>
       </el-col>
 </el-row> 
@@ -134,7 +134,7 @@
                
     </ul>
     </div>
-  </el-dialog>
+    </div>
 
 </template>
 
@@ -149,6 +149,7 @@ import 'viewerjs/dist/viewer.css';
         dataListLoading: false,
         dataList:[],
         isfullscreen:true,
+        trackingdetailsBle:true,
         monomerName:'',
         problemTypeName:'',
         attributeName:'',
@@ -157,12 +158,15 @@ import 'viewerjs/dist/viewer.css';
       }
     },
     activated () {
+      this.trackingdetailsBle = false;
+      this.init()
     },
     mounted(){
     },
     methods: {
       init (id) {
         this.visible = true
+        var id = this.$route.query.id
         this.$http({
           url: this.$http.adornUrl('/bim/safetyProblem/findSafetyProblemById'),
           method: 'post',
@@ -191,22 +195,28 @@ import 'viewerjs/dist/viewer.css';
                     
                 })
                 this.safetyPatrolDetailList = safelist
-                this.$nextTick(() => {
-                    this.getInfo();
-                });
+                this.trackingdetailsBle = true;
             } else {
 
             }
         })
       },
       getInfo(){
-          var ViewerDom = document.getElementById('tracking');
+          var ViewerDom = document.getElementById('tracking-details');
           var viewer = new Viewer(ViewerDom, {
-                navbar:false,
+                navbar:true,
                 title:false,
-                toolbar:false,	
+                toolbar:true,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                transition:true,
+                fullscreen:false,
+                keyboard:false,
+                backdrop:true,
+                loop:true,
+                loading:true,
           })
-
       }
     }
   }
@@ -226,6 +236,11 @@ import 'viewerjs/dist/viewer.css';
 </style>
 
 <style  lang="scss" scoped>
+.breadcrumbtab{
+  height:30px;
+  border-bottom:1px solid #ebeef5;
+  margin-bottom:20px;
+}
 .tableDatatable{
   margin:10px 0 0 0;
 }

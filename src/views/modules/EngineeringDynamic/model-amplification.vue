@@ -450,13 +450,19 @@ import RdWeather from './rd-weather'
   },
     methods: {
       setOption: function (){
-        let chart = this.$echarts.init(this.$refs['Statistical'])
+        // let chart = this.$echarts.init(this.$refs['Statistical'])
+        // chart.setOption(this.chart_pie, true)
+
+        // let chart1 = this.$echarts.init(this.$refs['line_echar'])
+        // chart1.setOption(this.chart_line, true)
+        let chart = echarts.init(this.$refs['Statistical'])
         chart.setOption(this.chart_pie, true)
 
-        let chart1 = this.$echarts.init(this.$refs['line_echar'])
+        let chart1 = echarts.init(this.$refs['line_echar'])
         chart1.setOption(this.chart_line, true)
 
-        let chart2 = this.$echarts.init(this.$refs['issueEchart']), obj = JSON.parse(JSON.stringify(this.chart_pieS))
+        let chart2 = echarts.init(this.$refs['issueEchart']), obj = JSON.parse(JSON.stringify(this.chart_pieS))
+        // let chart2 = this.$echarts.init(this.$refs['issueEchart']), obj = JSON.parse(JSON.stringify(this.chart_pieS))
         obj.series[0].name = '质量问题'
         obj.series[0].data.push(
                 {value: 10, name: '混泥土工程'},
@@ -466,7 +472,8 @@ import RdWeather from './rd-weather'
             )
         chart2.setOption(obj, true)
 
-        let chart3 = this.$echarts.init(this.$refs['issueEchart1']), obj1 = JSON.parse(JSON.stringify(this.chart_pieS))
+        // let chart3 = this.$echarts.init(this.$refs['issueEchart1']), obj1 = JSON.parse(JSON.stringify(this.chart_pieS))
+        let chart3 = echarts.init(this.$refs['issueEchart1']), obj1 = JSON.parse(JSON.stringify(this.chart_pieS))
         obj1.series[0].name = '安全问题'
         obj1.series[0].data.push(
                 {value: 20, name: '模板作业'},

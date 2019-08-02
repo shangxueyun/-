@@ -96,30 +96,32 @@
               <div >
                 <img src="../../../assets/img/home/bim.png" alt="" style="height: 340px">
               </div>
-              <div class="fx">
-                <header>产值分析图</header>
-                <div ref="containerShadow" style="width: 100%;height: 280px;"></div>
-              </div>
+              <fenxiBox>  </fenxiBox>
+<!--              <div class="fx">-->
+<!--                <header>产值分析图</header>-->
+<!--                <div ref="containerShadow" style="width: 100%;height: 280px;"></div>-->
+<!--              </div>-->
 
             </el-col>
             <el-col :span="6">
               <listProblem :url="'/bim/index/listProblem'" :type="1"></listProblem>
-               <div class="workerMessage">
-                   <header>人员动态管理</header>
-                 <ul class="workerItem">
-                   <li class="active"><p>进场人次</p><span>{{teamNumData.entryNums}}</span></li>
-                   <li><p>出场人次</p><span>{{teamNumData.appearanceNums}}</span></li>
-                   <li><p>在场人次</p><span>{{teamNumData.venueRealNums}}</span></li>
-                 </ul>
-                 <div class="workerPlaceBox">
-                   <p class="header">班组在场人数</p>
-                   <div ref="workerPlace" style="width: 100%;height:190px"></div>
-                 </div>
-                 <div class="senvenDataBox">
-                   <p class="header">七天劳动力统计</p>
-                 <div ref="senvenData" style="width: 100%;height: 230px"></div>
-                 </div>
-               </div>
+              <workerMessage></workerMessage>
+<!--               <div class="workerMessage">-->
+<!--                   <header>人员动态管理</header>-->
+<!--                 <ul class="workerItem">-->
+<!--                   <li class="active"><p>进场人次</p><span>{{teamNumData.entryNums}}</span></li>-->
+<!--                   <li><p>出场人次</p><span>{{teamNumData.appearanceNums}}</span></li>-->
+<!--                   <li><p>在场人次</p><span>{{teamNumData.venueRealNums}}</span></li>-->
+<!--                 </ul>-->
+<!--                 <div class="workerPlaceBox">-->
+<!--                   <p class="header">班组在场人数</p>-->
+<!--                   <div ref="workerPlace" style="width: 100%;height:190px"></div>-->
+<!--                 </div>-->
+<!--                 <div class="senvenDataBox">-->
+<!--                   <p class="header">七天劳动力统计</p>-->
+<!--                 <div ref="senvenData" style="width: 100%;height: 230px"></div>-->
+<!--                 </div>-->
+<!--               </div>-->
             </el-col>
           </el-row>
 
@@ -157,7 +159,9 @@
   import step2Container from './models/step2Container'
   import step3Container from './models/step3Container'
   import listProblem from './models/listProblem'
-  import '@/utils/macarons.js'
+  import workerMessage from "./models/workerMessage"
+  import fenxiBox from "./models/fenxiBox"
+  // import '@/utils/macarons.js'
   import $ from 'jquery'
   export default {
     name: 'amplificationNew',
@@ -186,7 +190,7 @@
           height: window.innerHeight, // 高度设置，占满设备高度
           resistanceRatio: 0, // 抵抗率。边缘抵抗力的大小比例。值越小抵抗越大越难将slide拖离边缘，0时完全无法拖离。本业务需要
           observeParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新
-          loop: true,
+          loop: false,
           // 如果自行设计了插件，那么插件的一些配置相关参数，也应该出现在这个对象中，如下debugger
           // debugger: true,
 
@@ -197,7 +201,7 @@
 
              /// console.log('index '+this.index)
               let swiper = this.$refs.mySwiper.swiper
-              console.log(swiper) // 滑动打印当前索引
+              // console.log(swiper) // 滑动打印当前索引
               // if(swiper.activeIndex === this.list.length - 1){ // 到最后一个加载更多数据
               // let newList = []
                // let listLength = this.list.length
@@ -240,6 +244,7 @@
       }
     },
     mounted (){
+      this.swiperOption
       this.autoSetScale('#swiperBoxItem') // 进页面先执行一次页面高度和宽度计算然后赋值
       this.autoSetScale('#swiperBox2') // 进页面先执行一次页面高度和宽度计算然后赋值
       this.$refs.topHeader.loading=true
@@ -256,10 +261,10 @@
       // this.getListProblem().then((data) => {
       //   this.proBlemList=data;
       // })
-      this.analysisChart()
-      this.getWorkerOption()
-      this.getWorker()
-      this.getDustNoise()
+
+      // this.getWorkerOption()
+      // this.getWorker()
+      // this.getDustNoise()
 
       // this.swiper.slideTo(3, 1000, false); //手动跳到指定gg页
     },
@@ -275,9 +280,9 @@
       },
       scale (rateWidth, rateHeight,dom){
         var w = $(window).width()
-        var w1 = $(dom).width()
+        var w1 = $('#swiperBoxItem').width()
         var h=$(window).height()
-        var h1=$(dom).height()
+        var h1=$('#swiperBoxItem').height()
         console.log(h1)
         var left
         var top
@@ -320,57 +325,57 @@
           })
         })
       },
-      analysisChart (year){ // 产值
-        this.$http({
-          url: this.$http.adornUrl('/bim/index/analysisChart'),
-          method: 'post',
-          data: this.$http.adornData({
-            'dateTime': year
-          })
-        }).then((data) => {
-          if(data.data.code==0){
-            this.analysisChartOption=option
-            let result=data.data.result,
-              arr=[],
-              subcontractingOutputValueArr=[],
-              constructionOutputValueArr=[],
-              installationOutputValueArr=[]
-            for(var item in result.production){
-              let obj={}
-              obj.index=Number(item.split('-')[1])
-              obj.subcontractingOutputValue=result.production[item].subcontractingOutputValue
-              obj.constructionOutputValue=result.production[item].constructionOutputValue
-              obj.installationOutputValue=result.production[item].installationOutputValue
-              arr.push(obj)
-            }
-
-            for(let i=1; i<13; i++){
-              subcontractingOutputValueArr.push(0)
-              constructionOutputValueArr.push(0)
-              installationOutputValueArr.push(0)
-            }
-            console.log(arr)
-            subcontractingOutputValueArr=this.publicFun(subcontractingOutputValueArr, arr, 'subcontractingOutputValue')
-            constructionOutputValueArr=this.publicFun(constructionOutputValueArr, arr, 'constructionOutputValue')
-            installationOutputValueArr=this.publicFun(installationOutputValueArr, arr, 'installationOutputValue')
-            this.analysisChartOption.series[0].data=subcontractingOutputValueArr
-            this.analysisChartOption.series[1].data=constructionOutputValueArr
-            this.analysisChartOption.series[2].data=installationOutputValueArr
-            this.getEchart('containerShadow', option)
-          }
-        })
-      },
-      publicFun (data, arr, str){
-        data.forEach((a, i) => {
-          arr.forEach((m, n) => {
-            if(i+1==m.index){
-              data[i]=m[str]
-            }
-          })
-        })
-        console.log(data)
-        return data
-      },
+      // analysisChart (year){ // 产值
+      //   this.$http({
+      //     url: this.$http.adornUrl('/bim/index/analysisChart'),
+      //     method: 'post',
+      //     data: this.$http.adornData({
+      //       'dateTime': year
+      //     })
+      //   }).then((data) => {
+      //     if(data.data.code==0){
+      //       this.analysisChartOption=option
+      //       let result=data.data.result,
+      //         arr=[],
+      //         subcontractingOutputValueArr=[],
+      //         constructionOutputValueArr=[],
+      //         installationOutputValueArr=[]
+      //       for(var item in result.production){
+      //         let obj={}
+      //         obj.index=Number(item.split('-')[1])
+      //         obj.subcontractingOutputValue=result.production[item].subcontractingOutputValue
+      //         obj.constructionOutputValue=result.production[item].constructionOutputValue
+      //         obj.installationOutputValue=result.production[item].installationOutputValue
+      //         arr.push(obj)
+      //       }
+      //
+      //       for(let i=1; i<13; i++){
+      //         subcontractingOutputValueArr.push(0)
+      //         constructionOutputValueArr.push(0)
+      //         installationOutputValueArr.push(0)
+      //       }
+      //       console.log(arr)
+      //       subcontractingOutputValueArr=this.publicFun(subcontractingOutputValueArr, arr, 'subcontractingOutputValue')
+      //       constructionOutputValueArr=this.publicFun(constructionOutputValueArr, arr, 'constructionOutputValue')
+      //       installationOutputValueArr=this.publicFun(installationOutputValueArr, arr, 'installationOutputValue')
+      //       this.analysisChartOption.series[0].data=subcontractingOutputValueArr
+      //       this.analysisChartOption.series[1].data=constructionOutputValueArr
+      //       this.analysisChartOption.series[2].data=installationOutputValueArr
+      //       this.getEchart('containerShadow', option)
+      //     }
+      //   })
+      // },
+      // publicFun (data, arr, str){
+      //   data.forEach((a, i) => {
+      //     arr.forEach((m, n) => {
+      //       if(i+1==m.index){
+      //         data[i]=m[str]
+      //       }
+      //     })
+      //   })
+      //   console.log(data)
+      //   return data
+      // },
       getWeath (){ // 获取天气预报数据
         return new Promise((resolve, reject) => {
           this.$http({
@@ -404,90 +409,90 @@
           }
         })
       },
-      getWorkerOption (){
-        this.$http({
-          url: this.$http.adornUrl('/bim/index/watchKanbanAttendance'),
-          method: 'post'
-        }).then((data) => {
-          if(data.data.code==0){
-            this.workerPlaceOptions=workerPlace
-            this.sevenData=senvenData
-            let province=data.data.result.province
-            let teamArr=[]
-            let obj=[]
-            let sevenClassData=data.data.result.sevenClassData[this.getNowTime()],
-              placeList=[],
-              teamList=[],
-              dateArr=new Array()
-            data.data.result.groupByClassNo.forEach((a, i) => {
-              teamArr.push(a.classNo)
-            })
-            for(var item in data.data.result.sevenClassData){
-              dateArr.push(item)
-              data.data.result.sevenClassData[item].forEach((a, i) => {
-                obj.push(a)
-              })
-            }
-            // console.log(obj)
-
-            province.forEach((a, i) => {
-              let obj={}
-              obj.value=a.nums
-              obj.name=a.province
-              placeList.push(obj)
-              this.optionsData.push(a.province)
-            })
-            sevenClassData.forEach((a, i) => {
-              let obj={}
-              obj.value=a.sums
-              obj.name=a.classNo
-              teamList.push(obj)
-              this.optionsData.push(a.classNo)
-            })
-            // console.log(placeList, teamList)
-            this.sevenData.yAxis.data=dateArr
-            this.workerPlaceOptions.legend.data=this.optionsData
-            this.workerPlaceOptions.series[0].data=placeList
-            this.workerPlaceOptions.series[1].data=teamList
-            this.sevenData.legend.data=teamArr
-            this.sevenData.series= this.getSeventData(data.data.result.groupByClassNo, obj, dateArr)
-            // console.log(teamList)
-            this.getEchart('workerPlace', this.workerPlaceOptions)
-            this.getEchart('senvenData', this.sevenData)
-          }
-        })
-      },
-      getSeventData (groupByClassNo, arr, dateArr){
-        var objArr=[]
-        // dateArr.prototype.indexVf=function (arr){
-        //
-        // }
-
-        groupByClassNo.forEach((a, i) => {
-          var obj={
-            name: a.classNo,
-            type: 'bar',
-            stack: '人数',
-            label: {
-              normal: {
-                show: false,
-                position: 'insideRight'
-              }
-            },
-            data: new Array(7).fill(0)
-          }
-          objArr.push(obj)
-        })
-
-        objArr.forEach((a, i) => {
-          arr.forEach((m, n) => {
-            if(a.name==m.classNo){
-              a.data[this.indexVf(dateArr, m.photoDate)]=m.sums
-            }
-          })
-        })
-        return objArr
-      },
+      // getWorkerOption (){
+      //   this.$http({
+      //     url: this.$http.adornUrl('/bim/index/watchKanbanAttendance'),
+      //     method: 'post'
+      //   }).then((data) => {
+      //     if(data.data.code==0){
+      //       this.workerPlaceOptions=workerPlace
+      //       this.sevenData=senvenData
+      //       let province=data.data.result.province
+      //       let teamArr=[]
+      //       let obj=[]
+      //       let sevenClassData=data.data.result.sevenClassData[this.getNowTime()],
+      //         placeList=[],
+      //         teamList=[],
+      //         dateArr=new Array()
+      //       data.data.result.groupByClassNo.forEach((a, i) => {
+      //         teamArr.push(a.classNo)
+      //       })
+      //       for(var item in data.data.result.sevenClassData){
+      //         dateArr.push(item)
+      //         data.data.result.sevenClassData[item].forEach((a, i) => {
+      //           obj.push(a)
+      //         })
+      //       }
+      //       // console.log(obj)
+      //
+      //       province.forEach((a, i) => {
+      //         let obj={}
+      //         obj.value=a.nums
+      //         obj.name=a.province
+      //         placeList.push(obj)
+      //         this.optionsData.push(a.province)
+      //       })
+      //       sevenClassData.forEach((a, i) => {
+      //         let obj={}
+      //         obj.value=a.sums
+      //         obj.name=a.classNo
+      //         teamList.push(obj)
+      //         this.optionsData.push(a.classNo)
+      //       })
+      //       // console.log(placeList, teamList)
+      //       this.sevenData.yAxis.data=dateArr
+      //       this.workerPlaceOptions.legend.data=this.optionsData
+      //       this.workerPlaceOptions.series[0].data=placeList
+      //       this.workerPlaceOptions.series[1].data=teamList
+      //       this.sevenData.legend.data=teamArr
+      //       this.sevenData.series= this.getSeventData(data.data.result.groupByClassNo, obj, dateArr)
+      //       // console.log(teamList)
+      //       this.getEchart('workerPlace', this.workerPlaceOptions)
+      //       this.getEchart('senvenData', this.sevenData)
+      //     }
+      //   })
+      // },
+      // getSeventData (groupByClassNo, arr, dateArr){
+      //   var objArr=[]
+      //   // dateArr.prototype.indexVf=function (arr){
+      //   //
+      //   // }
+      //
+      //   groupByClassNo.forEach((a, i) => {
+      //     var obj={
+      //       name: a.classNo,
+      //       type: 'bar',
+      //       stack: '人数',
+      //       label: {
+      //         normal: {
+      //           show: false,
+      //           position: 'insideRight'
+      //         }
+      //       },
+      //       data: new Array(7).fill(0)
+      //     }
+      //     objArr.push(obj)
+      //   })
+      //
+      //   objArr.forEach((a, i) => {
+      //     arr.forEach((m, n) => {
+      //       if(a.name==m.classNo){
+      //         a.data[this.indexVf(dateArr, m.photoDate)]=m.sums
+      //       }
+      //     })
+      //   })
+      //   return objArr
+      // },
       indexVf (arr, str){ // 获取下标
         for(var i=0; i<arr.length; i++){
           if(arr[i]==str){
@@ -517,17 +522,17 @@
           return str
         }
       },
-      getWorker (){ // 获取在场人数
-        this.$http({
-          url: this.$http.adornUrl('/bim/index/realTimeData'),
-          method: 'get'
-
-        }).then((data) => {
-          if(data.data.code==0){
-            this.teamNumData=data.data.result
-          }
-        })
-      },
+      // getWorker (){ // 获取在场人数
+      //   this.$http({
+      //     url: this.$http.adornUrl('/bim/index/realTimeData'),
+      //     method: 'get'
+      //
+      //   }).then((data) => {
+      //     if(data.data.code==0){
+      //       this.teamNumData=data.data.result
+      //     }
+      //   })
+      // },
       getProDetail (){
         return new Promise((resolve, reject) => {
           this.$http({
@@ -559,22 +564,24 @@
       projectTime,
       step2Container,
       step3Container,
-      listProblem
+      listProblem,
+      workerMessage,
+      fenxiBox
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .swiper-slide.swiper-slide-step1{
-    background: url("../../../assets/img/home/bg.png") no-repeat;
+    // background: url("../../../assets/img/home/bg.png") no-repeat;
     background-size: 100% 100%;
   }
   .swiper-slide.swiper-slide-step2{
-    background: url("../../../assets/img/home/bg.png") no-repeat;
+    // background: url("../../../assets/img/home/bg.png") no-repeat;
     background-size: 100% 100%;
   }
   .swiper-slide.swiper-slide-step3{
-    background: url("../../../assets/img/home/bg.png") no-repeat;
+    // background: url("../../../assets/img/home/bg.png") no-repeat;
     background-size: 100% 100%;
   }
   .swiper-slide{
@@ -586,69 +593,69 @@
       /*padding:10px;*/
 
   }
-  .workerMessage{
-    width: 100%;
-    box-sizing: border-box;
-    padding:10px;
-    background: url("../../../assets/img/home/worker.png") no-repeat;
-    background-size: 100% 100%;
-    .header{
-      text-align: left;
-      color: #00E5FF;
-      font-weight: bold;
-      position: relative;
-    box-sizing: border-box;
-      padding-left: 10px;
-    }
-    .header:before{
-      content: "";
-      width: 4px;
-      height:16px ;
-      position: absolute;
-      background: #00E5FF;
-      top:3px;
-      left:0;
-    }
-    header{
-      font-size:18px;
-      /*margin-bottom: 30px;*/
-      font-weight: bold;
-      color: #AAF5FE;
-    }
-  .workerItem{
-    width: 100%;
-    list-style: none;
-    padding:0;
-    display: flex;
-    justify-content: space-between;
-    li{
-      background: url("../../../assets/img/home/workerItem.png") no-repeat;
-      background-size: 100% 100%;
-      width: 30%;
-      height: 79px;
-      text-align: right;
-      border:1px solid transparent;
-      cursor: pointer;
-      color: #fff;
-      box-sizing: border-box;
-      padding-right: 10px;
-      font-size: 13px;
-      p{
-        margin-top:25px;
-        margin-bottom: 2px;
-        font-size: 13px;
-      }
-      span{
-        color:#00E5FF;
-        font-size: 0.9em;
-        font-weight: bold;
-      }
-    }
-    li.active{
-      border:1px solid #3f3f3f;
-    }
-   }
-  }
+  /*.workerMessage{*/
+  /*  width: 100%;*/
+  /*  box-sizing: border-box;*/
+  /*  padding:10px;*/
+  /*  background: url("../../../assets/img/home/worker.png") no-repeat;*/
+  /*  background-size: 100% 100%;*/
+  /*  .header{*/
+  /*    text-align: left;*/
+  /*    color: #00E5FF;*/
+  /*    font-weight: bold;*/
+  /*    position: relative;*/
+  /*  box-sizing: border-box;*/
+  /*    padding-left: 10px;*/
+  /*  }*/
+  /*  .header:before{*/
+  /*    content: "";*/
+  /*    width: 4px;*/
+  /*    height:16px ;*/
+  /*    position: absolute;*/
+  /*    background: #00E5FF;*/
+  /*    top:3px;*/
+  /*    left:0;*/
+  /*  }*/
+  /*  header{*/
+  /*    font-size:18px;*/
+  /*    !*margin-bottom: 30px;*!*/
+  /*    font-weight: bold;*/
+  /*    color: #AAF5FE;*/
+  /*  }*/
+  /*.workerItem{*/
+  /*  width: 100%;*/
+  /*  list-style: none;*/
+  /*  padding:0;*/
+  /*  display: flex;*/
+  /*  justify-content: space-between;*/
+  /*  li{*/
+  /*    background: url("../../../assets/img/home/workerItem.png") no-repeat;*/
+  /*    background-size: 100% 100%;*/
+  /*    width: 30%;*/
+  /*    height: 79px;*/
+  /*    text-align: right;*/
+  /*    border:1px solid transparent;*/
+  /*    cursor: pointer;*/
+  /*    color: #fff;*/
+  /*    box-sizing: border-box;*/
+  /*    padding-right: 10px;*/
+  /*    font-size: 13px;*/
+  /*    p{*/
+  /*      margin-top:25px;*/
+  /*      margin-bottom: 2px;*/
+  /*      font-size: 13px;*/
+  /*    }*/
+  /*    span{*/
+  /*      color:#00E5FF;*/
+  /*      font-size: 0.9em;*/
+  /*      font-weight: bold;*/
+  /*    }*/
+  /*  }*/
+  /*  li.active{*/
+  /*    border:1px solid #3f3f3f;*/
+  /*  }*/
+  /* }*/
+  /*}*/
   .noiseBox{
     width: 100%;
     height:500px;
@@ -711,4 +718,16 @@
   /*.swiper-slide:nth-child(2n-1){*/
   /*  background: seashell;*/
   /*}*/
+  .hello-world{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;height:100%;
+    background: url("../../../assets/img/home/bg.png") no-repeat;
+    background-size: 100% 100%;
+    position: fixed;
+    top:0;
+  }
+  #swiperBox{
+  }
 </style>

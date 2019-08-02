@@ -3,7 +3,7 @@
       <el-col :span="24">
         <div class="topTime">
             <span class="allTime">
-              <img src="../../../../assets/img/home/time.png" alt="">
+              <img src="~@/assets/img/home/time.png" alt="">
               <span>总工期</span>
             </span>
           <ul class="day">
@@ -12,7 +12,7 @@
           </ul>
           <span>日历天</span>
           <span class="safeTime">
-              <img src="../../../../assets/img/home/safeItem.png" alt="">
+              <img src="~@/assets/img/home/safeItem.png" alt="">
               <span>已安全生产</span>
             </span>
           <ul class="day">
@@ -25,23 +25,17 @@
       </el-col>
       <el-col :span="24">
           <div class="progress">
-            <p class="step1" style="width: 34%">
+            <p class="step1" :style="{width:(getDays(startTime,getNowFormatDate())/getDays(startTime,endTime))*proIndex+'px'}">
 
                  <span class="leftItem">开工</span>
-
-
-
-                 <span class="leftItem btItem">{{startTime}}</span>
-
+                 <span class="leftItem btItem">{{starttimesnew}}</span>
                  <span class="circle" style="left: 0"></span>
 
             </p>
              <template v-for="item in result">
-            <p class="step2"   :style="{'left':(getDays(startTime,item.milestoneDate)/getDays(startTime,endTime))*proIndex+'px'}">
+            <p class="step2"   :style="{'left':(getDays(startTime,item.milestoneDate)/getDays(startTime,endTime))*proIndex+'110'+'px'}">
                 <span style="bottom:17px">{{item.milestoneName}}</span>
-
-
-                 <span style="top:25px">{{item.milestoneDate}}</span>
+                 <span style="top:25px">{{item.milestoneDates}}</span>
               <span class="circle" ></span>
             </p>
              </template>
@@ -49,7 +43,7 @@
 
                 <span class="rtItem">竣工</span>
 
-                 <span class="rtItem btItem" style="right: -12px">{{endTime}}</span>
+                 <span class="rtItem btItem" style="right: -12px">{{endTimenew}}</span>
               <span class="circle"  style="right: 0"></span>
             </p>
           </div>
@@ -68,13 +62,49 @@
         proIndex: 0,
         result: [],
         startTime: '',
-        endTime: ''
+        endTime: '',
+        starttimesnew:'',
+        endTimenew:''
       }
     },
     mounted (){
       this.proIndex=$('.progress').width()
+      this.getSchedule()
     },
     methods: {
+      
+      getSchedule(){
+        this.$http({
+          url: this.$http.adornUrl('/bim/index/getSchedule'),
+          method: 'get',
+          params: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+              if(data.result !== null){
+             
+              this.starttimesnew = this.zhdate(data.result.startDate)
+              this.endTimenew = this.zhdate(data.result.endDate)  
+              console.log("this.starttimesnew",this.starttimesnew)
+              console.log("this.endTimenew",this.endTimenew)
+              this.allDays=this.changeDays(this.getDays(data.result.startDate, data.result.endDate))
+              this.nowSafeDays=this.changeDays(this.getDays(data.result.startDate, this.getNowFormatDate()))
+
+              }
+          }
+        })
+      },
+      zhdate(timedata){
+        let datestartTime = new Date(timedata.replace(/-/g, "/"));
+        var date = new Date(datestartTime);
+        var  yeartimes = date.getYear() + 1900;
+        var  monthtimes= date.getMonth() + 1;
+        var  daytimes = date.getDate();
+
+        var year = yeartimes < 2000 ? yeartimes + 1900 : yeartimes 
+        var yy = year.toString().substr(2, 2); 
+        var results = yy +'/'+ (monthtimes>9?monthtimes:'0'+monthtimes) +'/'+ (daytimes>9?daytimes:'0'+daytimes);
+         return results 
+      },
       getLcbData (){
         this.$http({
           url: this.$http.adornUrl('/bim/index/milestoneList'),
@@ -82,13 +112,69 @@
 
         }).then((data) => {
           if(data.data.code==0){
+            if(data.data.result == ''){
+                return
+            }
             let result=data.data.result
+            // console.log(result)
+            data.data.result.forEach((item) =>{
+                let date = new Date(item.milestoneDate.replace(/-/g, "/"));
+                let years = date.getFullYear();
+                let months = date.getMonth() + 1;
+                let strDates = date.getDate();
+                if (months >= 1 && months <= 9) {
+                  months = "0" + months;
+                }
+                if (strDates >= 0 && strDates <= 9) {
+                  strDates = "0" + strDates;
+                }
+                var year = years < 2000 ? years + 1900 : years 
+                var yy = year.toString().substr(2, 2); 
+                item.milestoneDates = yy+'/'+months+'/'+strDates
+                item.starttimesnew= item.startDate
+                item.endTimenew= item.endDate
+                
+            })
+
             this.result=data.data.result
-            this.startTime= this.result[0].startDate
+            // console.log("this.result",this.result)
+            this.startTime=  this.result[0].startDate
+
+
+            // this.starttimesnew = this.result[0].starttimesnew
+            let datestartTime = new Date(this.starttimesnew.replace(/-/g, "/"));
+            var date = new Date(datestartTime);
+            var  yeartimes = date.getYear() + 1900;
+            var  monthtimes= date.getMonth() + 1;
+            var  daytimes = date.getDate();
+
+            var year = yeartimes < 2000 ? yeartimes + 1900 : yeartimes 
+            var yy = year.toString().substr(2, 2); 
+            var results = yy +'/'+ (monthtimes>9?monthtimes:'0'+monthtimes) +'/'+ (daytimes>9?daytimes:'0'+daytimes);
+            
+            // this.starttimesnew = results
+
+            //
+            // this.endTimenew = this.result[0].endTimenew
+            let dateendTime = new Date(this.endTimenew.replace(/-/g, "/"));
+            var dateend = new Date(dateendTime);
+            var  yeartimesend= dateend.getYear() + 1900;
+            var  monthtimesend= dateend.getMonth() + 1;
+            var  daytimesend = dateend.getDate();
+
+            var yearend = yeartimesend < 2000 ? yeartimesend + 1900 : yeartimesend 
+            var yyend = yearend.toString().substr(2, 2); 
+            var resultsend = yyend +'/'+ (monthtimesend>9?monthtimesend:'0'+monthtimesend) +'/'+ (daytimesend>9?daytimesend:'0'+daytimesend);
+            
+            // this.endTimenew = resultsend
+
+
             this.endTime= this.result[0].endDate
-            this.allDays=this.changeDays(this.getDays(result[0].startDate, result[0].endDate))
-            console.log(this.allDays)
-            this.nowSafeDays=this.changeDays(this.getDays(result[0].startDate, this.getNowFormatDate()))
+            // this.allDays=this.changeDays(this.getDays(result[0].startDate, result[0].endDate))
+
+            // console.log(this.allDays)
+            // this.nowSafeDays=this.changeDays(this.getDays(result[0].startDate, this.getNowFormatDate()))
+            // console.log(this.nowSafeDays)
           }
         })
       },
@@ -151,7 +237,7 @@
          width: 159px;
          height: 48px;
         font-weight: bold;
-        background: url("../../../../assets/img/home/allTime.png");
+        background: url("~@/assets/img/home/allTime.png");
         background-size: 100% 100%;
         display: flex;
         justify-content: flex-start;
@@ -166,7 +252,7 @@
         width:191px;
         height: 48px;
         font-weight: bold;
-        background: url("../../../../assets/img/home/safe.png");
+        background: url("~@/assets/img/home/safe.png");
         background-size: 100% 100%;
         display: flex;
         justify-content: flex-start;
@@ -189,7 +275,7 @@
           text-align: center;
           line-height: 52px;
           margin-right: 5px;
-          background:url("../../../../assets/img/home/dayItem.png");
+          background:url("~@/assets/img/home/dayItem.png");
           background-size: 100% 100%;
         }
       }

@@ -2,22 +2,22 @@
   <div>
         <el-form :inline="true"  :model="dataForm"  ref="dataForm" @keyup.enter.native="getDataList()">
 
-            <el-form-item prop="name">
-                   <el-input v-model="dataForm.name" placeholder="请输入姓名" clearable></el-input>
+            <el-form-item prop="names">
+                   <el-input v-model="dataForm.names" placeholder="请输入姓名" clearable></el-input>
             </el-form-item>
             <el-form-item prop="date">    
                   <el-date-picker
                     v-model="dataForm.date"
-      @change="dateschange"
-      format="yyyy-MM"
-      value-format="yyyy-MM"
-      type="month"
+                    @change="dateschange"
+                    format="yyyy-MM"
+                    value-format="yyyy-MM"
+                    type="month"
                     placeholder="选择月份">
                   </el-date-picker>
             </el-form-item>
             <el-form-item>
                     <el-button @click="getDataList('1')">查询</el-button>
-                        <el-button type="primary" @click="payrollclick">工资查看</el-button>
+                    <el-button type="primary" @click="payrollclick">工资查看</el-button>
             </el-form-item>
         </el-form>
     <el-table
@@ -84,14 +84,16 @@
 </template>
 
 <script>
+
+  "use strict";
+
   import manage from './manage-see'
   import payroll from './payroll'
-  
   export default {
       data () {
           return {
               dataForm: {
-                name: '',
+                names: '',
                 date:''
               },
               dataListLoading: false,
@@ -117,18 +119,17 @@
           next();
       },
       methods: {
-
-      dateschange(val){
-          var monthdata = new Date(val)
-          var year = monthdata.getFullYear();
-          var month = monthdata.getMonth() + 1;
-          var months = monthdata.getMonth() + 1;
-          if (months >= 1 && months <= 9) {
-            months = "0" + months;
-          }
-          this.times = year + '年' + month+ '月'
-          this.dataForm.date = year + '-' + months+ '-'+'01'
-      },
+        dateschange(val){
+            var monthdatas = new Date(val)
+            var year = monthdatas.getFullYear();
+            var month = monthdatas.getMonth() + 1;
+            var months = monthdatas.getMonth() + 1;
+            if (months >= 1 && months <= 9) {
+              months = "0" + months;
+            }
+            this.times = year + '年' + month+ '月'
+            this.dataForm.date = year + '-' + months+ '-'+'01'
+        },
           getDataList(num){
             if(num == 1){
                 this.pageIndex = 1
@@ -143,27 +144,28 @@
                 'pageNo': this.pageIndex,
                 'pageSize': this.pageSize,
                 'param':{
-                  'userName':this.dataForm.name,
+                  'userName':this.dataForm.names,
                   'dateTime':this.dataForm.date
                 }
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
                 data.result.list.forEach((item) =>{
-                    var date = new Date(item.createTime);
-                    var seperator1 = "-";
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var strDate = date.getDate();
-                    if (month >= 1 && month <= 9) {
-                      month = "0" + month;
+                    console.log(item.createTime)
+                    let date = new Date(item.createTime.replace(/-/g, "/"));
+                    let seperator1 = "-";
+                    let years = date.getFullYear();
+                    let months = date.getMonth() + 1;
+                    let strDates = date.getDate();
+                    if (months >= 1 && months <= 9) {
+                      months = "0" + months;
                     }
-                    if (strDate >= 0 && strDate <= 9) {
-                      strDate = "0" + strDate;
+                    if (strDates >= 0 && strDates <= 9) {
+                      strDates = "0" + strDates;
                     }
-                    var currentdate = year + seperator1 + month
-                    item.createTime = year + seperator1 + month
-                    item.dateTimes = year + seperator1 + month + seperator1 + strDate
+                    let currentdate = years + seperator1 + months
+                    item.createTime = years + seperator1 + months
+                    item.dateTimes = years + seperator1 + months + seperator1 + strDates
                 })
                 this.dataList = data.result.list
                 this.totalPage = data.result.totalCount
@@ -245,8 +247,6 @@
 
 
 <style lang="scss" scoped>
-
-  
   .towertitle{
     height:30px;
     border-bottom:1px solid #e1e1e1;

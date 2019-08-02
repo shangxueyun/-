@@ -182,12 +182,18 @@
       },
       methods: {
           rowClick(row, column, event){
-            console.log(row.id)
             this.dataListSelections = row
-            this.siteDetailsVisible = true
-            this.$nextTick(() => {
-              this.$refs.details.init(row.id)
+            this.$router.push({  
+                path:'/tracking-details',   
+                query: {
+                  id: row.id
+                }
             })
+            // this.dataListSelections = row
+            // this.siteDetailsVisible = true
+            // this.$nextTick(() => {
+            //   this.$refs.details.init(row.id)
+            // })
           },
           safetyProblem(){
             this.$http({

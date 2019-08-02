@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="'编辑场地模型'"
+    :title="'修改场地模型'"
     :modal-append-to-body="true"
     :append-to-body="true"
     :close-on-click-modal="false"
