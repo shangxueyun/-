@@ -53,7 +53,7 @@
         label="打卡标签">
       </el-table-column>
      </el-table-column>
-     <el-table-column
+     <!-- <el-table-column
         prop="longitude"
         header-align="center"
         align="center"
@@ -61,17 +61,18 @@
             <template slot-scope="scope">
                 <el-button @click="clickMap(scope.row)" size="mini" type="text">查看位置</el-button>
             </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        width="280"
+        width="220"
         label="上传时间">
       </el-table-column> <el-table-column
         prop="createUser"
         header-align="center"
         align="center"
+        width="220"
         label="上传人员">
       </el-table-column>
     </el-table>

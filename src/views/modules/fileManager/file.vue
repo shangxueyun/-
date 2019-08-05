@@ -6,7 +6,7 @@
       </el-form-item> -->
       <el-form-item>
         <!-- <el-button primary="primary" icon="el-icon-search" @click="search">搜索</el-button> -->
-        <el-button @click="createLabel()" icon="el-icon-edit">新建文件夹</el-button>
+        <el-button @click="createLabel()" >新建文件夹</el-button>
         <el-button @click="backHome" v-if="this.$store.state.folder.viewFolder.id!=0">返回资料管理首页</el-button>
       </el-form-item>
     </el-form>

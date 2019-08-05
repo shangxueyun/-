@@ -7,7 +7,7 @@
     :headers="header"
     :action="actionUrl"
     :on-success="handleSuccess">
-    <el-button type="primary" icon="el-icon-upload">点击上传</el-button>
+    <el-button type="primary">点击上传</el-button>
   </el-upload>
 </template>
 

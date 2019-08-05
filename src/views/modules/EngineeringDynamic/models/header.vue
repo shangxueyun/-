@@ -2,7 +2,7 @@
   <div class="headerBox">
     <el-row >
       <el-col :span="4">
-        <img src="~@/assets/img/home/logo.png" alt=""  style="margin-top:5px;">
+        <img src="~@/assets/img/home/logo.png" alt=""  >
       </el-col>
       <el-col :span="16" style="height: 10px">
 
@@ -34,6 +34,7 @@
      background:url("~@/assets/img/home/header.png") no-repeat;
      background-size: 100% 100%;
    }
+   .headerBox img{margin:1rem 0 0 0}
   .layout{
     cursor: pointer;
     font-weight:400;

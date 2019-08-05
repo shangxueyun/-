@@ -218,7 +218,6 @@
     main{
         .model_bottom{
             width: 100%;
-            height: 328px;
             header{
                 line-height: 40px;
                 color: #666;
@@ -339,7 +338,6 @@ border-radius: 2px;
 }
 .cantileveredSteel .el-range-editor--medium .el-range-input {
     background: transparent;
-    color: #fff;
 }
 .cantileveredSteel .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #fff !important;

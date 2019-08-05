@@ -21,11 +21,11 @@ const globalRoutes = [
   { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } },
   { path: '/model', component: _import('modules/model/model'), name: 'model', meta: { title: '模型' } },
   { path: '/mobileH5', component: _import('common/mobileH5'),name: 'mobileH5',  meta: { title: '首页H5' } },
-  // { path: '/screen', component: _import('modules/screen'), name: 'screen', meta: { title: '大屏演示' } },
+  { path: '/screen', component: _import('common/screen'), name: 'screen', meta: { title: '大屏演示' } },
   
 
   { path: '/model-amplificationNew', component: _import('modules/EngineeringDynamic/model-amplificationNew'), name: 'inspect', meta: { title: '观摩看板' } },
-  { path: '/aaaaa', component: _import('modules/EngineeringDynamic/aaaaa'), name: 'aaaaa', meta: { title: '观摩看板' } }
+
 ]
 
 // 主入口路由(需嵌套上左右整体布局)

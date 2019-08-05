@@ -1,24 +1,37 @@
 
-  var  color =['#FFBA20','#048FA4','#75FBFF']
 export let option = {
   title: {
-    // text: '某地区蒸发量和降水量',
-    // subtext: '纯属虚构'
-  },
-
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-      type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+    text: '产值分析图',
+    left: 'center',
+    textStyle: {
+      color: '#3b3b3b',
+      fontSize: 14
     }
   },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'cross',
+      crossStyle: {
+        color: '#999'
+      }
+    }
+  },
+  grid: {
+      left: '3%',     //图表距离左右上下之间的距离
+      right: '4%',
+      top: '30%',
+      bottom: '0',
+      containLabel: true
+  },
   legend: {
-
-    data: ['分包产值', '土建产值', '安装产值'],
-    top: '10px',
+    type: 'scroll',
+    x: 'center',
+    top:"40",
+    data: ['','分包产值', '土建产值', '安装产值'],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
-      fontSize: 16
+      color: '#636363',
+      fontSize: 14
     }
   },
   toolbox: {
@@ -32,7 +45,18 @@ export let option = {
       data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       axisLine: {
         lineStyle: {
-          color: '#00EAFF'
+          color: '#000'
+        }
+      },
+      axisPointer: {
+        type: 'shadow'
+      },
+      splitArea: {
+        show: false,
+        lineStyle: {
+          color: ['#aaa', '#ddd'],
+          width: 1,
+          type: 'dashed'
         }
       }
 
@@ -40,72 +64,31 @@ export let option = {
   ],
   yAxis: [
     {
-      type: 'value',
-      axisLine: {
-        lineStyle: {
-          color: '#00EAFF'
+        type: 'value',
+        min: 0,
+        max: 1000,
+        interval: 200,
+        axisLabel: {
+            formatter: '{value}'
         }
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: ['#00EAFF'],
-          width: 1,
-          type: 'solid'
-        }
-      }
-    }
+    },
   ],
   series: [
     {
       name: '分包产值',
       type: 'bar',
-      data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-      itemStyle: {
-          normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: '#1BDFFC'
-              }, {
-                  offset: 1,
-                  color: '#014CE5'
-              }]),
-          }
-      }
+      data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
     },
     {
       name: '土建产值',
       type: 'bar',
-      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
-      itemStyle: {
-          normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: '#FFBA20'
-              }, {
-                  offset: 1,
-                  color: '#D16607'
-              }]),
-          }
-      }
+      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
 
     },
     {
       name: '安装产值',
       type: 'bar',
-      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
-      itemStyle: {
-          normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: '#75FBFF'
-              }, {
-                  offset: 1,
-                  color: '#048FA4'
-              }]),
-          }
-      }
-
+      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
 
     }
   ]
@@ -335,32 +318,20 @@ export let pieTopWeightPie={
     rich: {
       value: {
         color: '#00E4FF',
-        fontSize: 40,
         fontWeight: 'bold',
         lineHeight: 40
       },
       name: {
         color: '#00E4FF',
-        lineHeight: 20
+        // lineHeight: 20
       }
     },
     top: 'center',
-    left: '40%',
+    left: '70%',
     textAlign: 'center',
     textStyle: {
-      color: '#00E4FF'
-      // rich: {
-      //   value: {
-      //
-      //     fontSize: 40,
-      //     fontWeight: 'bold',
-      //     lineHeight: 40
-      //   },
-      //   name: {
-      //     color: '#00E4FF',
-      //     lineHeight: 20
-      //   }
-      // }
+      color: '#636363',
+      fontSize: 14,
     }
   },
   tooltip: {
@@ -369,6 +340,7 @@ export let pieTopWeightPie={
 
   },
   legend: {
+    icon: 'circle',
     type: 'scroll',
     orient: 'vertical',
     formatter: function (name) {
@@ -379,20 +351,22 @@ export let pieTopWeightPie={
         return name
       }
     },
-
-    x: 'right',
+    x: 'left',
+    top:50,
     data: [],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
-      fontSize: 14
-    }
+      color: '#4d4d4d',
+      fontSize: 12
+    },
+    height:200,
+
   },
   series: [
     {
       name: '质量管理',
       type: 'pie',
-      radius: ['50%', '70%'],
-      center: ['40%', '50%'],
+      radius: ['50%', '30%'],
+      center: ['72%', '50%'],
       avoidLabelOverlap: false,
       label: {
         normal: {
@@ -412,13 +386,7 @@ export let pieTopWeightPie={
           show: false
         }
       },
-      data: [
-        // {value: 335, name: '直接访问'},
-        // {value: 310, name: '邮件营销'},
-        // {value: 234, name: '联盟广告'},
-        // {value: 135, name: '视频广告'},
-        // {value: 1548, name: '搜索引擎'}
-      ]
+      data: []
     }
   ]
 }
@@ -432,32 +400,20 @@ export let teamoption = {
     rich: {
       value: {
         color: '#00E4FF',
-        fontSize: 40,
         fontWeight: 'bold',
         lineHeight: 40
       },
       name: {
         color: '#00E4FF',
-        lineHeight: 20
+        // lineHeight: 20
       }
     },
     top: 'center',
-    left: '40%',
+    left: '68%',
     textAlign: 'center',
     textStyle: {
-      color: '#00E4FF'
-      // rich: {
-      //   value: {
-      //
-      //     fontSize: 40,
-      //     fontWeight: 'bold',
-      //     lineHeight: 40
-      //   },
-      //   name: {
-      //     color: '#00E4FF',
-      //     lineHeight: 20
-      //   }
-      // }
+      color: '#636363',
+      fontSize: 14,
     }
   },
   tooltip: {
@@ -465,22 +421,26 @@ export let teamoption = {
     formatter: '{a} <br/>{b} : {c} ({d}%)'
   },
   legend: {
+    icon: 'circle',
     type: 'scroll',
     orient: 'vertical',
-    x: 'right',
-    data: [],
     formatter: function (name) {
       if (!name) return ''
       if (name.length > 5) {
-        name = name.slice(0, 5) + '...'
-        // console.log(name)
+        return name.slice(0, 5) + '...'
+      }else{
+        return name
       }
-      return name
     },
+
+    x: 'left',
+    top:50,
+    data: [],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
-      fontSize: 14
-    }
+      color: '#4d4d4d',
+      fontSize: 12
+    },
+    height:200,
   },
   toolbox: {
     show: false,
@@ -500,8 +460,9 @@ export let teamoption = {
     {
       name: '质量管理',
       type: 'pie',
-      radius: ['40%', '70%'],
-      center: ['40%', '50%'],
+      // radius : [20, 110],
+      radius: ['20%', '50%'],
+      center: ['70%', '50%'],
       roseType: 'radius',
       label: {
         normal: {
@@ -543,32 +504,20 @@ export let safepieToptPie={
     rich: {
       value: {
         color: '#00E4FF',
-        fontSize: 40,
         fontWeight: 'bold',
         lineHeight: 40
       },
       name: {
         color: '#00E4FF',
-        lineHeight: 20
+        // lineHeight: 20
       }
     },
     top: 'center',
-    left: '40%',
+    left: '70%',
     textAlign: 'center',
     textStyle: {
-      color: '#00E4FF'
-      // rich: {
-      //   value: {
-      //
-      //     fontSize: 40,
-      //     fontWeight: 'bold',
-      //     lineHeight: 40
-      //   },
-      //   name: {
-      //     color: '#00E4FF',
-      //     lineHeight: 20
-      //   }
-      // }
+      color: '#636363',
+      fontSize: 14,
     }
   },
   tooltip: {
@@ -577,9 +526,9 @@ export let safepieToptPie={
 
   },
   legend: {
+    icon: 'circle',
     type: 'scroll',
     orient: 'vertical',
-    right: '10%',
     formatter: function (name) {
       if (!name) return ''
       if (name.length > 5) {
@@ -588,23 +537,21 @@ export let safepieToptPie={
         return name
       }
     },
-
-    x: 'right',
+    x: 'left',
+    top:50,
     data: [],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
-      fontSize: 14
-    }
+      color: '#4d4d4d',
+      fontSize: 12
+    },
+    height:200,
   },
   series: [
     {
       name: '安全管理',
       type: 'pie',
-
-      radius: ['40%', '70%'],
-      center: ['40%', '50%'],
-      // radius: ['50%', '70%'],
-      // center: ['40%', '50%'],
+      radius: ['50%', '30%'],
+      center: ['72%', '50%'],
       avoidLabelOverlap: false,
       label: {
         normal: {
@@ -643,32 +590,20 @@ export let safepieToptTeamPie={
     rich: {
       value: {
         color: '#00E4FF',
-        fontSize: 40,
         fontWeight: 'bold',
         lineHeight: 40
       },
       name: {
         color: '#00E4FF',
-        lineHeight: 20
+        // lineHeight: 20
       }
     },
     top: 'center',
-    left: '40%',
+    left: '68%',
     textAlign: 'center',
     textStyle: {
-      color: '#00E4FF'
-      // rich: {
-      //   value: {
-      //
-      //     fontSize: 40,
-      //     fontWeight: 'bold',
-      //     lineHeight: 40
-      //   },
-      //   name: {
-      //     color: '#00E4FF',
-      //     lineHeight: 20
-      //   }
-      // }
+      color: '#636363',
+      fontSize: 14,
     }
   },
   tooltip: {
@@ -677,9 +612,9 @@ export let safepieToptTeamPie={
 
   },
   legend: {
+    icon: 'circle',
     type: 'scroll',
     orient: 'vertical',
-    right: '10%',
     formatter: function (name) {
       if (!name) return ''
       if (name.length > 5) {
@@ -689,50 +624,36 @@ export let safepieToptTeamPie={
       }
     },
 
-    x: 'right',
+    x: 'left',
+    top:50,
     data: [],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
-      fontSize: 14
-    }
+      color: '#4d4d4d',
+      fontSize: 12
+    },
+    height:200,
   },
-  toolbox: {
-    show: false,
-    feature: {
-      mark: {show: true},
-      dataView: {show: true, readOnly: false},
-      magicType: {
-        show: true,
-        type: ['pie', 'funnel']
-      },
-      restore: {show: true},
-      saveAsImage: {show: true}
-    }
-  },
-  calculable: true,
   series: [
     {
       name: '安全管理',
       type: 'pie',
-      radius: ['50%', '70%'],
-      center: ['40%', '50%'],
+      radius: ['20%', '50%'],
+      center: ['70%', '50%'],
       roseType: 'radius',
       label: {
         normal: {
-          show: false,
-          position: 'center'
+          show: false
         },
         emphasis: {
-          show: false,
-          textStyle: {
-            fontSize: '30',
-            fontWeight: 'bold'
-          }
+          show: false
         }
       },
-      labelLine: {
+      lableLine: {
         normal: {
           show: false
+        },
+        emphasis: {
+          show: true
         }
       },
       data: [
@@ -750,7 +671,8 @@ export let fenxioption = {
     text: '质量安全数量统计图',
     left: 'center',
     textStyle: {
-      color: '#AAF5FE'
+      color: '#3b3b3b',
+      fontSize: 14
     }
   },
   tooltip: {
@@ -763,9 +685,11 @@ export let fenxioption = {
     }
   },
   grid: {
-    left: 'left',
-    right: '10',
-    containLabel: true
+      left: '3%',     //图表距离左右上下之间的距离
+      right: '4%',
+      top: '30%',
+      bottom: '0',
+      containLabel: true
   },
   toolbox: {
     // feature: {
@@ -777,11 +701,11 @@ export let fenxioption = {
   },
   legend: {
     type: 'scroll',
-    x: 'left',
-    top:"20",
-    data: ['质量总量', '安全总量', '质量安全总量'],
+    x: 'center',
+    top:"40",
+    data: ['','质量总量', '安全总量', '质量安全总量'],
     textStyle: {// 图例文字的样式
-      color: '#00EAFF',
+      color: '#636363',
       fontSize: 14
     }
   },
@@ -791,8 +715,11 @@ export let fenxioption = {
       data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       axisLine: {
         lineStyle: {
-          color: '#A2D4E6'
+          color: '#000'
         }
+      },
+      axisPointer: {
+        type: 'shadow'
       },
       splitArea: {
         show: false,
@@ -807,68 +734,61 @@ export let fenxioption = {
   ],
   yAxis: [
     {
-      type: 'value',
-      // name: '个数',
-      min: 0,
-      max: 250,
-      interval: 50,
-      splitArea: {
-        show: false,
-        lineStyle: {
-          color: ['#aaa', '#ddd'],
-          width: 1,
-          type: 'dashed'
+        type: 'value',
+        name: '个数',
+        min: 0,
+        max: 250,
+        interval: 50,
+        axisLabel: {
+            formatter: '{value}'
         }
-      },
-      axisLine: {
-        lineStyle: {
-          color: '#A2D4E6'
-        }
-      },
-      axisLabel: {
-        formatter: '{value} '
-
-      }
     },
     {
-      type: 'value',
-      name: '总量',
-      min: 0,
-      max: 25,
-      show: false,
-      interval: 5,
-      splitArea: {
-        show: false,
-        lineStyle: {
-          color: ['#aaa', '#ddd'],
-          width: 1,
-          type: 'dashed'
+        type: 'value',
+        name: '总量',
+        min: 0,
+        max: 250,
+        interval: 50,
+        axisLabel: {
+            formatter: '{value}'
         }
-      },
-      axisLabel: {
-        formatter: '{value}',
-        lineStyle: {
-          color: '#00EAFF'
-        }
-      }
     }
   ],
   series: [
     {
       name: '质量总量',
       type: 'bar',
-      data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+      data: []
     },
     {
       name: '安全总量',
       type: 'bar',
-      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+      data: []
     },
     {
       name: '质量安全总量',
       type: 'line',
       yAxisIndex: 1,
-      data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+      areaStyle: {
+        normal: {
+            color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(88,160,253,1)'
+              }, {
+                  offset: 0.5, color: 'rgba(88,160,253,0.7)'
+              }, {
+                  offset: 1, color: 'rgba(88,160,253,0)'
+              }]
+            }
+        }
+      },
+      z:1,
+      data: []
     }
   ]
 }

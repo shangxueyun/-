@@ -1,24 +1,33 @@
 <template>
-  <div class="planningManagement" ref="planningManagement" v-loading="planningManagementLoading">
+  <div class="planningManagement" ref="planningManagement" >
+
       <main class="contains">
-          <div class="catalogue_left">
-                <el-container>
-                    <el-header height="44px">目录</el-header>
-                    <el-main>
-                        <ul ref="mainUL">
-                            <li v-for="(item,key) in catalogueList" :key="key" :index="key" @click="switchCatalogue($event)">{{item}}</li>
-                        </ul>
-                    </el-main>
-                </el-container>
-          </div>
-          <div class="catalogue_view">
-                <el-container v-if="projectImgListBle" id="projectImgList" :style="{height:offHeigth}">
-                    <div :style="imgStyle(imgList[imgINdex])" v-for="(item,key) in imgList[imgINdex]" :key="key">
-                        <img @click="imgstype()" style="width: 100%;height:100%" :src="item.src" alt="">
-                        <br>
-                    </div>
-                </el-container>
-          </div>
+
+  <el-row :gutter="20">
+            <el-col :span="6" >
+                        <div class="catalogue_left">
+                                <el-container>
+                                    <el-header height="44px">目录</el-header>
+                                    <el-main>
+                                        <ul ref="mainUL">
+                                            <li v-for="(item,key) in catalogueList" :key="key" :index="key" @click="switchCatalogue($event)">{{item}}</li>
+                                        </ul>
+                                    </el-main>
+                                </el-container>
+                        </div>
+            </el-col>
+            <el-col :span="18" >
+                        <div style="margin-top:80px;" class="catalogue_view"   id="projectImgList" v-loading="planningManagementLoading">
+
+                                    <div :style="imgStyle(imgList[imgINdex])" v-for="(item,key) in imgList[imgINdex]" :key="key">
+                                        <img @click="imgstype()" style="width: 100%;height:100%" :src="item.src" alt="">
+                                        <br>
+                                    </div>
+                                <!-- <el-container v-if="projectImgListBle" id="projectImgList" :style="{height:offHeigth}">
+                                </el-container> -->
+                        </div>
+            </el-col>
+</el-row>
       </main>
   </div>
 </template>
@@ -168,6 +177,7 @@
                 height: '32rem',
                 padding: '20px',
                 'margin-left':"4px",
+                'margin':'0 auto'
             }
           }
       },
@@ -183,9 +193,9 @@
         width: 100%;
         padding: 2rem 0 0 0px;
         .catalogue_left{
-            width: 14rem;
+            // width: 14rem;
             height: 100%;
-            position: absolute;
+            // position: absolute;
             height: 30rem;
             header{
                 width: 100%;
@@ -220,8 +230,8 @@
         .catalogue_view{
             width: auto;
             height: 36rem;
-            position: absolute;
-            left: 218px;
+            // position: absolute;
+            // left: 218px;
             padding: 0 20px;
         }
     }

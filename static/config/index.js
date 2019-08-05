@@ -6,16 +6,16 @@
 
 
 
-  // // api接口请求地址
-  // window.SITE_CONFIG['baseUrl'] = 'http://222.184.237.178:9998';
-  // // 设备请求url
-  // window.SITE_CONFIG['partyUrl'] = 'http://222.184.237.178:9998';
-
-
   // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://222.184.237.178:9010';
+  window.SITE_CONFIG['baseUrl'] = 'http://222.184.237.178:9998';
   // 设备请求url
-  window.SITE_CONFIG['partyUrl'] = 'http://222.184.237.178:9010';
+  window.SITE_CONFIG['partyUrl'] = 'http://222.184.237.178:9998';
+
+
+  // // api接口请求地址
+  // window.SITE_CONFIG['baseUrl'] = 'http://222.184.237.178:9010';
+  // // 设备请求url
+  // window.SITE_CONFIG['partyUrl'] = 'http://222.184.237.178:9010';
 
 
   // cdn地址 = 域名 + 版本号

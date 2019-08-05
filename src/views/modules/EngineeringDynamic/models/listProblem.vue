@@ -1,8 +1,10 @@
 <template>
   <div class="marquee_box marquee_boxs">
+
+    <div class="tips_r"></div>
     <ul class="marquee_list" :class="{marquee_top:animate}">
       <template v-if="type==1">
-        <li class="listHeader"  >工程动态</li>
+        <li class="listHeader listHeadersdt"  >工程动态</li>
         <li v-for="(item, index) in result" class="item">
           <span class="a">{{item.index}}</span>
           <span class="a">{{item.name}}</span>
@@ -102,12 +104,28 @@
 </script>
 
 <style scoped>
+
+
+.tips_r{
+
+    height:1rem;
+    display: flex;
+    flex-direction: column;
+    background: url(~@/assets/img/home/tips_r.png) no-repeat;
+    background-size: 100% 100%;
+    margin-bottom:1rem;
+    right:-25px;
+    position: relative;
+}
   .listHeader{
     font-size: 18px;
     font-weight:bold;
     color: #AAF5FE;
     margin-bottom:1.3em;
     cursor: pointer;
+  }
+  .listHeadersdt{
+    text-align: right;
   }
   .marquee_top {
     transition: all 0.5s;
@@ -122,13 +140,14 @@
     overflow: hidden;
   }
   .marquee_list {
+    /* border:1px solid red; */
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     padding:0;
     width:100%;
-    margin:0;
+    margin:1.9rem 0 0 0;
   }
   .item{
     display: flex;

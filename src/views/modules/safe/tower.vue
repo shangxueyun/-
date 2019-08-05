@@ -301,8 +301,6 @@ import { dateFormat } from '@/utils'
                     name:'吊重',
                     type:'line',
                     animation: false,
-                    areaStyle: {
-                    },
                     itemStyle : {
                         normal : {
                         color : '#16FFE6',
@@ -316,8 +314,6 @@ import { dateFormat } from '@/utils'
                     name:'力矩',
                     type:'line',
                     animation: false,
-                    areaStyle: {
-                    },
                     itemStyle : {
                         normal : {
                         color : '#24DEA0',
@@ -338,8 +334,8 @@ import { dateFormat } from '@/utils'
       },
     },
     created() {
-        var date = new Date().toISOString().replace(/T/g," ");
-        this.dateDay = date.substring(0,date.lastIndexOf("."))
+        // var date = new Date().toISOString().replace(/T/g," ");
+        // this.dateDay = date.substring(0,date.lastIndexOf("."))
         this.offsetHeight = (this.$store.state.common.documentClientHeight - 206) + "px";
         this.DriverList();
         //body
@@ -449,6 +445,8 @@ import { dateFormat } from '@/utils'
                         }
                     });
                     this.chart_line.xAxis.data = arrT;
+                    //数据获取时间
+                    this.dateDay = arrT[arrZ.length-1];
                     this.chart_line.series[0].data = arrZ;
                     this.chart_line.series[1].data = arrL;
                     this.setOption();

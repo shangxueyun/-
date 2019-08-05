@@ -10,7 +10,9 @@
            :default-expanded-keys="this.$store.state.folder.expand"
            style="font-size: larger">
     <span class="slot-t-node" slot-scope="{ node, data }">
-          <div><em class="icon-folder"></em>{{ node.label }}</div>
+          <!-- <div><em class="icon-folder"></em>{{ node.label }}1</div> -->
+          <div><icon-svg name="folder" class="icon-folder"></icon-svg>{{ node.label }}</div>
+          
           <!-- <div><i class="el-icon-thirdwenjianjia formatwjjmenu"></i>{{ node.label }}</div> -->
           
     </span>
@@ -92,7 +94,6 @@
 <style >
   .icon-folder {
 
-    background-image: url("~@/assets/icons/svg/icon-folder.svg");
     background-size: 100%;
     height: 20px;
     width: 20px;

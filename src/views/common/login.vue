@@ -328,6 +328,13 @@
 input[type="radio"],input[type="checkbox"]{
 zoom:180%;
 }
+
+input:-webkit-autofill{
+	-webkit-text-fill-color: #ededed !important;
+    background-color:transparent;
+    background-image: none;
+     transition: background-color 50000s ease-in-out 0s; 
+}
 </style>
 <style lang="scss" scoped>
 </style>

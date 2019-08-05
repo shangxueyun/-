@@ -1,5 +1,7 @@
 <template>
 <!--    工程概况/动态-->
+<div>
+  <div class="tips_l"></div>
   <ul class="list listgz" v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)">
     <template v-if="name=='工程概况'">
     <li class="listHeadersss"  @click="goDetail">工程概况</li>
@@ -16,6 +18,7 @@
       <li><span>暂无数据</span></li>
     </template>
   </ul>
+</div>
 </template>
 
 <script>
@@ -49,6 +52,17 @@
 </script>
 <style lang="scss" scoped>
 
+.tips_l{
+
+    height:1rem;
+    display: flex;
+    flex-direction: column;
+    background: url(~@/assets/img/home/tips_l.png) no-repeat;
+    background-size: 100% 100%;
+    margin-bottom:1rem;
+    left:10px;
+    position: relative;
+}
       .listHeadersss{
         font-size: 18px;
         font-weight:bold;

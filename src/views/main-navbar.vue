@@ -365,7 +365,7 @@ import { setTimeout, clearTimeout } from 'timers';
         a{
           color: rgba(255, 255, 255, .7);
           padding-bottom: 6px;
-          font-size: .9rem;
+          // font-size: .9rem;
           text-decoration: none;
         }
         a:hover{

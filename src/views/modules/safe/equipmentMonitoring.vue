@@ -43,8 +43,8 @@
     width: 22px;
     height: 22px;
     position: absolute;
-    right: 75px;
-    top: 58px;
+    right: 28px;
+    top: 28px;
     font-size: 14px;
     cursor: pointer;
     text-align: center;

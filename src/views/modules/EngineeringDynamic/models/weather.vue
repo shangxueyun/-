@@ -6,7 +6,7 @@
         <!-- {{weatherResultItem.city}} -->
         <!-- {{Weatherlist[0].daytemp}} -->
         <p><span class="font">{{reporttime}}</span><span class="font">{{city}}</span></p>
-        <h1  style="padding-top:20px;">{{temperature}}℃   <span class="font">{{dayweather}}</span></h1>
+        <h1  style="padding-top:10px;">{{temperature}}℃   <span class="font">{{dayweather}}</span></h1>
 
 <!--        <div class="iocn">-->
 <!--          <img src="~@/assets/img/weather/duoyun.png" alt="" v-if="Weatherlist[0].dayweather=='多云'">-->

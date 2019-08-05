@@ -6,7 +6,7 @@
       <li><span>问题总量</span><span style="color:#F6AB00">{{safeResult.total}}</span></li>
       <li><span>待整改</span><span style="color:#FE3A5E">{{safeResult.toBeRectifiedTotal}}</span></li>
       <li><span>待复查</span><span style="color:#D6FF1F">{{safeResult.toBeReviewedTotal}}</span></li>
-      <li><span>已复查</span><span style="color:#54EEEC">{{safeResult.completeTotal}}</span></li>
+      <li><span>完成</span><span style="color:#54EEEC">{{safeResult.completeTotal}}</span></li>
     </ul>
     <div ref="pieTopSafe" style="width: 100%;height: 300px"></div>
     <div ref="pieBtSafe" style="width: 100%;height: 300px"></div>

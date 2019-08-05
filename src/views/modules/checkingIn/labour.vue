@@ -1,46 +1,28 @@
 <template>
   <div>
- 
  <el-row :gutter="20">
-      <el-col :span="14">
-              <el-row :gutter="20">
-                    <el-col :span="8">
-                        <div class="implementation onsite">
-                            <h2><i class="el-icon-thirdchushizupin "></i>场内实时人数</h2>
-                            <p>{{venueRealNums}}</p>
-                        </div>
-                    </el-col>
-                    <el-col :span="8">
-                        <div class="implementation entry">
-                            <h2><i class="el-icon-thirdchushizupin "></i>进场总人数</h2>
-                            <p>{{entryNums}}</p>
-                        </div>
-                    </el-col>
-                    <el-col :span="8">
-                        <div class="implementation appearance">
-                            <h2><i class="el-icon-thirdchushizupin "></i>出场总人数</h2>
-                            <p>{{appearanceNums}}</p>
-                        </div>
-                    </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                    <el-col :span="12">
-                      <div class="teamDistribution">
-                             <h2>班组分布</h2>
-                             <div id="teampie" class="echartsbox"></div>
-                      </div>  
-                    </el-col>
-                    <el-col :span="12">
-                      <div class="teamDistribution">
-                             <h2>工种分布</h2>
-                             <div id="workpie" class="echartsbox"></div>
-                      </div>  
-                    </el-col>
-              </el-row>
+      <el-col :span="4">
+              <div class="implementation onsite">
+                  <!-- <h2><i class="el-icon-thirdchushizupin "></i>场内实时人数</h2> -->
+                  <h2><icon-svg name="admin" class="incsvg" style="color:#fff;font-size:14px;"></icon-svg>场内实时人数</h2>
+                  <p>{{venueRealNums}}</p>
+              </div>
+              <div class="implementation entry">
+                  <h2><icon-svg name="geren" class="incsvg" style="color:#fff;font-size:14px;"></icon-svg></i>进场总人数</h2>
+                  <p>{{entryNums}}</p>
+              </div>
+              <div class="implementation appearance">
+                  <h2><icon-svg name="job" class="incsvg" style="color:#fff;font-size:14px;"></icon-svg></i>出场总人数</h2>
+                  <p>{{appearanceNums}}</p>
+              </div>
 
       </el-col>
       <el-col :span="10">
-          <div class="teamDistribution">
+              <div class="teamDistribution" style="margin-top:7px;">
+                      <h2>班组分布</h2>
+                      <div id="teampie" ref="teampie" class="echartsbox"></div>
+              </div>  
+          <!-- <div class="teamDistribution">
                <h2>异常考勤</h2>
                <div class="labourtablebox">
 
@@ -67,8 +49,6 @@
           <div class="teamDistribution teamlabourt">
                <h2>考勤记录</h2>
                <div class="labourtablebox" >
-                 <!-- tableDataRecord -->
-
                     <ul class="tableDataRecord">
                         <li class="a">姓名</li>
                         <li class="b">班组</li>
@@ -90,15 +70,21 @@
                       </ul>
                   </div>
                </div>
-          </div>  
+          </div>   -->
+      </el-col>
+
+      <el-col :span="10">
+              <div class="teamDistribution" style="margin-top:7px;">
+                      <h2>工种分布</h2>
+                      <div id="workpie" ref="workpie" class="echartsbox"></div>
+              </div> 
       </el-col>
 </el-row>
-
- <el-row :gutter="20">
+ <el-row  :gutter="20">
       <el-col :span="10">
           <div class="teamDistribution" style="margin-top:20px;">
                   <h2>区域分布</h2>
-                  <div style="height:402px;" id="regionmap">
+                  <div style="height:402px;" id="regionmap" ref="regionmap">
 
                   </div>
           </div>  
@@ -116,7 +102,7 @@
                         placeholder="选择日期">
                       </el-date-picker>
                   </div>
-                  <div id="laborTrendChart" class="laborTrendChart">
+                  <div id="laborTrendChart" ref="laborTrendChart" class="laborTrendChart">
                     
                   </div>
           </div>  
@@ -155,6 +141,7 @@
     activated () {
       this.getDataList()
       this.laborTrend()
+      this.onresize()
     },
     created(){
             setInterval(this.showMarquee, 2000)
@@ -293,28 +280,102 @@
         // 绘制图表
         myChart.setOption({
             tooltip: {
-                // trigger: 'item',
+                trigger: 'item',
                 formatter: "{b}: {c}人 ({d}%)"
             },
             legend: {
-                  type: 'scroll',
-                  orient: 'vertical',
-                  formatter: function (name) {
-                    if (!name) return ''
-                    if (name.length > 10) {
-                      return name.slice(0, 10) + '...'
-                    }else{
-                      return name
-                    }
-                  },
-                  padding:[0,0,0,20],
-                  x: 'left',
-                  textStyle: {// 图例文字的样式
-                    color: '#000',
-                    fontSize: 14
-                  },    
-                  data: piearrs
+                type: 'scroll',
+                orient: 'vertical',
+                left: 20,
+                top: 20,
+                bottom: 20,
+                formatter: function (name) {
+                  if (!name) return ''
+                  if (name.length > 20) {
+                    return name.slice(0, 20) + '...'
+                  }else{
+                    return name
+                  }
+                },
+                data: piearrs,
+            },
+            // legend: {
+            //       type: 'scroll',
+            //       orient: 'vertical',
+            //       formatter: function (name) {
+            //         if (!name) return ''
+            //         if (name.length > 10) {
+            //           return name.slice(0, 10) + '...'
+            //         }else{
+            //           return name
+            //         }
+            //       },
+            //       padding:[0,0,0,20],
+            //       x: 'left',
+            //       textStyle: {// 图例文字的样式
+            //         color: '#000',
+            //         fontSize: 14
+            //       },    
+            //       data: piearrs
 
+            // },
+            series: [
+                {
+                    type:'pie',      
+                    center: ["70%", "50%"],
+                    radius: ['60%', '30%'],
+                    // avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside',
+                            formatter: '{d}%',
+                            // formatter: function (obj) {
+                            //     return obj.percent
+                            // },
+                        }
+                    },
+                    // labelLine: {
+                    //     normal: {
+                    //         show: false
+                    //     }
+                    // },
+                    data:piearrs
+                }
+            ],
+            color:color
+        });
+      },
+      workpie(arr){
+        var  color =['#4dc1f0','#9989fc','#ff9d5c','#2d6da6','#398cc4',]
+        var piearrs = arr 
+        piearrs.forEach((item) =>{
+            item.value = item.nums
+            item.name = item.workKindName
+        })
+        let myCharts = echarts.init(document.getElementById('workpie'))
+        // 绘制图表
+        myCharts.setOption({
+            tooltip: {
+                // trigger: 'item',
+                formatter: "{b}: {c}人 ({d}%)"
+            },
+
+            legend: {
+                type: 'scroll',
+                orient: 'vertical',
+                left: 20,
+                top: 20,
+                bottom: 20,
+                formatter: function (name) {
+                  if (!name) return ''
+                  if (name.length > 20) {
+                    return name.slice(0, 20) + '...'
+                  }else{
+                    return name
+                  }
+                },
+                data: piearrs,
             },
             series: [
                 {
@@ -328,9 +389,6 @@
                             position: 'inside',
                             // formatter: '{d}%',
                             formatter: function (obj) {
-
-console.log(obj.percent)
-
                                 return obj.percent
                             },
                         }
@@ -345,45 +403,20 @@ console.log(obj.percent)
             ],
             color:color
         });
+        
       },
-      workpie(arr){
-        var  color =['#4dc1f0','#9989fc','#ff9d5c','#2d6da6','#398cc4',]
-        var piearrs = arr 
-        piearrs.forEach((item) =>{
-            item.value = item.nums
-            item.name = item.workKindName
-        })
-        let myChart = echarts.init(document.getElementById('workpie'))
-        // 绘制图表
-        myChart.setOption({
-            tooltip: {
-                // trigger: 'item',
-                formatter: "{b}: {c}人 ({d}%)"
-            },
-            series: [
-                {
-                    type:'pie',      
-                    center: ["50%", "50%"],
-                    radius: ['80%', '30%'],
-                    avoidLabelOverlap: false,
-                    padding:[0,10,0,0],
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'inside',
-                            formatter: '{d}%',
-                        }
-                    },
-                    labelLine: {
-                        normal: {
-                            show: false
-                        }
-                    },
-                    data:piearrs
-                }
-            ],
-            color:color
-        });
+      onresize(){
+        let chart1 = echarts.init(this.$refs['teampie'])
+        let chart2 = echarts.init(this.$refs['workpie'])
+        let chart3 = echarts.init(this.$refs['regionmap'])
+        let chart4 = echarts.init(this.$refs['laborTrendChart'])
+        
+        window.onresize = function(){
+            chart1.resize();
+            chart2.resize();
+            chart3.resize();
+            chart4.resize();
+        }
       },
       laborTrendChart(arr){
         var  color =['#4dc1f0','#9989fc','#ff9d5c','#2d6da6','#398cc4',]
@@ -531,6 +564,8 @@ console.log(obj.percent)
   border-radius: 5px;
   // box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   padding:15px 20px 0 20px;
+  height:121px;
+  overflow: hidden;
   h2{
     border-bottom:1px solid #fff;
     font-size:14px;
@@ -539,16 +574,16 @@ console.log(obj.percent)
     line-height:30px;
     height:30px;
     overflow: hidden;
-    i{
+    .incsvg{
       font-size:20px;
       float:left;
-      margin:5px 6px 0 3px;
+      margin:8px 6px 0 3px;
     }
   }
   p{
     text-align: center;
     font-size:26px;
-    padding:10px 0;
+    padding:18px 0 0 0;
     font-weight:bold;
     color:#fff;
   }

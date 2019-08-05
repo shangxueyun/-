@@ -1,5 +1,5 @@
 <template>
-  <div class="workerMessage" style="margin:20px 0 0 0;">
+  <div class="workerMessage" >
     <header class="fx" style="text-align: center;">人员动态管理</header>
     <ul class="workerItem">
       <li class="active"><p>进场人次</p><span>{{teamNumData.entryNums}}</span></li>
@@ -64,6 +64,7 @@
               data.data.result.groupByClassNo.forEach((a, i) => {
                 teamArr.push(a.classNo)
               })
+              console.log(" data.data.result.sevenClassData", data.data.result.sevenClassData)
               for(var item in data.data.result.sevenClassData){
                 dateArr.push(item)
                 data.data.result.sevenClassData[item].forEach((a, i) => {

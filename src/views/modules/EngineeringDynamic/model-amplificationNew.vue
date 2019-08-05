@@ -283,7 +283,7 @@
         var w1 = $('#swiperBoxItem').width()
         var h=$(window).height()
         var h1=$('#swiperBoxItem').height()
-        console.log(h1)
+        // console.log(h1)
         var left
         var top
         var rate=null
